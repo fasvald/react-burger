@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  width: 272px;
+}
+
+.price {
+
+}

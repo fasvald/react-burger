@@ -1,0 +1,21 @@
+html,
+body {
+  height: 100%;
+}
+
+body,
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #1c1c21;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app {
+  flex: 1;
+}
