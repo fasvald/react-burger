@@ -4,18 +4,17 @@ body {
 }
 
 body,
-.app {
+.stellar-burger {
   display: flex;
   flex-direction: column;
 }
 
 body {
   background-color: #1c1c21;
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.app {
+.stellar-burger {
   flex: 1;
 }

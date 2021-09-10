@@ -5,11 +5,17 @@
   --container-lg: 960px;
   --container-xl: 1140px;
   --container-xxl:  1320px;
-
   --container-fluid: 100%;
+
+  /* Cards Sizes */
+  --card-width-default: 272px;
 
   /* Colors */
   --primary-light: #f2f2f3;
   --dark-grey: #8585ad;
   --dark-bg: #1c1c21;
+
+  /* Custom Scrollbar */
+  --scrollbar-track: #8585ad;
+  --scrollbar-thumb: #2f2f37;
 }

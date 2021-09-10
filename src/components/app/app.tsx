@@ -3,18 +3,18 @@ import React from 'react';
 import AppHeader from './app-header/app-header';
 import AppContent from './app-content/app-content';
 import AppFooter from './app-footer/app-footer';
-import BurgerIngredients from '../burger/burger-ingredients/burger-ingredients';
+import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients';
 
-import appStyles from './app.module.css';
+import styles from './app.module.css';
 
 function App () {
   return (
     <>
-      <AppHeader className={appStyles['app-header']} />
-      <AppContent className={appStyles['app-content']}>
+      <AppHeader className={styles.header} />
+      <AppContent className={styles.content}>
         <BurgerIngredients />
       </AppContent>
-      <AppFooter className={appStyles['app-footer']} />
+      <AppFooter className={styles.footer} />
     </>
   );
 }

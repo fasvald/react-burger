@@ -1,4 +1,6 @@
-export const ingredientsData = [
+import { IBurgerIngredient } from '../models/data.model';
+
+export const ingredientsData: IBurgerIngredient[] = [
   {
     _id: '60666c42cc7b410027a1a9b1',
     name: 'Краторная булка N-200i',

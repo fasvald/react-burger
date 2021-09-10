@@ -1,0 +1,27 @@
+/* List's section of ingredients */
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.list h2 {
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* Ingredient card */
+
+.card {
+  margin-bottom: 32px;
+}
+
+.card:last-of-type {
+  margin-bottom: 0;
+}
+
+.card:nth-child(even) {
+  margin-left: 16px;
+  margin-right: 24px;
+}

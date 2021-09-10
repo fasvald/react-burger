@@ -1,19 +1,16 @@
-@import './../../shared/styles/variables.css';
+@import './../../common/styles/variables.css';
 
-/* .app-header { } */
+.header {}
 
-.app-content {
+.content {
   display: flex;
   flex: 1;
-
   margin: auto;
-
   width: 100%;
   max-width: var(--container-xxl);
 }
 
-.app-footer {
+.footer {
   flex-shrink: 0;
-
   height: 40px;
 }
