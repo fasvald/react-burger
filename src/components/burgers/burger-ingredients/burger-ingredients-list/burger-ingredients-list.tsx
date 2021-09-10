@@ -11,7 +11,7 @@ import styles from './burger-ingredients-list.module.css';
 const BurgerIngredientsList = () => {
   const [current, setCurrent] = React.useState('bun');
 
-  const ingredientsNormalized = groupBy(ingredientsData, 'type');
+  const { bun, sauce, main } = groupBy(ingredientsData, 'type');
 
   return (
     <div className={styles.wrapper}>
@@ -27,19 +27,13 @@ const BurgerIngredientsList = () => {
         </Tab>
       </div>
       <div className={styles.list}>
-        <BurgerIngredientsListSection
-          ingredients={ingredientsNormalized.bun}
-          className={styles.listSection}>
+        <BurgerIngredientsListSection ingredients={bun} className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Булки</h2>
         </BurgerIngredientsListSection>
-        <BurgerIngredientsListSection
-          ingredients={ingredientsNormalized.sauce}
-          className={styles.listSection}>
+        <BurgerIngredientsListSection ingredients={sauce} className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Соусы</h2>
         </BurgerIngredientsListSection>
-        <BurgerIngredientsListSection
-          ingredients={ingredientsNormalized.main}
-          className={styles.listSection}>
+        <BurgerIngredientsListSection ingredients={main} className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Начинки</h2>
         </BurgerIngredientsListSection>
       </div>
