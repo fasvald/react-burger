@@ -49,7 +49,7 @@ const BurgerConstructor = () => {
         </ElementWrapper>
         <div className={styles.listDnD}>
           {[...sauce, ...main].map((ingredient, index) => (
-            <ElementDnDWrapper key={index} className={styles.listDnDItem}>
+            <ElementDnDWrapper key={ingredient['_id']} className={styles.listDnDItem}>
               <ConstructorElement
                 text={ingredient.name}
                 price={ingredient.price}

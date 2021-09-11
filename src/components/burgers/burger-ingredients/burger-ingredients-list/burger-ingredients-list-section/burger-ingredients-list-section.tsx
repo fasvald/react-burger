@@ -15,7 +15,7 @@ const BurgerIngredientsListSection = ({
     <div className={classNames(styles.list, className)}>
       {children}
       {ingredients.map((ingredient, index) => (
-        <BurgerIngredientsCard className={styles.card} ingredient={ingredient} key={index} />
+        <BurgerIngredientsCard className={styles.card} ingredient={ingredient} key={ingredient['_id']} />
       ))}
     </div>
   );
