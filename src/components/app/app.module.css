@@ -1,0 +1,17 @@
+@import './../../common/styles/variables.css';
+
+.header {}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  margin: auto;
+  width: 100%;
+  max-width: var(--container-xxl);
+}
+
+.footer {
+  flex-shrink: 0;
+  height: 40px;
+}

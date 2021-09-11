@@ -1,0 +1,32 @@
+:root {
+  /* Containers */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl:  1320px;
+  --container-fluid: 100%;
+
+  /* Sections */
+  --section-width: 600px;
+
+  /* Cards Sizes */
+  --card-width-default: 272px;
+
+  /* Colors */
+  --primary-light: #f2f2f3;
+  --dark-grey: #8585ad;
+  --dark-bg: #1c1c21;
+
+  /* Custom Scrollbar */
+  --scrollbar-track: #8585ad;
+  --scrollbar-thumb: #2f2f37;
+
+  /* Icon Sized */
+  --icon-width: 24px;
+  --icon-height: 24px;
+
+  /* Burger Constructor Component (with DnD) */
+  --burger-constructor-width-total: 536px;
+  --dnd-icon-margin-right: 8px;
+}

@@ -1,0 +1,98 @@
+@import './../../../common/styles/variables.css';
+
+/* Common */
+
+.logo,
+.navLeft,
+.navRight {
+  flex: 1;
+}
+
+/* Header */
+
+.header {
+  height: 88px;
+  background: var(--dark-bg);
+  box-shadow: 0 24px 32px rgba(0, 0, 0, 0.04), 0 16px 24px rgba(0, 0, 0, 0.04),
+    0 4px 8px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Header "inside" wrapper */
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  /* NOTE: Can be as part of media query */
+  max-width: var(--container-xxl);
+}
+
+/* Logo */
+
+.logo {
+  text-align: center;
+  text-decoration: none;
+  outline-offset: 5px;
+  outline-color: var(--primary-light);
+}
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.logo:hover svg {
+  stroke: #4c4cff;
+}
+
+/* Menu in navigation */
+
+.menu {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.menuItem {
+  padding: 16px 20px;
+}
+
+.menuItem:not(:last-of-type) {
+  margin-right: 8px;
+}
+
+.menuItem:hover {
+  cursor: pointer;
+}
+
+.menuItem:hover .menuItemLink {
+  color: var(--primary-light);
+}
+
+.menuItem:hover .menuItemLink svg {
+  fill: var(--primary-light);
+}
+
+.menuItemLink {
+  display: flex;
+  align-items: center;
+  color: var(--dark-grey);
+  outline-offset: 5px;
+  outline-color: var(--primary-light);
+  text-decoration: none;
+}
+
+.menuItemLink svg {
+  flex-shrink: 0;
+  padding-right: 8px;
+  fill: var(--dark-grey);
+}
+
+/* Nav Right */
+
+.navRight .menuItem:last-of-type {
+  margin-left: auto;
+}

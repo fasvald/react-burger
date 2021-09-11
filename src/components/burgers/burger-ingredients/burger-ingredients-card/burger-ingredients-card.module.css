@@ -1,0 +1,30 @@
+@import './../../../../common/styles/variables.css';
+
+.card {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: var(--card-width-default);
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.priceValue {
+  margin-right: 8px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  height: 48px;
+}
+
+.titleValue {
+  text-align: center;
+}

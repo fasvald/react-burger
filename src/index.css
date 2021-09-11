@@ -1,0 +1,20 @@
+html,
+body {
+  height: 100%;
+}
+
+body,
+.stellar-burger {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #131316;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stellar-burger {
+  flex: 1;
+}

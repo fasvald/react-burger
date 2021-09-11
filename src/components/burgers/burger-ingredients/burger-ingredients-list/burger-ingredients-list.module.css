@@ -1,0 +1,49 @@
+@import './../../../../common/styles/variables.css';
+
+/* Component wrapper */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabs sections (tab like switchers) */
+
+.tabs {
+  display: flex;
+}
+
+/* List of ingredients */
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  /* NOTE: Regarding the adaptive layout it was said to (at least to me) focus mainly on desktop */
+  /* 500px = 2x height of default ingredients row + 2x title row margin = 464px + 40px => round.  */
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+/* NOTE: Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+  border-radius: 0;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 0;
+}
+
+/* List section */
+
+.listSection:not(:last-of-type) {
+  /* NOTE: A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
+  margin-bottom: 8px;
+}

@@ -1,0 +1,82 @@
+@import './../../../common/styles/variables.css';
+
+/* Common */
+
+.list,
+.listDnD {
+  display: flex;
+}
+
+.list,
+.listDnD {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+/* Section (root element) */
+
+.section {
+  padding: 100px 20px 0;
+  width: 600px;
+}
+
+/* DnD list */
+
+.listDnD {
+  margin: 10px 0;
+  max-height: 464px;
+  overflow-y: scroll;
+}
+
+/* NOTE: Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.listDnD::-webkit-scrollbar {
+  width: 8px;
+}
+
+.listDnD::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+  border-radius: 0;
+}
+
+.listDnD::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 0;
+}
+
+/* List item */
+
+.listItem {
+  /* NOTE: Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
+  margin-left: calc(var(--icon-width) + var(--dnd-icon-margin-right));
+}
+
+/* DnD list item */
+
+.listDnDItem:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+/* Total price section */
+
+.price {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 40px;
+  margin-right: calc(var(--section-width) - var(--burger-constructor-width-total) - var(--icon-width) - var(--dnd-icon-margin-right));
+}
+
+/* Total price value (with icon) */
+
+.priceValue {
+  margin-right: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.priceValue svg {
+  margin-left: 9px;
+}
