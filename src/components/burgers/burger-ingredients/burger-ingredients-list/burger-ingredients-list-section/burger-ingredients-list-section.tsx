@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+
 import BurgerIngredientsCard from '../../burger-ingredients-card/burger-ingredients-card';
 
 import { IBurgerIngredientsListSectionProps } from './burger-ingredients-list-section.model';
@@ -14,8 +15,12 @@ const BurgerIngredientsListSection = ({
   return (
     <div className={classNames(styles.list, className)}>
       {children}
-      {ingredients.map((ingredient, index) => (
-        <BurgerIngredientsCard className={styles.card} ingredient={ingredient} key={ingredient['_id']} />
+      {ingredients.map((ingredient) => (
+        <BurgerIngredientsCard
+          key={ingredient['_id']}
+          className={styles.card}
+          ingredient={ingredient}
+        />
       ))}
     </div>
   );

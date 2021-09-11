@@ -1,10 +1,10 @@
 import React from 'react';
 
-import AppHeader from './app-header/app-header';
 import AppContent from './app-content/app-content';
 import AppFooter from './app-footer/app-footer';
-import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients';
+import AppHeader from './app-header/app-header';
 import BurgerConstructor from '../burgers/burger-constructor/burger-constructor';
+import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients';
 
 import styles from './app.module.css';
 

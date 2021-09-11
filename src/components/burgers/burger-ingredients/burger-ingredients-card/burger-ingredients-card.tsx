@@ -1,6 +1,6 @@
+import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 import React from 'react';
-import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model';
 

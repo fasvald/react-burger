@@ -3,15 +3,12 @@
 /* Common */
 
 .list,
-.listDnD,
-.listItem,
-.listDnDItem {
+.listDnD {
   display: flex;
 }
 
 .list,
-.listDnD,
-.listItem {
+.listDnD {
   flex-direction: column;
   flex-wrap: nowrap;
 }
@@ -55,14 +52,6 @@
 }
 
 /* DnD list item */
-
-.listDnDItem {
-  align-items: center;
-}
-
-.listDnDItem svg {
-  margin-right: var(--dnd-icon-margin-right);
-}
 
 .listDnDItem:not(:last-of-type) {
   margin-bottom: 10px;

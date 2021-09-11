@@ -1,6 +1,6 @@
 import { groupBy } from 'lodash';
-import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import React from 'react';
 
 import BurgerIngredientsListSection from './burger-ingredients-list-section/burger-ingredients-list-section';
 

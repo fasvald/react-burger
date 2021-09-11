@@ -1,0 +1,10 @@
+@import './../../../../common/styles/variables.css';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.wrapper svg {
+  margin-right: var(--dnd-icon-margin-right);
+}

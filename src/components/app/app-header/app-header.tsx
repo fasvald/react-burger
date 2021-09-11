@@ -1,11 +1,11 @@
-import classNames from 'classnames';
-import React from 'react';
 import {
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import classNames from 'classnames';
+import React from 'react';
 
 import { IAppHeaderProps } from './app-header.model';
 
