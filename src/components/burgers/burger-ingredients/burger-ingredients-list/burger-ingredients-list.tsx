@@ -3,16 +3,15 @@ import React from 'react'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
 
-import ingredientsData from '../../../../common/utils/data'
-
 import BurgerIngredientsListSection from './burger-ingredients-list-section/burger-ingredients-list-section'
+import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
 
 import styles from './burger-ingredients-list.module.css'
 
-const BurgerIngredientsList = (): JSX.Element => {
+const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JSX.Element => {
   const [current, setCurrent] = React.useState('bun')
 
-  const { bun, sauce, main } = groupBy(ingredientsData, 'type')
+  const { bun, sauce, main } = groupBy(ingredients, 'type')
 
   return (
     <div className={styles.wrapper}>

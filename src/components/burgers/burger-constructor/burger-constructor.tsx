@@ -4,15 +4,14 @@ import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-co
 import classNames from 'classnames'
 import { groupBy } from 'lodash'
 
-import ingredientsData from '../../../common/utils/data'
-
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
+import { IBurgerConstructorProps } from './burger-constructor.model'
 
 import styles from './burger-constructor.module.css'
 
-const BurgerConstructor = (): JSX.Element => {
-  const { bun, sauce, main } = groupBy(ingredientsData, 'type')
+const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Element => {
+  const { bun, sauce, main } = groupBy(ingredients, 'type')
 
   return (
     <section className={styles.section}>
