@@ -10,15 +10,19 @@ import styles from './burger-constructor-ingredient-draggable.module.css'
 const BurgerConstructorIngredientDraggable = ({
   className,
   ingredient,
-}: IBurgerConstructorIngredientProps): JSX.Element => (
-  <div className={classNames(styles.wrapper, className)}>
-    <DragIcon type='primary' />
-    <ConstructorElement
-      text={ingredient.name}
-      price={ingredient.price}
-      thumbnail={ingredient.image}
-    />
-  </div>
-)
+}: IBurgerConstructorIngredientProps): JSX.Element => {
+  const wrapperClass = classNames(styles.wrapper, className)
+
+  return (
+    <div className={wrapperClass}>
+      <DragIcon type='primary' />
+      <ConstructorElement
+        text={ingredient.name}
+        price={ingredient.price}
+        thumbnail={ingredient.image}
+      />
+    </div>
+  )
+}
 
 export default BurgerConstructorIngredientDraggable

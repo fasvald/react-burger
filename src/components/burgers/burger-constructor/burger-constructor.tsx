@@ -11,6 +11,8 @@ import { IBurgerConstructorProps } from './burger-constructor.model'
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Element => {
+  const priceValueClass = classNames('text text_type_digits-medium', styles.priceValue)
+
   const { bun, sauce, main } = groupBy(ingredients, 'type')
 
   return (
@@ -37,7 +39,7 @@ const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Elemen
         />
       </div>
       <div className={styles.price}>
-        <span className={classNames('text text_type_digits-medium', styles.priceValue)}>
+        <span className={priceValueClass}>
           610
           <CurrencyIcon type='primary' />
         </span>

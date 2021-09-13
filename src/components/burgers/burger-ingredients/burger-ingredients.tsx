@@ -8,9 +8,11 @@ import { IBurgerIngredientsProps } from './burger-ingredients.model'
 import styles from './burger-ingredients.module.css'
 
 const BurgerIngredients = ({ ingredients }: IBurgerIngredientsProps): JSX.Element => {
+  const sectionTitleClass = classNames('text text_type_main-large', styles.title)
+
   return (
     <section className={styles.section}>
-      <h1 className={classNames('text text_type_main-large', styles.title)}>Соберите бургер</h1>
+      <h1 className={sectionTitleClass}>Соберите бургер</h1>
       <BurgerIngredientsList ingredients={ingredients} />
     </section>
   )

@@ -11,16 +11,20 @@ const BurgerConstructorIngredientBun = ({
   className,
   ingredient,
   direction,
-}: IBurgerConstructorIngredientBunProps): JSX.Element => (
-  <div className={classNames(styles.wrapper, className)}>
-    <ConstructorElement
-      type={direction}
-      isLocked
-      text={`${ingredient.name} (${direction === 'top' ? 'верх' : 'низ'})`}
-      price={ingredient.price}
-      thumbnail={ingredient.image}
-    />
-  </div>
-)
+}: IBurgerConstructorIngredientBunProps): JSX.Element => {
+  const wrapperClass = classNames(styles.wrapper, className)
+
+  return (
+    <div className={wrapperClass}>
+      <ConstructorElement
+        type={direction}
+        isLocked
+        text={`${ingredient.name} (${direction === 'top' ? 'верх' : 'низ'})`}
+        price={ingredient.price}
+        thumbnail={ingredient.image}
+      />
+    </div>
+  )
+}
 
 export default BurgerConstructorIngredientBun

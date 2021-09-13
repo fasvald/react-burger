@@ -13,8 +13,10 @@ const BurgerIngredientsListSection = ({
   ingredients,
   children,
 }: IBurgerIngredientsListSectionProps): JSX.Element => {
+  const listClass = classNames(styles.list, className)
+
   return (
-    <div className={classNames(styles.list, className)}>
+    <div className={listClass}>
       {children}
       {ingredients.map((ingredient) => (
         <BurgerIngredientsCard

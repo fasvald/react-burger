@@ -11,20 +11,20 @@ const BurgerIngredientsCard = ({
   ingredient,
   className,
 }: IBurgerIngredientsCardProps): JSX.Element => {
+  const cardClass = classNames(styles.card, className)
+  const priceValueClass = classNames('text text_type_digits-default', styles.priceValue)
+  const titleValueClass = classNames('text text_type_main-default', styles.titleValue)
+
   return (
-    <div className={classNames(styles.card, className)}>
+    <div className={cardClass}>
       <Counter count={1} size='default' />
       <img src={ingredient.image} alt='test' />
       <div className={styles.price}>
-        <span className={classNames('text text_type_digits-default', styles.priceValue)}>
-          {ingredient.price}
-        </span>
+        <span className={priceValueClass}>{ingredient.price}</span>
         <CurrencyIcon type='primary' />
       </div>
       <div className={styles.title}>
-        <span className={classNames('text text_type_main-default', styles.titleValue)}>
-          {ingredient.name}
-        </span>
+        <span className={titleValueClass}>{ingredient.name}</span>
       </div>
     </div>
   )

@@ -4,8 +4,10 @@ import classNames from 'classnames'
 
 import { IAppContentProps } from './app.content.model'
 
-const AppContent = ({ children, className = '' }: IAppContentProps): JSX.Element => (
-  <main className={classNames(className)}>{children}</main>
-)
+const AppContent = ({ children, className = '' }: IAppContentProps): JSX.Element => {
+  const mainClass = classNames(className)
+
+  return <main className={mainClass}>{children}</main>
+}
 
 export default AppContent
