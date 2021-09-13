@@ -1,42 +1,87 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
 
-import BurgerIngredientsListSection from './burger-ingredients-list-section/burger-ingredients-list-section'
+import { IBurgerIngredient } from '../../../../common/models/data.model'
+import Modal from '../../../modal/modal'
+import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
+
 import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
 
 import styles from './burger-ingredients-list.module.css'
 
 const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JSX.Element => {
-  const [current, setCurrent] = React.useState('bun')
+  const [chosenIngredient, setChosenIngredient] = useState()
+  const [currentListSection, setCurrentListSection] = useState('bun')
 
-  const { bun, sauce, main } = groupBy(ingredients, 'type')
+  // TODO: fix typings
+  const modal = useRef(null) as any
+
+  const { bun: buns, sauce: sauces, main: mains } = groupBy(ingredients, 'type')
+
+  const handleClick = (ingredient: IBurgerIngredient) => {
+    if (modal.current) {
+      modal.current.open()
+      // TODO: fix typings
+      setChosenIngredient(ingredient as any)
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
-        <Tab value='bun' active={current === 'bun'} onClick={setCurrent}>
+        <Tab value='bun' active={currentListSection === 'bun'} onClick={setCurrentListSection}>
           Булки
         </Tab>
-        <Tab value='sauce' active={current === 'sauce'} onClick={setCurrent}>
+        <Tab value='sauce' active={currentListSection === 'sauce'} onClick={setCurrentListSection}>
           Соусы
         </Tab>
-        <Tab value='main' active={current === 'main'} onClick={setCurrent}>
+        <Tab value='main' active={currentListSection === 'main'} onClick={setCurrentListSection}>
           Начинки
         </Tab>
       </div>
       <div className={styles.list}>
-        <BurgerIngredientsListSection ingredients={bun} className={styles.listSection}>
+        <div className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Булки</h2>
-        </BurgerIngredientsListSection>
-        <BurgerIngredientsListSection ingredients={sauce} className={styles.listSection}>
+          {buns.map((bun) => (
+            <BurgerIngredientsCard
+              key={bun._id}
+              className={styles.card}
+              ingredient={bun}
+              onClick={() => handleClick(bun)}
+            />
+          ))}
+        </div>
+        <div className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Соусы</h2>
-        </BurgerIngredientsListSection>
-        <BurgerIngredientsListSection ingredients={main} className={styles.listSection}>
+          {sauces.map((sauce) => (
+            <BurgerIngredientsCard
+              key={sauce._id}
+              className={styles.card}
+              ingredient={sauce}
+              onClick={() => handleClick(sauce)}
+            />
+          ))}
+        </div>
+        <div className={styles.listSection}>
           <h2 className='text text_type_main-medium'>Начинки</h2>
-        </BurgerIngredientsListSection>
+          {mains.map((main) => (
+            <BurgerIngredientsCard
+              key={main._id}
+              className={styles.card}
+              ingredient={main}
+              onClick={() => handleClick(main)}
+            />
+          ))}
+        </div>
       </div>
+      <Modal ref={modal}>
+        <div>
+          <p>Ingredient:</p>
+          <p>{JSON.stringify(chosenIngredient)}</p>
+        </div>
+      </Modal>
     </div>
   )
 }

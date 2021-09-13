@@ -8,6 +8,12 @@
   width: var(--card-width-default);
 }
 
+.img {
+
+  /* To prevent content shrink after loading */
+  min-height: 120px;
+}
+
 .price {
   display: flex;
   justify-content: center;

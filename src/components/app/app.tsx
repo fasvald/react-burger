@@ -49,7 +49,7 @@ const App = (): JSX.Element => {
   }, [])
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <AppHeader className={styles.header} />
       <AppContent className={styles.content}>
         {status === 'loading' && <Loader />}
@@ -68,7 +68,7 @@ const App = (): JSX.Element => {
         )}
       </AppContent>
       <AppFooter className={styles.footer} />
-    </>
+    </div>
   )
 }
 

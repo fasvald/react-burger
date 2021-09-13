@@ -46,8 +46,34 @@
 
 /* List section */
 
+.listSection {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .listSection:not(:last-of-type) {
 
   /* NOTE: A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
   margin-bottom: 8px;
+}
+
+.listSection h2 {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Ingredient card */
+
+.card {
+  margin-bottom: 32px;
+}
+
+.card:last-of-type {
+  margin-bottom: 0;
+}
+
+.card:nth-child(even) {
+  margin-right: 24px;
+  margin-left: 16px;
 }
