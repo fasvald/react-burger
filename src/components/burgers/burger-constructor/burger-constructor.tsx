@@ -1,17 +1,18 @@
-import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { groupBy } from 'lodash';
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun';
-import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable';
+import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import classNames from 'classnames'
+import { groupBy } from 'lodash'
 
-import { ingredientsData } from '../../../common/utils/data';
+import ingredientsData from '../../../common/utils/data'
 
-import styles from './burger-constructor.module.css';
+import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
+import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
 
-const BurgerConstructor = () => {
-  const { bun, sauce, main } = groupBy(ingredientsData, 'type');
+import styles from './burger-constructor.module.css'
+
+const BurgerConstructor = (): JSX.Element => {
+  const { bun, sauce, main } = groupBy(ingredientsData, 'type')
 
   return (
     <section className={styles.section}>
@@ -24,7 +25,7 @@ const BurgerConstructor = () => {
         <div className={styles.listDnD}>
           {[...sauce, ...main].map((ingredient) => (
             <BurgerConstructorIngredientDraggable
-              key={ingredient['_id']}
+              key={ingredient._id}
               className={styles.listDnDItem}
               ingredient={ingredient}
             />
@@ -46,7 +47,7 @@ const BurgerConstructor = () => {
         </Button>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default BurgerConstructor;
+export default BurgerConstructor

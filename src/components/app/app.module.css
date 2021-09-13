@@ -1,14 +1,14 @@
 @import './../../common/styles/variables.css';
 
-.header {}
+/* .header {} */
 
 .content {
   display: flex;
   justify-content: space-between;
-  flex: 1;
-  margin: auto;
   width: 100%;
   max-width: var(--container-xxl);
+  margin: auto;
+  flex: 1;
 }
 
 .footer {

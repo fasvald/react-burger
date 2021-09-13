@@ -1,10 +1,11 @@
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import { IAppFooterProps } from './app-footer.model';
+import classNames from 'classnames'
 
-const AppFooter = ({ children, className = '' }: IAppFooterProps) => (
+import { IAppFooterProps } from './app-footer.model'
+
+const AppFooter = ({ children, className = '' }: IAppFooterProps): JSX.Element => (
   <footer className={classNames(className)}>{children}</footer>
-);
+)
 
-export default AppFooter;
+export default AppFooter

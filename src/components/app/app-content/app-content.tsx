@@ -1,10 +1,11 @@
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import { IAppContentProps } from './app.content.model';
+import classNames from 'classnames'
 
-const AppContent = ({ children, className = '' }: IAppContentProps) => (
+import { IAppContentProps } from './app.content.model'
+
+const AppContent = ({ children, className = '' }: IAppContentProps): JSX.Element => (
   <main className={classNames(className)}>{children}</main>
-);
+)
 
-export default AppContent;
+export default AppContent

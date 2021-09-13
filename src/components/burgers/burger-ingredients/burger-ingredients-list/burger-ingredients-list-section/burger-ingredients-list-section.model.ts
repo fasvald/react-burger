@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
-import { IBurgerIngredient } from '../../../../../common/models/data.model';
+import { ReactNode } from 'react'
+
+import { IBurgerIngredient } from '../../../../../common/models/data.model'
 
 export interface IBurgerIngredientsListSectionProps {
-  children?: ReactNode;
-  className?: string;
-  ingredients: IBurgerIngredient[];
+  children?: ReactNode
+  className?: string
+  ingredients: IBurgerIngredient[]
 }

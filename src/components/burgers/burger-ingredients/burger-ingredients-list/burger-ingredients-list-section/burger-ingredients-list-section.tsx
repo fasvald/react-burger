@@ -1,29 +1,30 @@
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import BurgerIngredientsCard from '../../burger-ingredients-card/burger-ingredients-card';
+import classNames from 'classnames'
 
-import { IBurgerIngredientsListSectionProps } from './burger-ingredients-list-section.model';
+import BurgerIngredientsCard from '../../burger-ingredients-card/burger-ingredients-card'
 
-import styles from './burger-ingredients-list-section.module.css';
+import { IBurgerIngredientsListSectionProps } from './burger-ingredients-list-section.model'
+
+import styles from './burger-ingredients-list-section.module.css'
 
 const BurgerIngredientsListSection = ({
   className,
   ingredients,
   children,
-}: IBurgerIngredientsListSectionProps) => {
+}: IBurgerIngredientsListSectionProps): JSX.Element => {
   return (
     <div className={classNames(styles.list, className)}>
       {children}
       {ingredients.map((ingredient) => (
         <BurgerIngredientsCard
-          key={ingredient['_id']}
+          key={ingredient._id}
           className={styles.card}
           ingredient={ingredient}
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default BurgerIngredientsListSection;
+export default BurgerIngredientsListSection

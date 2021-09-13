@@ -7,8 +7,8 @@
 }
 
 .list h2 {
-  margin-bottom: 24px;
   width: 100%;
+  margin-bottom: 24px;
 }
 
 /* Ingredient card */
@@ -22,6 +22,6 @@
 }
 
 .card:nth-child(even) {
-  margin-left: 16px;
   margin-right: 24px;
+  margin-left: 16px;
 }

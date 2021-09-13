@@ -1,17 +1,18 @@
-import { groupBy } from 'lodash';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React from 'react'
 
-import BurgerIngredientsListSection from './burger-ingredients-list-section/burger-ingredients-list-section';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
+import { groupBy } from 'lodash'
 
-import { ingredientsData } from '../../../../common/utils/data';
+import ingredientsData from '../../../../common/utils/data'
 
-import styles from './burger-ingredients-list.module.css';
+import BurgerIngredientsListSection from './burger-ingredients-list-section/burger-ingredients-list-section'
 
-const BurgerIngredientsList = () => {
-  const [current, setCurrent] = React.useState('bun');
+import styles from './burger-ingredients-list.module.css'
 
-  const { bun, sauce, main } = groupBy(ingredientsData, 'type');
+const BurgerIngredientsList = (): JSX.Element => {
+  const [current, setCurrent] = React.useState('bun')
+
+  const { bun, sauce, main } = groupBy(ingredientsData, 'type')
 
   return (
     <div className={styles.wrapper}>
@@ -38,7 +39,7 @@ const BurgerIngredientsList = () => {
         </BurgerIngredientsListSection>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BurgerIngredientsList;
+export default BurgerIngredientsList

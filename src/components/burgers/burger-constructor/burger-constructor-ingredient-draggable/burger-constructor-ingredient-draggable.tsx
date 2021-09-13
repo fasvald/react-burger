@@ -1,15 +1,16 @@
-import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import { IBurgerConstructorIngredientProps } from '../burger-constructor.model';
+import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import classNames from 'classnames'
 
-import styles from './burger-constructor-ingredient-draggable.module.css';
+import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
+
+import styles from './burger-constructor-ingredient-draggable.module.css'
 
 const BurgerConstructorIngredientDraggable = ({
   className,
   ingredient,
-}: IBurgerConstructorIngredientProps) => (
+}: IBurgerConstructorIngredientProps): JSX.Element => (
   <div className={classNames(styles.wrapper, className)}>
     <DragIcon type='primary' />
     <ConstructorElement
@@ -18,6 +19,6 @@ const BurgerConstructorIngredientDraggable = ({
       thumbnail={ingredient.image}
     />
   </div>
-);
+)
 
-export default BurgerConstructorIngredientDraggable;
+export default BurgerConstructorIngredientDraggable

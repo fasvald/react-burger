@@ -1,17 +1,18 @@
+import React from 'react'
+
 import {
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import classNames from 'classnames';
-import React from 'react';
+} from '@ya.praktikum/react-developer-burger-ui-components'
+import classNames from 'classnames'
 
-import { IAppHeaderProps } from './app-header.model';
+import { IAppHeaderProps } from './app-header.model'
 
-import styles from './app-header.module.css';
+import styles from './app-header.module.css'
 
-const AppHeader = ({ className = '' }: IAppHeaderProps) => (
+const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => (
   /**
    * NOTE: The logic is based on this article (version 3) => https://ishadeed.com/article/website-headers-flexbox/
    * Yep there is a chance to push only the last item of nav and make logo as absolute, but I do not think
@@ -27,14 +28,14 @@ const AppHeader = ({ className = '' }: IAppHeaderProps) => (
           <li className={styles.menuItem}>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a href='#' className={styles.menuItemLink}>
-              <BurgerIcon type='primary'/>
+              <BurgerIcon type='primary' />
               <span className='text text_type_main-default'>Конструктор</span>
             </a>
           </li>
           <li className={styles.menuItem}>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a href='#' className={styles.menuItemLink}>
-              <ListIcon type='primary'/>
+              <ListIcon type='primary' />
               <span className='text text_type_main-default'>Лента заказов</span>
             </a>
           </li>
@@ -42,14 +43,14 @@ const AppHeader = ({ className = '' }: IAppHeaderProps) => (
       </nav>
       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <a href='#' className={styles.logo}>
-        <Logo/>
+        <Logo />
       </a>
       <nav className={classNames(styles.nav, styles.navRight)}>
         <ul className={styles.menu}>
           <li className={styles.menuItem}>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a href='#' className={styles.menuItemLink}>
-              <ProfileIcon type='primary'/>
+              <ProfileIcon type='primary' />
               <span className='text text_type_main-default'>Личный кабинет</span>
             </a>
           </li>
@@ -57,6 +58,6 @@ const AppHeader = ({ className = '' }: IAppHeaderProps) => (
       </nav>
     </div>
   </header>
-);
+)
 
-export default AppHeader;
+export default AppHeader

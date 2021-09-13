@@ -1,6 +1,6 @@
-import { IBurgerIngredient } from '../../../../common/models/data.model';
+import { IBurgerIngredient } from '../../../../common/models/data.model'
 
 export interface IBurgerIngredientsCardProps {
-  className?: string;
-  ingredient: IBurgerIngredient;
+  className?: string
+  ingredient: IBurgerIngredient
 }

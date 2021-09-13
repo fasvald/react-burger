@@ -1,14 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import AppContent from './app-content/app-content';
-import AppFooter from './app-footer/app-footer';
-import AppHeader from './app-header/app-header';
-import BurgerConstructor from '../burgers/burger-constructor/burger-constructor';
-import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients';
+import BurgerConstructor from '../burgers/burger-constructor/burger-constructor'
+import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients'
 
-import styles from './app.module.css';
+import AppContent from './app-content/app-content'
+import AppFooter from './app-footer/app-footer'
+import AppHeader from './app-header/app-header'
 
-function App () {
+import styles from './app.module.css'
+
+const App = (): JSX.Element => {
   return (
     <>
       <AppHeader className={styles.header} />
@@ -18,7 +19,7 @@ function App () {
       </AppContent>
       <AppFooter className={styles.footer} />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

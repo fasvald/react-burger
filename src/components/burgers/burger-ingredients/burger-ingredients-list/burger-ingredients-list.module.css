@@ -17,11 +17,14 @@
 
 .list {
   display: flex;
-  flex-wrap: wrap;
-  margin-top: 40px;
-  /* NOTE: Regarding the adaptive layout it was said to (at least to me) focus mainly on desktop */
-  /* 500px = 2x height of default ingredients row + 2x title row margin = 464px + 40px => round.  */
+
+  /*
+    NOTE: Regarding the adaptive layout it was said to (at least to me) focus mainly on desktop;
+    500px = 2x height of default ingredients row + 2x title row margin = 464px + 40px => round.
+  */
   max-height: 500px;
+  margin-top: 40px;
+  flex-wrap: wrap;
   overflow-y: scroll;
 }
 
@@ -44,6 +47,7 @@
 /* List section */
 
 .listSection:not(:last-of-type) {
+
   /* NOTE: A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
   margin-bottom: 8px;
 }

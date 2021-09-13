@@ -1,15 +1,19 @@
-import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import classNames from 'classnames';
-import React from 'react';
+import React from 'react'
 
-import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model';
+import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import classNames from 'classnames'
 
-import styles from './burger-ingredients-card.module.css';
+import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model'
 
-function BurgerIngredientsCard({ ingredient, className }: IBurgerIngredientsCardProps) {
+import styles from './burger-ingredients-card.module.css'
+
+const BurgerIngredientsCard = ({
+  ingredient,
+  className,
+}: IBurgerIngredientsCardProps): JSX.Element => {
   return (
     <div className={classNames(styles.card, className)}>
-      <Counter count={1} size="default" />
+      <Counter count={1} size='default' />
       <img src={ingredient.image} alt='test' />
       <div className={styles.price}>
         <span className={classNames('text text_type_digits-default', styles.priceValue)}>
@@ -23,7 +27,7 @@ function BurgerIngredientsCard({ ingredient, className }: IBurgerIngredientsCard
         </span>
       </div>
     </div>
-  );
+  )
 }
 
-export default BurgerIngredientsCard;
+export default BurgerIngredientsCard
