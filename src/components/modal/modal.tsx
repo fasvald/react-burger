@@ -65,7 +65,7 @@ const Modal = ({ children }: IModalProps, ref: any): JSX.Element | null => {
     isShown ? (
       <div className={styles.wrapper} role='dialog'>
         <ModalOverlay modal={ref} />
-        <div className={styles.modal}>{children}</div>
+        <div className={styles.dialogWrapper}>{children}</div>
       </div>
     ) : null,
     wrapperEl,

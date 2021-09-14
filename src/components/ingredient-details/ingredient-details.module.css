@@ -1,6 +1,17 @@
-.wrapper {
+@import './../../common/styles/variables.css';
+
+/* TODO: Make it global/common styles for all dialogs */
+
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
   width: 720px;
-  height: 539px;
+  /* height: 539px; */
+  padding: 40px;
   background: #1c1c21;
   border: 1px solid rgba(76, 76, 255, .2);
   box-shadow:
@@ -10,4 +21,80 @@
 
   /* TODO: Think of adding it automatically or make it more neat */
   pointer-events: auto;
+
+  overflow: hidden;
+}
+
+.dialogBtnClose {
+  padding: 0;
+  position: absolute;
+  top: 60px;
+  right: 40px;
+  background: none;
+  border: none;
+  outline-offset: 5px;
+  outline-color: var(--primary-light);
+
+  /* TODO: make additional class */
+  width: 24px;
+  height: 24px;
+}
+
+.dialogBtnClose:hover {
+  cursor: pointer;
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 64px;
+  padding-right: 40px;
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+
+  /* TODO: move to a separate selector */
+  max-width: 520px;
+  align-self: center;
+}
+
+/* Specific for ingredients dialog */
+
+/* .ingredient {} */
+
+/* .ingredientImg {} */
+
+.ingredientName {
+  margin-top: 16px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.ingredientDetails {
+  display: flex;
+  flex-wrap: nowrap;
+
+  /* justify-content: space-between; */
+  margin-bottom: 20px;
+}
+
+.ingredientDetailsItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.ingredientDetailsItem:not(:last-of-type) {
+  padding-right: 20px;
+}
+
+.ingredientDetailsItem p:last-of-type {
+  margin-top: 8px;
 }
