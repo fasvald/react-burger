@@ -6,6 +6,7 @@ import { groupBy } from 'lodash'
 import { IBurgerIngredient } from '../../../../common/models/data.model'
 import IngredientDetails from '../../../ingredient-details/ingredient-details'
 import Modal from '../../../modal/modal'
+import { IModalRefObject } from '../../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
 
 import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
@@ -13,19 +14,18 @@ import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
 import styles from './burger-ingredients-list.module.css'
 
 const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JSX.Element => {
-  const [chosenIngredient, setChosenIngredient] = useState()
-  const [currentListSection, setCurrentListSection] = useState('bun')
+  const [chosenIngredient, setChosenIngredient] = useState<IBurgerIngredient>()
+  // NOTE: Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
+  const [currentListSection, setCurrentListSection] = useState<string>('bun')
 
-  // TODO: fix typings
-  const modal = useRef(null) as any
+  const modal = useRef<IModalRefObject>(null)
 
   const { bun: buns, sauce: sauces, main: mains } = groupBy(ingredients, 'type')
 
   const handleClick = (ingredient: IBurgerIngredient) => {
     if (modal.current) {
       modal.current.open()
-      // TODO: fix typings
-      setChosenIngredient(ingredient as any)
+      setChosenIngredient(ingredient)
     }
   }
 
@@ -78,7 +78,7 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
         </div>
       </div>
       <Modal ref={modal}>
-        <IngredientDetails ingredient={chosenIngredient as any} modal={modal} />
+        {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} modal={modal} />}
       </Modal>
     </div>
   )

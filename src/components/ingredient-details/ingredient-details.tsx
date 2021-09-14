@@ -9,7 +9,7 @@ import styles from './ingredient-details.module.css'
 
 const IngredientDetails = ({ ingredient, modal }: IIngredientDetailsProps): JSX.Element => {
   const handleClick = useCallback(() => {
-    modal.current.close()
+    modal.current?.close()
   }, [modal])
 
   const ingredientClass = classNames('text text_type_main-medium', styles.ingredientName)

@@ -34,6 +34,7 @@ const App = (): JSX.Element => {
         setStatus('loaded')
         setIngredients(result.data)
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e)
 
         setStatus('error')

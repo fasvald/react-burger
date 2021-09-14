@@ -1,12 +1,3 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
-
-import ReactDOM from 'react-dom'
-
-import ModalOverlay from './modal-overlay/modal-overlay'
-import { IModalProps } from './modal.model'
-
-import styles from './modal.module.css'
-
 /**
  * NOTE: There are 2 main approaches to how to render modals (from my experience at least):
  *
@@ -33,22 +24,39 @@ import styles from './modal.module.css'
  * I've used it :).
  * */
 
+import React, {
+  forwardRef,
+  Ref,
+  RefObject,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react'
+
+import ReactDOM from 'react-dom'
+
+import ModalOverlay from './modal-overlay/modal-overlay'
+import { IModalProps, IModalRefObject } from './modal.model'
+import { blockBrowserScroll, unblockBrowserScroll } from './modal.utils'
+
+import styles from './modal.module.css'
+
 const modalRootEl = document.getElementById('modal-root')
 
-// TODO: fix typings
-const Modal = ({ children }: IModalProps, ref: any): JSX.Element | null => {
+const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Element | null => {
   const wrapperEl = document.createElement('div')
 
   const [isShown, setIsShown] = useState<boolean>(false)
 
   const open = useCallback(() => {
     setIsShown(true)
-    document.body.classList.add('modal-is-opened')
+    blockBrowserScroll()
   }, [])
 
   const close = useCallback(() => {
     setIsShown(false)
-    document.body.classList.remove('modal-is-opened')
+    unblockBrowserScroll()
   }, [])
 
   useImperativeHandle(ref, () => ({ open, close }), [open, close])
@@ -64,7 +72,7 @@ const Modal = ({ children }: IModalProps, ref: any): JSX.Element | null => {
   return ReactDOM.createPortal(
     isShown ? (
       <div className={styles.wrapper} role='dialog'>
-        <ModalOverlay modal={ref} />
+        <ModalOverlay modal={ref as RefObject<IModalRefObject>} />
         <div className={styles.dialogWrapper}>{children}</div>
       </div>
     ) : null,
@@ -72,5 +80,4 @@ const Modal = ({ children }: IModalProps, ref: any): JSX.Element | null => {
   )
 }
 
-// TODO: fix typings
-export default forwardRef<any, IModalProps>(Modal)
+export default forwardRef<IModalRefObject, IModalProps>(Modal)

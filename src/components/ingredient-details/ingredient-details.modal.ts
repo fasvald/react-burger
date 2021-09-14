@@ -1,8 +1,9 @@
+import { RefObject } from 'react'
+
 import { IBurgerIngredient } from '../../common/models/data.model'
+import { IModalRefObject } from '../modal/modal.model'
 
 export interface IIngredientDetailsProps {
-  // TODO: Refactor all models naming
   ingredient: IBurgerIngredient
-  // TODO: fix typings
-  modal: any
+  modal: RefObject<IModalRefObject>
 }

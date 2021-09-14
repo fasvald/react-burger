@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect } from 'react'
 
+import { IModalOverlayProps } from './modal-overlay.modal'
+
 import styles from './modal-overlay.module.css'
 
-const ModalOverlay = ({ modal }: any): JSX.Element => {
+const ModalOverlay = ({ modal }: IModalOverlayProps): JSX.Element => {
   const handleEscape = useCallback(
     (event) => {
       if (event.keyCode === 27) {
-        modal.current.close()
+        modal.current?.close()
       }
     },
     [modal],
@@ -15,7 +17,7 @@ const ModalOverlay = ({ modal }: any): JSX.Element => {
   const handleClick = useCallback(
     (event) => {
       if (event.target === event.currentTarget) {
-        modal.current.close()
+        modal.current?.close()
       }
     },
     [modal],
