@@ -4,6 +4,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
 
 import { IBurgerIngredient } from '../../../../common/models/data.model'
+import IngredientDetails from '../../../ingredient-details/ingredient-details'
 import Modal from '../../../modal/modal'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
 
@@ -77,10 +78,7 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
         </div>
       </div>
       <Modal ref={modal}>
-        <div>
-          <p>Ingredient:</p>
-          <p>{JSON.stringify(chosenIngredient)}</p>
-        </div>
+        <IngredientDetails ingredient={chosenIngredient as any} modal={modal} />
       </Modal>
     </div>
   )
