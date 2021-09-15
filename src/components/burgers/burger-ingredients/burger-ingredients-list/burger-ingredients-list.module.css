@@ -52,9 +52,8 @@
   width: 100%;
 }
 
+/* NOTE: A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
 .listSection:not(:last-of-type) {
-
-  /* NOTE: A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
   margin-bottom: 8px;
 }
 
