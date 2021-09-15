@@ -22,7 +22,7 @@
   align-self: center;
   align-items: center;
   width: 100%;
-  max-width: 520px;
+  max-width: var(--modal-dialog-default-body-max-width);
 }
 
 .ingredientName {

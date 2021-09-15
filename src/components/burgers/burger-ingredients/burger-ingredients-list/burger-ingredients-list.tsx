@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
@@ -22,12 +22,12 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
 
   const { bun: buns, sauce: sauces, main: mains } = groupBy(ingredients, 'type')
 
-  const handleClick = (ingredient: IBurgerIngredient) => {
+  const handleClick = useCallback((ingredient: IBurgerIngredient) => {
     if (modal.current) {
       modal.current.open()
       setChosenIngredient(ingredient)
     }
-  }
+  }, [])
 
   return (
     <div className={styles.wrapper}>

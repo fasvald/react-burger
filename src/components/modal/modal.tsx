@@ -39,14 +39,14 @@ import ReactDOM from 'react-dom'
 import ModalDialog from './modal-dialog/modal-dialog'
 import ModalOverlay from './modal-overlay/modal-overlay'
 import { IModalProps, IModalRefObject } from './modal.model'
-import { blockBrowserScroll, unblockBrowserScroll } from './modal.utils'
+import { blockBrowserScroll, createInjectionElement, unblockBrowserScroll } from './modal.utils'
 
 import styles from './modal.module.css'
 
 const modalRootEl = document.getElementById('modal-root')
 
 const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Element | null => {
-  const wrapperEl = document.createElement('div')
+  const wrapperEl = createInjectionElement(modalRootEl)
 
   const [isShown, setIsShown] = useState<boolean>(false)
 
@@ -63,10 +63,14 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
   useImperativeHandle(ref, () => ({ open, close }), [open, close])
 
   useEffect(() => {
-    modalRootEl?.appendChild(wrapperEl)
+    // NOTE: This check is to prevent of creation multiple div's inside of modal
+    // root if the page have multiple modal instances (same for creation and removal wrapper)
+    if (!modalRootEl?.childElementCount) {
+      modalRootEl?.appendChild(wrapperEl)
+    }
 
     return () => {
-      modalRootEl?.removeChild(wrapperEl)
+      modalRootEl?.replaceChildren()
     }
   }, [wrapperEl])
 

@@ -32,8 +32,12 @@
 
   /* Modal Windows (Dialogs) */
   --modal-dialog-default-width: 720px;
+  --modal-dialog-default-body-max-width: 520px;
   --modal-dialog-border-bg: rgba(76, 76, 255, .2);
   --modal-dialog-shadow-bg: rgba(0, 0, 0, .04);
   --modal-dialog-btn-close-width: 24px;
   --modal-dialog-btn-close-height: 24px;
+
+  /* Glow Text Shadow For Numbers */
+  --glow-shadow: 0 0 16px rgba(51, 51, 255, .25), 0 0 8px rgba(51, 51, 255, .25), 0 4px 32px rgba(51, 51, 255, .5);
 }
