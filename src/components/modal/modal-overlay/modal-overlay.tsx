@@ -34,4 +34,4 @@ const ModalOverlay = ({ modal }: IModalOverlayProps): JSX.Element => {
   return <div className={styles.backdrop} onClick={handleClick} aria-hidden='true' />
 }
 
-export default ModalOverlay
+export default React.memo(ModalOverlay)

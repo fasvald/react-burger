@@ -31,4 +31,4 @@ const BurgerIngredientsCard = ({
   )
 }
 
-export default BurgerIngredientsCard
+export default React.memo(BurgerIngredientsCard)

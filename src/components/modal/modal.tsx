@@ -46,6 +46,7 @@ import styles from './modal.module.css'
 const modalRootEl = document.getElementById('modal-root')
 
 const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Element | null => {
+  // NOTE: We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
   const [isShown, setIsShown] = useState<boolean>(false)
@@ -85,4 +86,4 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
   )
 }
 
-export default forwardRef<IModalRefObject, IModalProps>(Modal)
+export default React.memo(forwardRef<IModalRefObject, IModalProps>(Modal))

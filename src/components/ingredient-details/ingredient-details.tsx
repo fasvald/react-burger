@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 import { pick } from 'lodash'
@@ -14,12 +14,16 @@ import styles from './ingredient-details.module.css'
 const IngredientDetails = ({ ingredient }: IIngredientDetailsProps): JSX.Element => {
   const ingredientNameClass = classNames('text text_type_main-medium', styles.ingredientName)
 
-  const foodEnergy = pick<IBurgerIngredientFoodEnergy>(ingredient, [
-    'calories',
-    'proteins',
-    'fat',
-    'carbohydrates',
-  ])
+  const foodEnergy = useMemo(
+    () =>
+      pick<IBurgerIngredientFoodEnergy>(ingredient, [
+        'calories',
+        'proteins',
+        'fat',
+        'carbohydrates',
+      ]),
+    [ingredient],
+  )
 
   return (
     <div className={styles.dialog}>
@@ -35,4 +39,4 @@ const IngredientDetails = ({ ingredient }: IIngredientDetailsProps): JSX.Element
   )
 }
 
-export default IngredientDetails
+export default React.memo(IngredientDetails)

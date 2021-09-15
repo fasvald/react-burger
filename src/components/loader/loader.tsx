@@ -29,4 +29,4 @@ const Loader = ({ className, circularProgressProps }: ILoaderProps): JSX.Element
   )
 }
 
-export default Loader
+export default React.memo(Loader)

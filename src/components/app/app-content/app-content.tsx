@@ -10,4 +10,4 @@ const AppContent = ({ children, className = '' }: IAppContentProps): JSX.Element
   return <main className={mainClass}>{children}</main>
 }
 
-export default AppContent
+export default React.memo(AppContent)

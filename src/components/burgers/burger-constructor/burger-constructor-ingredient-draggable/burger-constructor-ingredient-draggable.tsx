@@ -25,4 +25,4 @@ const BurgerConstructorIngredientDraggable = ({
   )
 }
 
-export default BurgerConstructorIngredientDraggable
+export default React.memo(BurgerConstructorIngredientDraggable)

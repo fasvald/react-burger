@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
@@ -20,7 +20,11 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
 
   const modal = useRef<IModalRefObject>(null)
 
-  const { bun: buns, sauce: sauces, main: mains } = groupBy(ingredients, 'type')
+  const {
+    bun: buns,
+    sauce: sauces,
+    main: mains,
+  } = useMemo(() => groupBy(ingredients, 'type'), [ingredients])
 
   const handleClick = useCallback((ingredient: IBurgerIngredient) => {
     if (modal.current) {
@@ -84,4 +88,4 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
   )
 }
 
-export default BurgerIngredientsList
+export default React.memo(BurgerIngredientsList)

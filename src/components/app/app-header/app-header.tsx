@@ -66,4 +66,4 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
   )
 }
 
-export default AppHeader
+export default React.memo(AppHeader)

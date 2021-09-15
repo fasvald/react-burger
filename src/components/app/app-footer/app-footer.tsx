@@ -10,4 +10,4 @@ const AppFooter = ({ children, className = '' }: IAppFooterProps): JSX.Element =
   return <footer className={footerClass}>{children}</footer>
 }
 
-export default AppFooter
+export default React.memo(AppFooter)

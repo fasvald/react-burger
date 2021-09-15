@@ -27,4 +27,4 @@ const BurgerConstructorIngredientBun = ({
   )
 }
 
-export default BurgerConstructorIngredientBun
+export default React.memo(BurgerConstructorIngredientBun)

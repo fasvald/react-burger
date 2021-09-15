@@ -18,4 +18,4 @@ const BurgerIngredients = ({ ingredients }: IBurgerIngredientsProps): JSX.Elemen
   )
 }
 
-export default BurgerIngredients
+export default React.memo(BurgerIngredients)

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -17,7 +17,7 @@ import styles from './burger-constructor.module.css'
 const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Element => {
   const priceValueClass = classNames('text text_type_digits-medium', styles.priceValue)
 
-  const { bun, sauce, main } = groupBy(ingredients, 'type')
+  const { bun, sauce, main } = useMemo(() => groupBy(ingredients, 'type'), [ingredients])
 
   const modal = useRef<IModalRefObject>(null)
 
@@ -66,4 +66,4 @@ const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Elemen
   )
 }
 
-export default BurgerConstructor
+export default React.memo(BurgerConstructor)

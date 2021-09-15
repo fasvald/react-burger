@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import classNames from 'classnames'
 
@@ -28,4 +28,4 @@ const OrderDetails = (): JSX.Element => {
   )
 }
 
-export default OrderDetails
+export default React.memo(OrderDetails)

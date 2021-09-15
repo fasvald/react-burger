@@ -44,4 +44,4 @@ const IngredientDetailsFoodEnergy = ({
   )
 }
 
-export default IngredientDetailsFoodEnergy
+export default React.memo(IngredientDetailsFoodEnergy)

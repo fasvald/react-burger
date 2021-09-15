@@ -23,4 +23,4 @@ const ModalDialog = ({ children, modal }: IModalDialogProps): JSX.Element => {
   )
 }
 
-export default ModalDialog
+export default React.memo(ModalDialog)

@@ -24,4 +24,4 @@ const IngredientDetailsImage = ({
   )
 }
 
-export default IngredientDetailsImage
+export default React.memo(IngredientDetailsImage)
