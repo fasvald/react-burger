@@ -1,6 +1,4 @@
-/* NOTE: Think about adding animation in future */
-
-.overlay {
+.backdrop {
   position: absolute;
   top: 0;
   right: 0;

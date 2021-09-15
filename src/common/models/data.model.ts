@@ -21,3 +21,8 @@ export interface IBurgerIngredientFetch {
   data: IBurgerIngredient[]
   success: boolean
 }
+
+export type IBurgerIngredientFoodEnergy = Pick<
+  IBurgerIngredient,
+  'calories' | 'proteins' | 'fat' | 'carbohydrates'
+>

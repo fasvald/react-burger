@@ -17,12 +17,10 @@
   /* Colors */
   --primary-light: #f2f2f3;
   --dark-grey: #8585ad;
+  --dark-grey-dim: #2f2f37;
   --dark-bg: #1c1c21;
   --dark-black-bg: #131316;
-
-  /* Custom Scrollbar */
-  --scrollbar-track: #8585ad;
-  --scrollbar-thumb: #2f2f37;
+  --purple: #4c4cff;
 
   /* Icon Sized */
   --icon-width: 24px;
@@ -31,4 +29,11 @@
   /* Burger Constructor Component (with DnD) */
   --burger-constructor-width-total: 536px;
   --dnd-icon-margin-right: 8px;
+
+  /* Modal Windows (Dialogs) */
+  --modal-dialog-default-width: 720px;
+  --modal-dialog-border-bg: rgba(76, 76, 255, .2);
+  --modal-dialog-shadow-bg: rgba(0, 0, 0, .04);
+  --modal-dialog-btn-close-width: 24px;
+  --modal-dialog-btn-close-height: 24px;
 }

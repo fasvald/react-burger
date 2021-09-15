@@ -45,7 +45,7 @@
 }
 
 .logo:hover svg {
-  stroke: #4c4cff;
+  stroke: var(--purple);
 }
 
 /* Menu in navigation */

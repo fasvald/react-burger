@@ -78,7 +78,7 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
         </div>
       </div>
       <Modal ref={modal}>
-        {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} modal={modal} />}
+        {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} />}
       </Modal>
     </div>
   )

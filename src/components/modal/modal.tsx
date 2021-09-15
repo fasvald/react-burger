@@ -36,6 +36,7 @@ import React, {
 
 import ReactDOM from 'react-dom'
 
+import ModalDialog from './modal-dialog/modal-dialog'
 import ModalOverlay from './modal-overlay/modal-overlay'
 import { IModalProps, IModalRefObject } from './modal.model'
 import { blockBrowserScroll, unblockBrowserScroll } from './modal.utils'
@@ -73,7 +74,7 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
     isShown ? (
       <div className={styles.wrapper} role='dialog'>
         <ModalOverlay modal={ref as RefObject<IModalRefObject>} />
-        <div className={styles.dialogWrapper}>{children}</div>
+        <ModalDialog modal={ref as RefObject<IModalRefObject>}>{children}</ModalDialog>
       </div>
     ) : null,
     wrapperEl,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
-import { IModalOverlayProps } from './modal-overlay.modal'
+import { IModalOverlayProps } from './modal-overlay.model'
 
 import styles from './modal-overlay.module.css'
 
@@ -31,7 +31,7 @@ const ModalOverlay = ({ modal }: IModalOverlayProps): JSX.Element => {
     }
   }, [handleEscape])
 
-  return <div className={styles.overlay} onClick={handleClick} aria-hidden='true' />
+  return <div className={styles.backdrop} onClick={handleClick} aria-hidden='true' />
 }
 
 export default ModalOverlay
