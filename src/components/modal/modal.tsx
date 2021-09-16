@@ -61,6 +61,15 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
     unblockBrowserScroll()
   }, [])
 
+  const handleEscape = useCallback(
+    (event) => {
+      if (event.keyCode === 27) {
+        close()
+      }
+    },
+    [close],
+  )
+
   useImperativeHandle(ref, () => ({ open, close }), [open, close])
 
   useEffect(() => {
@@ -70,10 +79,14 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
       modalRootEl?.appendChild(wrapperEl)
     }
 
+    document.addEventListener('keydown', handleEscape, false)
+
     return () => {
       modalRootEl?.replaceChildren()
+
+      document.removeEventListener('keydown', handleEscape, false)
     }
-  }, [wrapperEl])
+  }, [wrapperEl, handleEscape])
 
   return ReactDOM.createPortal(
     isShown ? (
