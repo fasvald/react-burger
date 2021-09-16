@@ -6,6 +6,12 @@
   flex-wrap: wrap;
   flex-direction: column;
   width: var(--card-width-default);
+  cursor: pointer;
+}
+
+/* To prevent content shrink after loading */
+.img {
+  min-height: 120px;
 }
 
 .price {

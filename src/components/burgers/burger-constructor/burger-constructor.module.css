@@ -16,15 +16,15 @@
 /* Section (root element) */
 
 .section {
-  padding: 100px 20px 0;
   width: 600px;
+  padding: 100px 20px 0;
 }
 
 /* DnD list */
 
 .listDnD {
-  margin: 10px 0;
   max-height: 464px;
+  margin: 10px 0;
   overflow-y: scroll;
 }
 
@@ -35,18 +35,19 @@
 }
 
 .listDnD::-webkit-scrollbar-track {
-  background-color: var(--scrollbar-track);
+  background-color: var(--dark-grey);
   border-radius: 0;
 }
 
 .listDnD::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb);
+  background-color: var(--dark-grey-dim);
   border-radius: 0;
 }
 
 /* List item */
 
 .listItem {
+
   /* NOTE: Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
   margin-left: calc(var(--icon-width) + var(--dnd-icon-margin-right));
 }
@@ -70,10 +71,10 @@
 /* Total price value (with icon) */
 
 .priceValue {
-  margin-right: 40px;
   display: inline-flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
+  margin-right: 40px;
   text-align: right;
 }
 

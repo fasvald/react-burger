@@ -1,0 +1,97 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "no-descending-specificity": null,
+    "no-duplicate-selectors": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "block-opening-brace-newline-after": "always-multi-line",
+    "block-closing-brace-empty-line-before": "never",
+    "block-closing-brace-newline-before": "always-multi-line",
+    "comment-empty-line-before": "always",
+    "color-hex-case": "lower",
+    "declaration-colon-newline-after": "always-multi-line",
+    "declaration-empty-line-before": [
+      "never",
+      {
+        "ignore": "after-declaration"
+      }
+    ],
+    "declaration-block-no-redundant-longhand-properties": [
+      true,
+      {
+        "ignoreShorthands": ["/flex/"]
+      }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["export"]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["ng-deep"]
+      }
+    ],
+    "property-blacklist": ["word-wrap"],
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["/^color-/", "/^export-/"]
+      }
+    ],
+    "selector-list-comma-newline-after": "always",
+    "no-empty-source": true,
+    "number-leading-zero": "never",
+    "order/properties-order": [
+      {
+        "properties": ["position", "top", "right", "bottom", "left", "z-index"]
+      },
+      {
+        "properties": [
+          "display",
+          "flex-direction",
+          "justify-content",
+          "align-content",
+          "align-self",
+          "align-items",
+          "float",
+          "overflow",
+          "box-sizing",
+          "width",
+          "min-width",
+          "max-width",
+          "height",
+          "min-height",
+          "max-height",
+          "padding",
+          "padding-top",
+          "padding-right",
+          "padding-bottom",
+          "padding-left",
+          "margin",
+          "margin-top",
+          "margin-right",
+          "margin-bottom",
+          "margin-left"
+        ]
+      },
+      {
+        "properties": ["background", "background-color", "border", "border-radius"]
+      },
+      {
+        "properties": [
+          "font",
+          "font-family",
+          "font-size",
+          "line-height",
+          "color",
+          "text-align",
+          "text-transform"
+        ]
+      }
+    ]
+  }
+}

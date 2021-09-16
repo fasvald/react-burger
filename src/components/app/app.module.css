@@ -1,17 +1,43 @@
 @import './../../common/styles/variables.css';
 
-.header {}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+
+  /*
+    This is needed for working flex-grow rule (and because of app structure of many div inheritances).
+    We can use percentage, but it won't work until we set the same rule for parent div, and so on.
+    Based on: https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
+  */
+  min-height: 100vh;
+}
+
+.header {
+  height: 88px;
+  flex-shrink: 0;
+}
 
 .content {
   display: flex;
   justify-content: space-between;
-  flex: 1;
-  margin: auto;
   width: 100%;
   max-width: var(--container-xxl);
+  margin: auto;
+  flex: 1;
 }
 
 .footer {
   flex-shrink: 0;
   height: 40px;
+}
+
+/* TODO: Think about making as a separate component */
+
+.error {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
 }

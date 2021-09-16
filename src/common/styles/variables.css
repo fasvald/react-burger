@@ -1,4 +1,5 @@
 :root {
+
   /* Containers */
   --container-sm: 540px;
   --container-md: 720px;
@@ -16,11 +17,10 @@
   /* Colors */
   --primary-light: #f2f2f3;
   --dark-grey: #8585ad;
+  --dark-grey-dim: #2f2f37;
   --dark-bg: #1c1c21;
-
-  /* Custom Scrollbar */
-  --scrollbar-track: #8585ad;
-  --scrollbar-thumb: #2f2f37;
+  --dark-black-bg: #131316;
+  --purple: #4c4cff;
 
   /* Icon Sized */
   --icon-width: 24px;
@@ -29,4 +29,15 @@
   /* Burger Constructor Component (with DnD) */
   --burger-constructor-width-total: 536px;
   --dnd-icon-margin-right: 8px;
+
+  /* Modal Windows (Dialogs) */
+  --modal-dialog-default-width: 720px;
+  --modal-dialog-default-body-max-width: 520px;
+  --modal-dialog-border-bg: rgba(76, 76, 255, .2);
+  --modal-dialog-shadow-bg: rgba(0, 0, 0, .04);
+  --modal-dialog-btn-close-width: 24px;
+  --modal-dialog-btn-close-height: 24px;
+
+  /* Glow Text Shadow For Numbers */
+  --glow-shadow: 0 0 16px rgba(51, 51, 255, .25), 0 0 8px rgba(51, 51, 255, .25), 0 4px 32px rgba(51, 51, 255, .5);
 }
