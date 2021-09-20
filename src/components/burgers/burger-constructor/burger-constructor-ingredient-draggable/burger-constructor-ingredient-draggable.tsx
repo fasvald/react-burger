@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
-import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
+import { useBurgerConstructor } from '../burger-constructor.context'
+import {
+  BurgerConstructorActionKind,
+  IBurgerConstructorIngredientProps,
+} from '../burger-constructor.model'
 
 import styles from './burger-constructor-ingredient-draggable.module.css'
 
@@ -13,6 +17,12 @@ const BurgerConstructorIngredientDraggable = ({
 }: IBurgerConstructorIngredientProps): JSX.Element => {
   const wrapperClass = classNames(styles.wrapper, className)
 
+  const { dispatch } = useBurgerConstructor()
+
+  const handleClose = useCallback(() => {
+    dispatch({ type: BurgerConstructorActionKind.Remove, item: ingredient })
+  }, [dispatch, ingredient])
+
   return (
     <div className={wrapperClass}>
       <DragIcon type='primary' />
@@ -20,6 +30,7 @@ const BurgerConstructorIngredientDraggable = ({
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
+        handleClose={handleClose}
       />
     </div>
   )

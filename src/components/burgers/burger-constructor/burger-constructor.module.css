@@ -24,7 +24,6 @@
 
 .listDnD {
   max-height: 464px;
-  margin: 10px 0;
   overflow-y: scroll;
 }
 
@@ -46,10 +45,17 @@
 
 /* List item */
 
+/* NOTE: Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
 .listItem {
-
-  /* NOTE: Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
   margin-left: calc(var(--icon-width) + var(--dnd-icon-margin-right));
+}
+
+.listItem:first-of-type {
+  margin-bottom: 10px;
+}
+
+.listItem:last-of-type {
+  margin-top: 10px;
 }
 
 /* DnD list item */

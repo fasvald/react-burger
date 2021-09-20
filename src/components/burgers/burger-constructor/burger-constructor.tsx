@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { groupBy } from 'lodash'
 
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
@@ -10,16 +9,21 @@ import OrderDetails from '../../order-details/order-details'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
-import { IBurgerConstructorProps } from './burger-constructor.model'
+import { useBurgerConstructor } from './burger-constructor.context'
+import { calculateTotalPrice, groupIngredients } from './burger-constructor.utils'
 
 import styles from './burger-constructor.module.css'
 
-const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Element => {
+const BurgerConstructor = (): JSX.Element => {
   const priceValueClass = classNames('text text_type_digits-medium', styles.priceValue)
 
-  const { bun, sauce, main } = useMemo(() => groupBy(ingredients, 'type'), [ingredients])
+  const { state } = useBurgerConstructor()
 
   const modal = useRef<IModalRefObject>(null)
+
+  const { bun, toppings } = useMemo(() => groupIngredients(state.ingredients), [state.ingredients])
+
+  const totalPrice = useMemo(() => calculateTotalPrice(state.ingredients), [state.ingredients])
 
   const handleClick = useCallback(() => {
     if (modal.current) {
@@ -30,29 +34,35 @@ const BurgerConstructor = ({ ingredients }: IBurgerConstructorProps): JSX.Elemen
   return (
     <section className={styles.section}>
       <div className={styles.list}>
-        <BurgerConstructorIngredientBun
-          className={styles.listItem}
-          ingredient={bun[0]}
-          direction='top'
-        />
-        <div className={styles.listDnD}>
-          {[...sauce, ...main].map((ingredient) => (
-            <BurgerConstructorIngredientDraggable
-              key={ingredient._id}
-              className={styles.listDnDItem}
-              ingredient={ingredient}
-            />
-          ))}
-        </div>
-        <BurgerConstructorIngredientBun
-          className={styles.listItem}
-          ingredient={bun[0]}
-          direction='bottom'
-        />
+        {bun?.length > 0 && (
+          <BurgerConstructorIngredientBun
+            className={styles.listItem}
+            ingredient={bun[0]}
+            direction='top'
+          />
+        )}
+        {toppings?.length > 0 && (
+          <div className={styles.listDnD}>
+            {toppings.map((ingredient) => (
+              <BurgerConstructorIngredientDraggable
+                key={ingredient.nanoid}
+                className={styles.listDnDItem}
+                ingredient={ingredient}
+              />
+            ))}
+          </div>
+        )}
+        {bun?.length > 0 && (
+          <BurgerConstructorIngredientBun
+            className={styles.listItem}
+            ingredient={bun[0]}
+            direction='bottom'
+          />
+        )}
       </div>
       <div className={styles.price}>
         <span className={priceValueClass}>
-          610
+          {totalPrice}
           <CurrencyIcon type='primary' />
         </span>
         <Button type='primary' size='large' onClick={handleClick}>

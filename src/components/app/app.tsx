@@ -6,6 +6,7 @@ import {
   TFetchProcess,
 } from '../../common/models/data.model'
 import BurgerConstructor from '../burgers/burger-constructor/burger-constructor'
+import { BurgerConstructorProvider } from '../burgers/burger-constructor/burger-constructor.context'
 import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients'
 import Loader from '../loader/loader'
 
@@ -63,8 +64,10 @@ const App = (): JSX.Element => {
         )}
         {status === 'loaded' && ingredients.length > 0 && (
           <>
-            <BurgerIngredients ingredients={ingredients} />
-            <BurgerConstructor ingredients={ingredients} />
+            <BurgerConstructorProvider>
+              <BurgerIngredients ingredients={ingredients} />
+              <BurgerConstructor />
+            </BurgerConstructorProvider>
           </>
         )}
       </AppContent>

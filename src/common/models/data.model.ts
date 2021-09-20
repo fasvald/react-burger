@@ -17,6 +17,11 @@ export interface IBurgerIngredient {
   __v: number
 }
 
+// NOTE: Powered by "nanoid" library
+export interface IBurgerIngredientUnique extends IBurgerIngredient {
+  nanoid: string
+}
+
 export interface IBurgerIngredientFetch {
   data: IBurgerIngredient[]
   success: boolean
