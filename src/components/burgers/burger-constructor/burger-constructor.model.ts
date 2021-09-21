@@ -2,11 +2,7 @@ import { ReactNode } from 'react'
 
 import { IBurgerIngredientUnique } from '../../../common/models/data.model'
 
-export enum BurgerConstructorActionKind {
-  Add = 'ADD',
-  Remove = 'REMOVE',
-  Clear = 'CLEAR',
-}
+import BurgerConstructorActionKind from './burger-constructor.constant'
 
 // export interface IBurgerConstructorProps {}
 

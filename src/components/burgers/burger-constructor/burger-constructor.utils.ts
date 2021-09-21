@@ -1,4 +1,12 @@
-import { IBurgerIngredientUnique } from '../../../common/models/data.model'
+import { useState } from 'react'
+
+import { IBurgerIngredientUnique, TFetchProcess } from '../../../common/models/data.model'
+import { ORDER_CREATION_API_ENDPOINT } from '../../app/app.constant'
+import {
+  IOrderDetails,
+  IOrderDetailsBody,
+  IUseOrderDetails,
+} from '../../order-details/order-details.model'
 
 import { IGroupedIngredients } from './burger-constructor.model'
 
@@ -15,7 +23,7 @@ export function calculateTotalPrice(ingredients: IBurgerIngredientUnique[]): num
 
   return ingredients.reduce(
     (sum, ingredient) =>
-      // NOTE: API can accept order with sending only one bun ID, so we need to adjust total calculation
+      // API can accept order with sending only one bun ID, so we need to adjust total calculation
       sum + (ingredient.type === 'bun' ? ingredient.price * 2 : ingredient.price),
     0,
   )
@@ -35,7 +43,7 @@ export function addIngredient(
 ): IBurgerIngredientUnique[] {
   const newArray = ingredients.slice()
 
-  // NOTE: Omit this check if "bun" will be a first ingredient
+  // Omit this check if "bun" will be a first ingredient
   if (ingredient.type === 'bun' && newArray.length) {
     return [...normalizeBuns(newArray, ingredient)]
   }
@@ -87,24 +95,61 @@ export function groupIngredients(ingredients: IBurgerIngredientUnique[]): IGroup
  * @param ingredient Added ingredient
  * @returns Normalized array of ingredients
  */
-function normalizeBuns(
+export function normalizeBuns(
   ingredients: IBurgerIngredientUnique[],
   ingredient: IBurgerIngredientUnique,
 ): IBurgerIngredientUnique[] {
-  // NOTE: Find bun index if it's not a duplication
-  const bunIndex = ingredients.findIndex(
-    (item) => item.type === 'bun' && item._id !== ingredient._id,
-  )
+  // Find bun index if it's not a duplication
+  const bunIndex = ingredients.findIndex((item) => item.type === 'bun')
 
-  if (bunIndex !== -1) {
-    // NOTE: Remove bun
-    const normalizedIngredients = ingredients.filter((item, i) => i !== bunIndex)
+  // No buns at all, so we insert a bun into the first position
+  if (bunIndex === -1) {
+    ingredients.splice(0, 0, ingredient)
+  }
 
-    // NOTE: Insert a new bun instead of an old one
-    normalizedIngredients.splice(bunIndex, 0, ingredient)
-
-    return normalizedIngredients
+  // We have found a bun, so we need to check if it duplication and replace it
+  if (bunIndex !== -1 && ingredients[bunIndex]._id !== ingredient._id) {
+    ingredients.splice(bunIndex, 1) // Remove bun
+    ingredients.splice(bunIndex, 0, ingredient) // Add bun
   }
 
   return ingredients
+}
+
+export function useOrderDetails(): IUseOrderDetails {
+  const [status, setStatus] = useState<TFetchProcess>('idle')
+  const [order, setOrder] = useState<IOrderDetails | null>(null)
+
+  const controller = new AbortController()
+  const { signal } = controller
+
+  const createOrder = async (body: IOrderDetailsBody, cb: () => void) => {
+    setStatus('loading')
+
+    try {
+      const response = await fetch(ORDER_CREATION_API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+        signal,
+      })
+
+      const result = await response.json()
+
+      setStatus('loaded')
+      setOrder(result)
+      cb()
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+
+      setStatus('error')
+      setOrder(null)
+    }
+  }
+
+  return { order, status, controller, createOrder }
 }

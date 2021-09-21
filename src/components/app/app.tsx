@@ -13,7 +13,7 @@ import Loader from '../loader/loader'
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
 import AppHeader from './app-header/app-header'
-import INGREDIENTS_API_ENDPOINT from './app.constant'
+import { INGREDIENTS_API_ENDPOINT } from './app.constant'
 
 import styles from './app.module.css'
 

@@ -27,7 +27,7 @@
   overflow-y: scroll;
 }
 
-/* NOTE: Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+/* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
 
 .listDnD::-webkit-scrollbar {
   width: 8px;
@@ -45,7 +45,7 @@
 
 /* List item */
 
-/* NOTE: Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
+/* Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
 .listItem {
   margin-left: calc(var(--icon-width) + var(--dnd-icon-margin-right));
 }
@@ -72,6 +72,10 @@
   align-items: center;
   margin-top: 40px;
   margin-right: calc(var(--section-width) - var(--burger-constructor-width-total) - var(--icon-width) - var(--dnd-icon-margin-right));
+}
+
+.price button {
+  min-width: 214px;
 }
 
 /* Total price value (with icon) */

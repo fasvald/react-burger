@@ -20,7 +20,7 @@ const BurgerIngredientsCard = ({
 
   const { state } = useBurgerConstructor()
 
-  // NOTE: The most easiest way how to use "Context" and calculate how many times it has duplication :)
+  // The most easiest way how to use "Context" and calculate how many times it has duplication :)
   // Anyway, I think it should be (and will be) reworked during next step => Redux
   const count = useMemo(() => {
     return state.ingredients.reduce((countValue, item) => {

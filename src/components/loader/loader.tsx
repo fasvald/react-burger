@@ -14,6 +14,10 @@ const themeOptions = createTheme({
       main: '#8585ad',
       dark: '#2f2f37',
     },
+    secondary: {
+      main: '#fff',
+      dark: '#2f2f37',
+    },
   },
 })
 

@@ -3,11 +3,9 @@ import React, { useCallback } from 'react'
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
+import BurgerConstructorActionKind from '../burger-constructor.constant'
 import { useBurgerConstructor } from '../burger-constructor.context'
-import {
-  BurgerConstructorActionKind,
-  IBurgerConstructorIngredientProps,
-} from '../burger-constructor.model'
+import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
 
 import styles from './burger-constructor-ingredient-draggable.module.css'
 

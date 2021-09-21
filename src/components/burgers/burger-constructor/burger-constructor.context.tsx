@@ -14,8 +14,8 @@
 
 import React, { useMemo, useReducer } from 'react'
 
+import BurgerConstructorActionKind from './burger-constructor.constant'
 import {
-  BurgerConstructorActionKind,
   IBurgerConstructorAction,
   IBurgerConstructorContext,
   IBurgerConstructorProviderProps,
@@ -48,7 +48,7 @@ function burgerConstructorReducer(
       return { ...state, ingredients: [] }
     }
     default: {
-      // NOTE: Instead of throwing an error, we can return passing state here
+      // Instead of throwing an error, we can return passing state here
       throw new Error(`Unhandled action type: ${action.type}`)
     }
   }

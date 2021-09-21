@@ -8,8 +8,8 @@ import { IBurgerIngredient } from '../../../../common/models/data.model'
 import IngredientDetails from '../../../ingredient-details/ingredient-details'
 import Modal from '../../../modal/modal'
 import { IModalRefObject } from '../../../modal/modal.model'
+import BurgerConstructorActionKind from '../../burger-constructor/burger-constructor.constant'
 import { useBurgerConstructor } from '../../burger-constructor/burger-constructor.context'
-import { BurgerConstructorActionKind } from '../../burger-constructor/burger-constructor.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
 
 import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
@@ -18,7 +18,7 @@ import styles from './burger-ingredients-list.module.css'
 
 const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JSX.Element => {
   const [chosenIngredient, setChosenIngredient] = useState<IBurgerIngredient>()
-  // NOTE: Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
+  // Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
   const [currentListSection, setCurrentListSection] = useState<string>('bun')
 
   const modal = useRef<IModalRefObject>(null)
@@ -38,7 +38,7 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
 
         setChosenIngredient(ingredient)
 
-        // NOTE: Because there could be a lot of duplication of ingredients, using "_id" as a key ref is wrong,
+        // Because there could be a lot of duplication of ingredients, using "_id" as a key ref is wrong,
         // so we are going to inject custom id via "nanoid" library (this part will be refactored for DnD feature soon)
         dispatch({
           type: BurgerConstructorActionKind.Add,
