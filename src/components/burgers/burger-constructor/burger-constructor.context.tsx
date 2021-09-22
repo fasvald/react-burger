@@ -48,8 +48,7 @@ function burgerConstructorReducer(
       return { ...state, ingredients: [] }
     }
     default: {
-      // Instead of throwing an error, we can return passing state here
-      throw new Error(`Unhandled action type: ${action.type}`)
+      return state
     }
   }
 }
