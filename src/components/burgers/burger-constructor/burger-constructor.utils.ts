@@ -129,13 +129,17 @@ export function useOrderDetails(): IUseOrderDetails {
     try {
       const response = await fetch(ORDER_CREATION_API_ENDPOINT, {
         method: 'POST',
+        body: JSON.stringify(body),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
         signal,
       })
+
+      if (!response.ok) {
+        throw new Error(`Order creation failed with "HTTP status code": ${response.status}`)
+      }
 
       const result = await response.json()
 
@@ -143,11 +147,14 @@ export function useOrderDetails(): IUseOrderDetails {
       setOrder(result)
       cb()
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e)
+      // Update order and status states only if it's real error and not an abortion
+      if (!controller.signal.aborted) {
+        setStatus('error')
+        setOrder(null)
 
-      setStatus('error')
-      setOrder(null)
+        // eslint-disable-next-line no-console
+        console.error(e)
+      }
     }
   }
 

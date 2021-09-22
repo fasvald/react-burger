@@ -30,16 +30,26 @@ const App = (): JSX.Element => {
 
       try {
         const response = await fetch(INGREDIENTS_API_ENDPOINT, { signal })
+
+        if (!response.ok) {
+          throw new Error(
+            `Ingredients fetching was failed with "HTTP status code": ${response.status}`,
+          )
+        }
+
         const result: IBurgerIngredientFetch = await response.json()
 
         setStatus('loaded')
         setIngredients(result.data)
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e)
+        // Update ingredients and status states only if it's real error and not an abortion
+        if (!controller.signal.aborted) {
+          setStatus('error')
+          setIngredients([])
 
-        setStatus('error')
-        setIngredients([])
+          // eslint-disable-next-line no-console
+          console.error(e)
+        }
       }
     }
 
