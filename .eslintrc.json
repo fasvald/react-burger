@@ -45,6 +45,8 @@
         "tsx": "never"
       }
     ],
+    // It's off due to https://stackoverflow.com/a/63924400/4606887 !!!
+    "import/no-cycle": "off",
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
     "react-hooks/rules-of-hooks": "error",
