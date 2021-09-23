@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-import { IBurgerIngredientUnique, TFetchProcess } from '../../../common/models/data.model'
-import { ORDER_CREATION_API_ENDPOINT } from '../../app/app.constant'
+import { IBurgerIngredientUnique, TFetchProcess } from '../../common/models/data.model'
+import { ORDER_CREATION_API_ENDPOINT } from '../app/app.constant'
 import {
   IOrderDetails,
   IOrderDetailsBody,
   IUseOrderDetails,
-} from '../../order-details/order-details.model'
+} from '../order-details/order-details.model'
 
 import { IGroupedIngredients } from './burger-constructor.model'
 

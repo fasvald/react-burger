@@ -4,12 +4,10 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { groupBy } from 'lodash'
 import { nanoid } from 'nanoid'
 
-import { IBurgerIngredient } from '../../../../common/models/data.model'
-import IngredientDetails from '../../../ingredient-details/ingredient-details'
-import Modal from '../../../modal/modal'
-import { IModalRefObject } from '../../../modal/modal.model'
-import BurgerConstructorActionKind from '../../burger-constructor/burger-constructor.constant'
-import { useBurgerConstructor } from '../../burger-constructor/burger-constructor.context'
+import { IBurgerIngredient } from '../../../common/models/data.model'
+import IngredientDetails from '../../ingredient-details/ingredient-details'
+import Modal from '../../modal/modal'
+import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
 
 import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
@@ -22,8 +20,6 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
   const [currentListSection, setCurrentListSection] = useState<string>('bun')
 
   const modal = useRef<IModalRefObject>(null)
-
-  const { dispatch } = useBurgerConstructor()
 
   const {
     bun: buns,
@@ -40,16 +36,17 @@ const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JS
 
         // Because there could be a lot of duplication of ingredients, using "_id" as a key ref is wrong,
         // so we are going to inject custom id via "nanoid" library (this part will be refactored for DnD feature soon)
-        dispatch({
-          type: BurgerConstructorActionKind.Add,
-          item: {
-            ...ingredient,
-            nanoid: nanoid(),
-          },
-        })
+        // dispatch({
+        //   type: BurgerConstructorActionKind.Add,
+        //   item: {
+        //     ...ingredient,
+        //     nanoid: nanoid(),
+        //   },
+        // })
       }
     },
-    [dispatch],
+    // [dispatch],
+    [],
   )
 
   return (

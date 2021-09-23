@@ -1,19 +1,21 @@
 import React from 'react'
 
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 
 import App from './components/app/app'
 import reportWebVitals from './reportWebVitals'
-
 import 'normalize.css'
-
 import './index.css'
+import store from './store'
 
 /* NOTE: There will be FOUC, but still there are a lot of approaches how to deal with it */
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('app-root'),
 )

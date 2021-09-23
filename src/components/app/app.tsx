@@ -1,64 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import BurgerConstructor from '../burger-constructor/burger-constructor'
+import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import {
-  IBurgerIngredient,
-  IBurgerIngredientFetch,
-  TFetchProcess,
-} from '../../common/models/data.model'
-import BurgerConstructor from '../burgers/burger-constructor/burger-constructor'
-import { BurgerConstructorProvider } from '../burgers/burger-constructor/burger-constructor.context'
-import BurgerIngredients from '../burgers/burger-ingredients/burger-ingredients'
+  fetchBurgerIngredients,
+  selectBurgerIngredients,
+  selectBurgerIngredientsStatus,
+} from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader/loader'
 
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
 import AppHeader from './app-header/app-header'
-import { INGREDIENTS_API_ENDPOINT } from './app.constant'
 
 import styles from './app.module.css'
 
 const App = (): JSX.Element => {
-  const [status, setStatus] = useState<TFetchProcess>('idle')
-  const [ingredients, setIngredients] = useState<IBurgerIngredient[]>([])
+  const ingredients = useAppSelector(selectBurgerIngredients)
+  const status = useAppSelector(selectBurgerIngredientsStatus)
+
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const controller = new AbortController()
-    const { signal } = controller
-
-    const fetchIngredients = async () => {
-      setStatus('loading')
-
-      try {
-        const response = await fetch(INGREDIENTS_API_ENDPOINT, { signal })
-
-        if (!response.ok) {
-          throw new Error(
-            `Ingredients fetching was failed with "HTTP status code": ${response.status}`,
-          )
-        }
-
-        const result: IBurgerIngredientFetch = await response.json()
-
-        setStatus('loaded')
-        setIngredients(result.data)
-      } catch (e) {
-        // Update ingredients and status states only if it's real error and not an abortion
-        if (!controller.signal.aborted) {
-          setStatus('error')
-          setIngredients([])
-
-          // eslint-disable-next-line no-console
-          console.error(e)
-        }
-      }
-    }
-
-    fetchIngredients()
-
-    return () => {
-      controller.abort()
-    }
-  }, [])
+    dispatch(fetchBurgerIngredients())
+  }, [dispatch])
 
   return (
     <div className={styles.wrapper}>
@@ -74,10 +40,8 @@ const App = (): JSX.Element => {
         )}
         {status === 'loaded' && ingredients.length > 0 && (
           <>
-            <BurgerConstructorProvider>
-              <BurgerIngredients ingredients={ingredients} />
-              <BurgerConstructor />
-            </BurgerConstructorProvider>
+            <BurgerIngredients ingredients={ingredients} />
+            <BurgerConstructor />
           </>
         )}
       </AppContent>
