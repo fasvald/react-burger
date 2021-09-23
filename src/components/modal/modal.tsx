@@ -46,7 +46,7 @@ import styles from './modal.module.css'
 const modalRootEl = document.getElementById('modal-root')
 
 const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Element | null => {
-  // NOTE: We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
+  // We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
   const [isShown, setIsShown] = useState<boolean>(false)
@@ -73,7 +73,7 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
   useImperativeHandle(ref, () => ({ open, close }), [open, close])
 
   useEffect(() => {
-    // NOTE: This check is to prevent of creation multiple div's inside of modal
+    // This check is to prevent of creation multiple div's inside of modal
     // root if the page have multiple modal instances (same for creation and removal wrapper)
     if (!modalRootEl?.childElementCount) {
       modalRootEl?.appendChild(wrapperEl)
