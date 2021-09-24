@@ -3,8 +3,13 @@ import React, { useCallback, useRef, useState } from 'react'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { IBurgerIngredient } from '../../../common/models/data.model'
-import { useAppSelector } from '../../../hooks'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
 import IngredientDetails from '../../ingredient-details/ingredient-details'
+import {
+  ingredientDetailsRemove,
+  ingredientDetailsSave,
+  selectIngredientDetails,
+} from '../../ingredient-details/ingredient-details.slice'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
@@ -13,23 +18,33 @@ import { selectBurgerIngredientsByType } from '../burger-ingredients.slice'
 import styles from './burger-ingredients-list.module.css'
 
 const BurgerIngredientsList = (): JSX.Element => {
+  const dispatch = useAppDispatch()
+
   const buns = useAppSelector((state) => selectBurgerIngredientsByType(state)('bun'))
   const sauces = useAppSelector((state) => selectBurgerIngredientsByType(state)('sauce'))
   const mains = useAppSelector((state) => selectBurgerIngredientsByType(state)('main'))
 
-  const [chosenIngredient, setChosenIngredient] = useState<IBurgerIngredient>()
+  const chosenIngredient = useAppSelector(selectIngredientDetails)
+
   // Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
   const [currentListSection, setCurrentListSection] = useState<string>('bun')
 
   const modal = useRef<IModalRefObject>(null)
 
-  const handleClick = useCallback((ingredient: IBurgerIngredient) => {
-    if (modal.current) {
-      modal.current.open()
+  const handleClick = useCallback(
+    (ingredient: IBurgerIngredient) => {
+      if (modal.current) {
+        modal.current.open()
 
-      setChosenIngredient(ingredient)
-    }
-  }, [])
+        dispatch(ingredientDetailsSave(ingredient))
+      }
+    },
+    [dispatch],
+  )
+
+  const handleClose = useCallback(() => {
+    dispatch(ingredientDetailsRemove())
+  }, [dispatch])
 
   return (
     <div className={styles.wrapper}>
@@ -79,7 +94,7 @@ const BurgerIngredientsList = (): JSX.Element => {
           ))}
         </div>
       </div>
-      <Modal ref={modal}>
+      <Modal ref={modal} onClose={handleClose}>
         {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} />}
       </Modal>
     </div>
