@@ -1,5 +1,6 @@
 import { createSelector, PayloadAction } from '@reduxjs/toolkit'
 import produce from 'immer'
+import { memoize } from 'lodash'
 import { nanoid } from 'nanoid'
 import { AnyAction } from 'redux'
 
@@ -7,7 +8,7 @@ import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/
 import { AppThunk, RootState } from '../../store'
 
 import { IBurgerConstructorIngredientState } from './burger-constructor.model'
-import { calculateTotalPrice } from './burger-constructor.utils'
+import calculateTotalPrice from './burger-constructor.utils'
 
 /** Actions */
 
@@ -38,7 +39,30 @@ export const burgerConstructorToppingsSelector = (state: RootState): IBurgerIngr
 
 export const selectBurgerConstructorTotalPrice = createSelector(
   [burgerConstructorSelector],
-  (constructor) => calculateTotalPrice([...constructor.buns, ...constructor.toppings]),
+  (constructor) =>
+    memoize(() => calculateTotalPrice([...constructor.buns, ...constructor.toppings])),
+)
+
+export const selectBurgerConstructorIDs = createSelector(
+  [burgerConstructorSelector],
+  (constructor) =>
+    memoize(() =>
+      [...constructor.buns, ...constructor.toppings].map((ingredient) => ingredient._id),
+    ),
+)
+
+export const selectBurgerConstructorIngredientCountById = createSelector(
+  [burgerConstructorSelector],
+  (constructor) =>
+    memoize((id: string) =>
+      [...constructor.buns, ...constructor.toppings].reduce((countValue, ingredient) => {
+        if (ingredient._id === id) {
+          return countValue + 1
+        }
+
+        return countValue
+      }, 0),
+    ),
 )
 
 /** Action creators */

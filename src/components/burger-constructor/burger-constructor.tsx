@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -9,6 +9,11 @@ import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
+import {
+  createOrder,
+  orderDetailsSelector,
+  orderDetailsStatusSelector,
+} from '../order-details/order-details.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
@@ -16,6 +21,7 @@ import BurgerConstructorIngredientDraggable from './burger-constructor-ingredien
 import {
   burgerConstructorBunSelector,
   burgerConstructorToppingsSelector,
+  selectBurgerConstructorIDs,
   selectBurgerConstructorTotalPrice,
   toppingIngredientRemove,
 } from './burger-constructor.slice'
@@ -27,7 +33,13 @@ const BurgerConstructor = (): JSX.Element => {
 
   const buns = useAppSelector(burgerConstructorBunSelector)
   const toppings = useAppSelector(burgerConstructorToppingsSelector)
-  const totalPrice = useAppSelector(selectBurgerConstructorTotalPrice)
+  const ingredientsIDs = useAppSelector((state) => selectBurgerConstructorIDs(state)())
+  const totalPrice = useAppSelector((state) => selectBurgerConstructorTotalPrice(state)())
+
+  const order = useAppSelector(orderDetailsSelector)
+  const orderStatus = useAppSelector(orderDetailsStatusSelector)
+
+  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   const modal = useRef<IModalRefObject>(null)
 
@@ -38,20 +50,14 @@ const BurgerConstructor = (): JSX.Element => {
     [dispatch],
   )
 
-  /* const handleClick = useCallback(() => {
-    // You can create an order only if you add at least one bun
-    if (state.ingredients.some((ingredient) => ingredient.type === 'bun')) {
-      createOrder({ ingredients: state.ingredients.map((ingredient) => ingredient._id) }, () => {
-        if (modal?.current) {
-          modal.current.open()
-        }
-      })
-    }
-  }, [createOrder, state.ingredients]) */
+  const handleClick = useCallback(() => {
+    dispatch(createOrder({ ingredients: ingredientsIDs })).then(() => {
+      modal.current?.open()
+    })
+  }, [dispatch, ingredientsIDs])
 
   // To be sure that the request will be aborted during unmount, and we need to silent a warning here
   // eslint-disable-next-line react-hooks/exhaustive-deps
-
   /* useEffect(() => () => controller?.abort(), []) */
 
   const priceValueClass = useMemo(
@@ -92,17 +98,16 @@ const BurgerConstructor = (): JSX.Element => {
       <div className={styles.price}>
         <span className={priceValueClass}>
           {totalPrice}
-          <CurrencyIcon type='primary' />
+          {CurrencyIconMemo}
         </span>
-        <Button type='primary' size='large'>
-          <span>Оформить заказ</span>
-          {/* {(status === 'idle' || status === 'loaded') && <span>Оформить заказ</span>}
-          {status === 'loading' && (
-            <Loader circularProgressProps={{ size: 20, color: 'secondary' }} />
-          )} */}
+        <Button type='primary' size='large' onClick={handleClick}>
+          {(orderStatus === 'idle' || orderStatus === 'loaded') && <span>Оформить заказ</span>}
+          {orderStatus === 'loading' && (
+            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+          )}
         </Button>
       </div>
-      {/* <Modal ref={modal}>{order && <OrderDetails orderDetails={order} />}</Modal> */}
+      <Modal ref={modal}>{order && <OrderDetails orderDetails={order} />}</Modal>
     </section>
   )
 }

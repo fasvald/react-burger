@@ -3,6 +3,9 @@ import React, { useCallback, useMemo } from 'react'
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
+import { useAppSelector } from '../../../hooks'
+import { selectBurgerConstructorIngredientCountById } from '../../burger-constructor/burger-constructor.slice'
+
 import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model'
 
 import styles from './burger-ingredients-card.module.css'
@@ -22,19 +25,12 @@ const BurgerIngredientsCard = ({
     [],
   )
 
-  // const { state } = useBurgerConstructor()
+  // The most easiest way how to use Redux + Reselect :) and calculate how many times it has duplication :)
+  const count = useAppSelector((state) =>
+    selectBurgerConstructorIngredientCountById(state)(ingredient._id),
+  )
 
-  // The most easiest way how to use "Context" and calculate how many times it has duplication :)
-  // Anyway, I think it should be (and will be) reworked during next step => Redux
-  // const count = useMemo(() => {
-  //   return state.ingredients.reduce((countValue, item) => {
-  //     if (ingredient.name === item.name) {
-  //       return countValue + 1
-  //     }
-
-  //     return countValue
-  //   }, 0)
-  // }, [ingredient.name, state.ingredients])
+  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   // Because of passing it like arrow function it will cause the re-render of the card.
   // So we can do it like this down below, to prevent re-render, or make it like this:
@@ -45,11 +41,11 @@ const BurgerIngredientsCard = ({
 
   return (
     <div className={cardClass} onClick={handleClick} aria-hidden='true'>
-      {/* {!!count && <Counter count={count} size='default' />} */}
+      {!!count && <Counter count={count} size='default' />}
       <img src={ingredient.image} alt='test' className={styles.img} />
       <div className={styles.price}>
         <span className={priceValueClass}>{ingredient.price}</span>
-        <CurrencyIcon type='primary' />
+        {CurrencyIconMemo}
       </div>
       <div className={styles.title}>
         <span className={titleValueClass}>{ingredient.name}</span>

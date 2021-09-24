@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { createSelector, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction } from '@reduxjs/toolkit'
 import produce from 'immer'
 import { Action, AnyAction } from 'redux'
 
