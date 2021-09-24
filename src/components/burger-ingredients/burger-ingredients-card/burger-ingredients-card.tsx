@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -30,8 +30,15 @@ const BurgerIngredientsCard = ({
   //   }, 0)
   // }, [ingredient.name, state.ingredients])
 
+  // Because of passing it like arrow function it will cause the re-render of the card.
+  // So we can do it like this down below, to prevent re-render, or make it like this:
+  // <div className={cardClass} onClick={() => onClick(ingredient)} aria-hidden='true'>
+  const handleClick = useCallback(() => {
+    onClick(ingredient)
+  }, [ingredient, onClick])
+
   return (
-    <div className={cardClass} onClick={onClick} aria-hidden='true'>
+    <div className={cardClass} onClick={handleClick} aria-hidden='true'>
       {/* {!!count && <Counter count={count} size='default' />} */}
       <img src={ingredient.image} alt='test' className={styles.img} />
       <div className={styles.price}>

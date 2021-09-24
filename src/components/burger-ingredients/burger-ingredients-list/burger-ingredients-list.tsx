@@ -46,18 +46,33 @@ const BurgerIngredientsList = (): JSX.Element => {
     dispatch(ingredientDetailsRemove())
   }, [dispatch])
 
+  // We can use either useMemo or React.memo, but I've decided to use React.memo().
+  // Possible enhancement => separate component.
+
+  const TabBun = React.memo(() => (
+    <Tab value='bun' active={currentListSection === 'bun'} onClick={setCurrentListSection}>
+      Булки
+    </Tab>
+  ))
+
+  const TabSauce = React.memo(() => (
+    <Tab value='bun' active={currentListSection === 'sauce'} onClick={setCurrentListSection}>
+      Соусы
+    </Tab>
+  ))
+
+  const TabMain = React.memo(() => (
+    <Tab value='bun' active={currentListSection === 'main'} onClick={setCurrentListSection}>
+      Начинки
+    </Tab>
+  ))
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
-        <Tab value='bun' active={currentListSection === 'bun'} onClick={setCurrentListSection}>
-          Булки
-        </Tab>
-        <Tab value='sauce' active={currentListSection === 'sauce'} onClick={setCurrentListSection}>
-          Соусы
-        </Tab>
-        <Tab value='main' active={currentListSection === 'main'} onClick={setCurrentListSection}>
-          Начинки
-        </Tab>
+        <TabBun />
+        <TabSauce />
+        <TabMain />
       </div>
       <div className={styles.list}>
         <div className={styles.listSection}>
@@ -67,7 +82,7 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={bun._id}
               className={styles.card}
               ingredient={bun}
-              onClick={() => handleClick(bun)}
+              onClick={handleClick}
             />
           ))}
         </div>
@@ -78,7 +93,7 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={sauce._id}
               className={styles.card}
               ingredient={sauce}
-              onClick={() => handleClick(sauce)}
+              onClick={handleClick}
             />
           ))}
         </div>
@@ -89,7 +104,7 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={main._id}
               className={styles.card}
               ingredient={main}
-              onClick={() => handleClick(main)}
+              onClick={handleClick}
             />
           ))}
         </div>
