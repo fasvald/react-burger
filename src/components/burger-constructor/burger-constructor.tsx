@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
-import { useAppSelector } from '../../hooks'
+import { IBurgerIngredientUnique } from '../../common/models/data.model'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
@@ -16,16 +17,26 @@ import {
   burgerConstructorBunSelector,
   burgerConstructorToppingsSelector,
   selectBurgerConstructorTotalPrice,
+  toppingIngredientRemove,
 } from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
+  const dispatch = useAppDispatch()
+
   const buns = useAppSelector(burgerConstructorBunSelector)
   const toppings = useAppSelector(burgerConstructorToppingsSelector)
   const totalPrice = useAppSelector(selectBurgerConstructorTotalPrice)
 
   const modal = useRef<IModalRefObject>(null)
+
+  const handleRemoveIngredient = useCallback(
+    (ingredient: IBurgerIngredientUnique) => {
+      dispatch(toppingIngredientRemove(ingredient))
+    },
+    [dispatch],
+  )
 
   /* const handleClick = useCallback(() => {
     // You can create an order only if you add at least one bun
@@ -65,6 +76,7 @@ const BurgerConstructor = (): JSX.Element => {
                 key={ingredient.nanoid}
                 className={styles.listDnDItem}
                 ingredient={ingredient}
+                handleRemove={handleRemoveIngredient}
               />
             ))}
           </div>

@@ -43,32 +43,25 @@ export const selectBurgerConstructorTotalPrice = createSelector(
 
 /** Action creators */
 
-const getBunIngredientPayload = (bunIngredient: IBurgerIngredient) => ({
+const getIngredientInsertingPayload = (ingredient: IBurgerIngredient) => ({
   ingredient: {
-    ...bunIngredient,
+    ...ingredient,
     nanoid: nanoid(),
   },
 })
 
 export const bunIngredientAdd = (
-  bunIngredient: IBurgerIngredient,
+  ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.AddBun> => ({
   type: ActionKind.AddBun,
-  payload: getBunIngredientPayload(bunIngredient),
+  payload: getIngredientInsertingPayload(ingredient),
 })
 
 export const bunIngredientReplace = (
-  bunIngredient: IBurgerIngredient,
+  ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.ReplaceBun> => ({
   type: ActionKind.ReplaceBun,
-  payload: getBunIngredientPayload(bunIngredient),
-})
-
-export const toppingIngredientAdd = (
-  toppingIngredient: IBurgerIngredient,
-): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.AddTopping> => ({
-  type: ActionKind.AddTopping,
-  payload: getBunIngredientPayload(toppingIngredient),
+  payload: getIngredientInsertingPayload(ingredient),
 })
 
 export const bunIngredientAddThunk =
@@ -86,6 +79,22 @@ export const bunIngredientAddThunk =
       dispatch(bunIngredientAdd(ingredient))
     }
   }
+
+export const toppingIngredientAdd = (
+  ingredient: IBurgerIngredient,
+): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.AddTopping> => ({
+  type: ActionKind.AddTopping,
+  payload: getIngredientInsertingPayload(ingredient),
+})
+
+export const toppingIngredientRemove = (
+  ingredient: IBurgerIngredientUnique,
+): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.RemoveTopping> => ({
+  type: ActionKind.RemoveTopping,
+  payload: {
+    ingredient,
+  },
+})
 
 /** Reducer */
 
@@ -110,6 +119,12 @@ export const burgerConstructorReducer = produce((draft, action: AnyAction) => {
       return draft
     }
     case ActionKind.RemoveTopping: {
+      const index = draft.toppings.findIndex(
+        (topping) => topping.nanoid === payload.ingredient.nanoid,
+      )
+
+      if (index !== -1) draft.toppings.splice(index, 1)
+
       return draft
     }
     default:
