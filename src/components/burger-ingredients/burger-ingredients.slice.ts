@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 
-import { AnyAction, createSelector, PayloadAction } from '@reduxjs/toolkit'
+import { AnyAction, createSelector, OutputSelector, PayloadAction } from '@reduxjs/toolkit'
 import produce from 'immer'
+import { memoize } from 'lodash'
 
 import {
   IBurgerIngredient,
   IBurgerIngredientFetch,
+  TBurgerIngredientType,
   TFetchProcess,
   TFetchProcessError,
   TFetchProcessLoaded,
@@ -40,9 +42,30 @@ export const selectBurgerIngredients = createSelector(
   [burgerIngredientsSelector],
   (burgerIngredients: IBurgerIngredient[]) => burgerIngredients,
 )
+
 export const selectBurgerIngredientsStatus = createSelector(
   [burgerIngredientsStatusSelector],
   (burgerIngredientsStatus: TFetchProcess) => burgerIngredientsStatus,
+)
+
+export const burgerIngredientsTypeSelectorFactory = (
+  type: TBurgerIngredientType,
+): OutputSelector<
+  { burgerIngredients: IBurgerIngredientsState },
+  IBurgerIngredient[],
+  (res: IBurgerIngredient[]) => IBurgerIngredient[]
+> => {
+  return createSelector(burgerIngredientsSelector, (ingredients) =>
+    ingredients.filter((ingredient) => ingredient.type === type),
+  )
+}
+
+export const selectBurgerIngredientsByType = createSelector(
+  [burgerIngredientsSelector],
+  (ingredients) =>
+    memoize((type: TBurgerIngredientType) =>
+      ingredients.filter((ingredient) => ingredient.type === type),
+    ),
 )
 
 /** Action creators */

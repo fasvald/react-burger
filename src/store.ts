@@ -1,12 +1,10 @@
 import { AnyAction, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 
-import { burgerIngredientsReducer } from './components/burger-ingredients/burger-ingredients.slice'
+import rootReducer from './rootReducer'
 
 const store = configureStore({
-  reducer: {
-    burgerIngredients: burgerIngredientsReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: process.env.NODE_ENV !== 'production',
 })

@@ -1,53 +1,35 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { groupBy } from 'lodash'
-import { nanoid } from 'nanoid'
 
 import { IBurgerIngredient } from '../../../common/models/data.model'
+import { useAppSelector } from '../../../hooks'
 import IngredientDetails from '../../ingredient-details/ingredient-details'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
-
-import { IBurgerIngredientsListProps } from './burger-ingredients-list.model'
+import { selectBurgerIngredientsByType } from '../burger-ingredients.slice'
 
 import styles from './burger-ingredients-list.module.css'
 
-const BurgerIngredientsList = ({ ingredients }: IBurgerIngredientsListProps): JSX.Element => {
+const BurgerIngredientsList = (): JSX.Element => {
+  const buns = useAppSelector((state) => selectBurgerIngredientsByType(state)('bun'))
+  const sauces = useAppSelector((state) => selectBurgerIngredientsByType(state)('sauce'))
+  const mains = useAppSelector((state) => selectBurgerIngredientsByType(state)('main'))
+
   const [chosenIngredient, setChosenIngredient] = useState<IBurgerIngredient>()
   // Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
   const [currentListSection, setCurrentListSection] = useState<string>('bun')
 
   const modal = useRef<IModalRefObject>(null)
 
-  const {
-    bun: buns,
-    sauce: sauces,
-    main: mains,
-  } = useMemo(() => groupBy(ingredients, 'type'), [ingredients])
+  const handleClick = useCallback((ingredient: IBurgerIngredient) => {
+    if (modal.current) {
+      modal.current.open()
 
-  const handleClick = useCallback(
-    (ingredient: IBurgerIngredient) => {
-      if (modal.current) {
-        modal.current.open()
-
-        setChosenIngredient(ingredient)
-
-        // Because there could be a lot of duplication of ingredients, using "_id" as a key ref is wrong,
-        // so we are going to inject custom id via "nanoid" library (this part will be refactored for DnD feature soon)
-        // dispatch({
-        //   type: BurgerConstructorActionKind.Add,
-        //   item: {
-        //     ...ingredient,
-        //     nanoid: nanoid(),
-        //   },
-        // })
-      }
-    },
-    // [dispatch],
-    [],
-  )
+      setChosenIngredient(ingredient)
+    }
+  }, [])
 
   return (
     <div className={styles.wrapper}>
