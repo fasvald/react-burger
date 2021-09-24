@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
@@ -9,12 +9,21 @@ import { IOrderDetailsProps } from './order-details.model'
 import styles from './order-details.module.css'
 
 const OrderDetails = ({ orderDetails }: IOrderDetailsProps): JSX.Element => {
-  const orderNumberClass = classNames('text text_type_digits-large', styles.orderNumber)
-  const orderTitleClass = classNames('text text_type_main-medium', styles.orderNumberTitle)
-  const orderDescriptionTitleClass = classNames('text text_type_main-default', styles.orderTitle)
-  const orderDescriptionSubTitleClass = classNames(
-    'text text_type_main-default text_color_inactive',
-    styles.orderSubTitle,
+  const orderNumberClass = useMemo(
+    () => classNames('text text_type_digits-large', styles.orderNumber),
+    [],
+  )
+  const orderTitleClass = useMemo(
+    () => classNames('text text_type_main-medium', styles.orderNumberTitle),
+    [],
+  )
+  const orderDescriptionTitleClass = useMemo(
+    () => classNames('text text_type_main-default', styles.orderTitle),
+    [],
+  )
+  const orderDescriptionSubTitleClass = useMemo(
+    () => classNames('text text_type_main-default text_color_inactive', styles.orderSubTitle),
+    [],
   )
 
   const { order } = orderDetails

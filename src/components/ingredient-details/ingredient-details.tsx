@@ -12,7 +12,10 @@ import { IIngredientDetailsProps } from './ingredient-details.model'
 import styles from './ingredient-details.module.css'
 
 const IngredientDetails = ({ ingredient }: IIngredientDetailsProps): JSX.Element => {
-  const ingredientNameClass = classNames('text text_type_main-medium', styles.ingredientName)
+  const ingredientNameClass = useMemo(
+    () => classNames('text text_type_main-medium', styles.ingredientName),
+    [],
+  )
 
   const foodEnergy = useMemo(
     () =>

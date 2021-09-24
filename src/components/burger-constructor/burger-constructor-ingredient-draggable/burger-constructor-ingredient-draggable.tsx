@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -12,7 +12,7 @@ const BurgerConstructorIngredientDraggable = ({
   className,
   ingredient,
 }: IBurgerConstructorIngredientProps): JSX.Element => {
-  const wrapperClass = classNames(styles.wrapper, className)
+  const wrapperClass = useMemo(() => classNames(styles.wrapper, className), [className])
 
   // const { dispatch } = useBurgerConstructor()
 

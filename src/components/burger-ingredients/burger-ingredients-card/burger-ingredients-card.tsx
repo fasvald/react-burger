@@ -12,9 +12,15 @@ const BurgerIngredientsCard = ({
   className,
   onClick,
 }: IBurgerIngredientsCardProps): JSX.Element => {
-  const cardClass = classNames(styles.card, className)
-  const priceValueClass = classNames('text text_type_digits-default', styles.priceValue)
-  const titleValueClass = classNames('text text_type_main-default', styles.titleValue)
+  const cardClass = useMemo(() => classNames(styles.card, className), [className])
+  const priceValueClass = useMemo(
+    () => classNames('text text_type_digits-default', styles.priceValue),
+    [],
+  )
+  const titleValueClass = useMemo(
+    () => classNames('text text_type_main-default', styles.titleValue),
+    [],
+  )
 
   // const { state } = useBurgerConstructor()
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
@@ -11,7 +11,7 @@ const IngredientDetailsImage = ({
   image,
   height,
 }: IIngredientDetailsImageProps): JSX.Element => {
-  const imgContainerClass = classNames(styles.img, className)
+  const imgContainerClass = useMemo(() => classNames(styles.img, className), [className])
 
   return (
     <div

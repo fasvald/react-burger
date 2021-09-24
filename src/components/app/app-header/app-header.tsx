@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import {
   Logo,
@@ -13,9 +13,9 @@ import { IAppHeaderProps } from './app-header.model'
 import styles from './app-header.module.css'
 
 const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
-  const headerClass = classNames(styles.header, className)
-  const navLeftClass = classNames(styles.nav, styles.navLeft)
-  const navRightClass = classNames(styles.nav, styles.navRight)
+  const headerClass = useMemo(() => classNames(styles.header, className), [className])
+  const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
+  const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])
 
   return (
     /**

@@ -16,7 +16,10 @@ import { calculateTotalPrice, groupIngredients, useOrderDetails } from './burger
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
-  const priceValueClass = classNames('text text_type_digits-medium', styles.priceValue)
+  const priceValueClass = useMemo(
+    () => classNames('text text_type_digits-medium', styles.priceValue),
+    [],
+  )
   // const { state } = useBurgerConstructor()
   const { order, createOrder, status, controller } = useOrderDetails()
   // const { bun, toppings } = useMemo(() => groupIngredients(state.ingredients), [state.ingredients])
