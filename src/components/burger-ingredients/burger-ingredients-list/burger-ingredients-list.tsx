@@ -4,11 +4,15 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { IBurgerIngredient } from '../../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
+import {
+  bunIngredientAddThunk,
+  toppingIngredientAdd,
+} from '../../burger-constructor/burger-constructor.slice'
 import IngredientDetails from '../../ingredient-details/ingredient-details'
 import {
   ingredientDetailsRemove,
   ingredientDetailsSave,
-  selectIngredientDetails,
+  ingredientDetailsSelector,
 } from '../../ingredient-details/ingredient-details.slice'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
@@ -24,7 +28,7 @@ const BurgerIngredientsList = (): JSX.Element => {
   const sauces = useAppSelector((state) => selectBurgerIngredientsByType(state)('sauce'))
   const mains = useAppSelector((state) => selectBurgerIngredientsByType(state)('main'))
 
-  const chosenIngredient = useAppSelector(selectIngredientDetails)
+  const chosenIngredient = useAppSelector(ingredientDetailsSelector)
 
   // Couldn't use my own type "TBurgerIngredientType" because library component is waiting "string"
   const [currentListSection, setCurrentListSection] = useState<string>('bun')
@@ -37,6 +41,13 @@ const BurgerIngredientsList = (): JSX.Element => {
         modal.current.open()
 
         dispatch(ingredientDetailsSave(ingredient))
+
+        // Temporary solution
+        if (ingredient.type === 'bun') {
+          dispatch(bunIngredientAddThunk(ingredient))
+        } else {
+          dispatch(toppingIngredientAdd(ingredient))
+        }
       }
     },
     [dispatch],

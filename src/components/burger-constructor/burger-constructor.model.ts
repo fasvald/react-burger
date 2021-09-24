@@ -19,3 +19,8 @@ export interface IGroupedIngredients {
   bun: IBurgerIngredientUnique[]
   toppings: IBurgerIngredientUnique[]
 }
+
+export interface IBurgerConstructorIngredientState {
+  buns: IBurgerIngredientUnique[]
+  toppings: IBurgerIngredientUnique[]
+}

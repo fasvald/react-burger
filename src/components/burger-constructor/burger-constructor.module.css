@@ -16,8 +16,16 @@
 /* Section (root element) */
 
 .section {
+  display: flex;
+  flex-direction: column;
   width: 600px;
   padding: 100px 20px 0;
+}
+
+/* List */
+
+.list {
+  flex: 1;
 }
 
 /* DnD list */

@@ -24,12 +24,8 @@ const initialState: IIngredientDetailsState = {
 
 /** Selectors */
 
-const ingredientDetailsSelector = (state: RootState) => state.ingredientDetails.ingredient
-
-export const selectIngredientDetails = createSelector(
-  [ingredientDetailsSelector],
-  (ingredientDetails) => ingredientDetails,
-)
+export const ingredientDetailsSelector = (state: RootState): IBurgerIngredient | null =>
+  state.ingredientDetails.ingredient
 
 /** Action creators */
 
@@ -47,7 +43,7 @@ export const ingredientDetailsRemove = (): Action<ActionKind.Remove> => ({
 /** Reducer */
 
 export const ingredientDetailsReducer = produce((draft, action: AnyAction) => {
-  const { type, payload } = action
+  const { type, payload } = action as PayloadAction<{ ingredient: IBurgerIngredient | null }>
 
   switch (type) {
     case ActionKind.Save: {

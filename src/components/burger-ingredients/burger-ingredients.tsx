@@ -7,9 +7,9 @@ import Loader from '../loader/loader'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
 import {
+  burgerIngredientsSelector,
+  burgerIngredientsStatusSelector,
   fetchBurgerIngredients,
-  selectBurgerIngredients,
-  selectBurgerIngredientsStatus,
 } from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
@@ -17,8 +17,8 @@ import styles from './burger-ingredients.module.css'
 const BurgerIngredients = (): JSX.Element => {
   const dispatch = useAppDispatch()
 
-  const ingredients = useAppSelector(selectBurgerIngredients)
-  const status = useAppSelector(selectBurgerIngredientsStatus)
+  const ingredients = useAppSelector(burgerIngredientsSelector)
+  const status = useAppSelector(burgerIngredientsStatusSelector)
 
   const sectionTitleClass = classNames('text text_type_main-large', styles.title)
 

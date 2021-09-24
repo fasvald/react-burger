@@ -35,18 +35,11 @@ const initialState: IBurgerIngredientsState = {
 
 /** Selectors */
 
-const burgerIngredientsSelector = (state: RootState) => state.burgerIngredients.items
-const burgerIngredientsStatusSelector = (state: RootState) => state.burgerIngredients.status
+export const burgerIngredientsSelector = (state: RootState): IBurgerIngredient[] =>
+  state.burgerIngredients.items
 
-export const selectBurgerIngredients = createSelector(
-  [burgerIngredientsSelector],
-  (burgerIngredients: IBurgerIngredient[]) => burgerIngredients,
-)
-
-export const selectBurgerIngredientsStatus = createSelector(
-  [burgerIngredientsStatusSelector],
-  (burgerIngredientsStatus: TFetchProcess) => burgerIngredientsStatus,
-)
+export const burgerIngredientsStatusSelector = (state: RootState): TFetchProcess =>
+  state.burgerIngredients.status
 
 export const selectBurgerIngredientsByType = createSelector(
   [burgerIngredientsSelector],
@@ -118,7 +111,10 @@ export const fetchBurgerIngredients = (): AppThunk => async (dispatch, getState)
 /** Reducer */
 
 export const burgerIngredientsReducer = produce((draft, action: AnyAction) => {
-  const { type, payload } = action
+  const { type, payload } = action as PayloadAction<{
+    status: TFetchProcess
+    items: IBurgerIngredient[]
+  }>
 
   switch (type) {
     case ActionKind.Pending: {
