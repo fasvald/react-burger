@@ -23,7 +23,6 @@ const BurgerIngredients = (): JSX.Element => {
   const sectionTitleClass = classNames('text text_type_main-large', styles.title)
 
   useEffect(() => {
-    // TODO: Think about how to abort requests
     dispatch(fetchBurgerIngredients())
   }, [dispatch])
 

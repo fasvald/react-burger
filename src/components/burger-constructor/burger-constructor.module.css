@@ -82,6 +82,16 @@
   margin-right: calc(var(--section-width) - var(--burger-constructor-width-total) - var(--icon-width) - var(--dnd-icon-margin-right));
 }
 
+.price.isDisabled button {
+  background: var(--dark-grey-dim);
+  cursor: not-allowed;
+}
+
+.price.isDisabled button:hover {
+  box-shadow: none;
+  filter: none;
+}
+
 .price button {
   display: inline-flex;
   justify-content: center;
@@ -103,4 +113,10 @@
 
 .priceValue svg {
   margin-left: 9px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .listDnD {
+    scroll-behavior: smooth;
+  }
 }

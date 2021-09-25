@@ -5,6 +5,7 @@ import classNames from 'classnames'
 
 import { IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { burgerIngredientsStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
@@ -17,7 +18,6 @@ import {
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
-// import { useBurgerConstructor } from './burger-constructor.context'
 import {
   burgerConstructorBunSelector,
   burgerConstructorToppingsSelector,
@@ -29,19 +29,19 @@ import {
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
-  const dispatch = useAppDispatch()
-
   const buns = useAppSelector(burgerConstructorBunSelector)
   const toppings = useAppSelector(burgerConstructorToppingsSelector)
   const ingredientsIDs = useAppSelector((state) => selectBurgerConstructorIDs(state)())
   const totalPrice = useAppSelector((state) => selectBurgerConstructorTotalPrice(state)())
-
+  const burgerIngredientsStatus = useAppSelector(burgerIngredientsStatusSelector)
   const order = useAppSelector(orderDetailsSelector)
   const orderStatus = useAppSelector(orderDetailsStatusSelector)
 
-  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
+  const dispatch = useAppDispatch()
 
   const modal = useRef<IModalRefObject>(null)
+
+  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   const handleRemoveIngredient = useCallback(
     (ingredient: IBurgerIngredientUnique) => {
@@ -51,14 +51,26 @@ const BurgerConstructor = (): JSX.Element => {
   )
 
   const handleClick = useCallback(() => {
+    // Check if burger has at least 1 topping and if there is no error from ingredients fetching
+    if (burgerIngredientsStatus === 'error' || !toppings.length || !buns.length) {
+      return
+    }
+
     dispatch(createOrder({ ingredients: ingredientsIDs })).then(() => {
       modal.current?.open()
     })
-  }, [dispatch, ingredientsIDs])
+  }, [dispatch, ingredientsIDs, burgerIngredientsStatus, toppings, buns])
 
-  // To be sure that the request will be aborted during unmount, and we need to silent a warning here
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  /* useEffect(() => () => controller?.abort(), []) */
+  const priceSectionClassName = useMemo(
+    () =>
+      classNames(
+        styles.price,
+        burgerIngredientsStatus === 'error' || !toppings.length || !buns.length
+          ? styles.isDisabled
+          : '',
+      ),
+    [burgerIngredientsStatus, toppings.length, buns.length],
+  )
 
   const priceValueClass = useMemo(
     () => classNames('text text_type_digits-medium', styles.priceValue),
@@ -95,7 +107,7 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
       </div>
-      <div className={styles.price}>
+      <div className={priceSectionClassName}>
         <span className={priceValueClass}>
           {totalPrice}
           {CurrencyIconMemo}
