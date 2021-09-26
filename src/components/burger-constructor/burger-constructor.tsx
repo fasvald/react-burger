@@ -28,6 +28,7 @@ import {
   selectBurgerConstructorTotalPrice,
   toppingIngredientAdd,
   toppingIngredientRemove,
+  toppingIngredientSwap,
 } from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
@@ -103,6 +104,25 @@ const BurgerConstructor = (): JSX.Element => {
     [canDrop, isOver],
   )
 
+  const findCard = (id: string) => {
+    const card = toppings.filter((c) => `${c.nanoid}` === id)[0]
+
+    const foo = toppings.indexOf(card)
+
+    return {
+      card,
+      index: foo,
+    }
+  }
+
+  const moveCard = (id: string, atIndex: number) => {
+    const { card, index } = findCard(id)
+
+    dispatch(toppingIngredientSwap(index, atIndex))
+  }
+
+  const [, drop] = useDrop(() => ({ accept: 'TEST' }))
+
   return (
     <section className={styles.section}>
       <div className={listClass} ref={dropRef}>
@@ -114,12 +134,15 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
         {toppings?.length > 0 && (
-          <div className={styles.listDnD}>
+          <div className={styles.listDnD} ref={drop}>
             {toppings.map((ingredient) => (
               <BurgerConstructorIngredientDraggable
                 key={ingredient.nanoid}
                 className={styles.listDnDItem}
                 ingredient={ingredient}
+                id={ingredient.nanoid}
+                moveCard={moveCard}
+                findCard={findCard}
                 handleRemove={handleRemoveIngredient}
               />
             ))}

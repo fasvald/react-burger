@@ -17,6 +17,7 @@ enum ActionKind {
   ReplaceBun = 'burgerConstructor/replaceBun',
   AddTopping = 'burgerConstructor/addTopping',
   RemoveTopping = 'burgerConstructor/removeTopping',
+  SortTopping = 'burgerConstructor/sortTopping',
 }
 
 /** Initial state */
@@ -120,10 +121,25 @@ export const toppingIngredientRemove = (
   },
 })
 
+export const toppingIngredientSwap = (
+  toIndex: number,
+  fromIndex: number,
+): PayloadAction<{ toIndex: number; fromIndex: number }, ActionKind.SortTopping> => ({
+  type: ActionKind.SortTopping,
+  payload: {
+    toIndex,
+    fromIndex,
+  },
+})
+
 /** Reducer */
 
 export const burgerConstructorReducer = produce((draft, action: AnyAction) => {
-  const { type, payload } = action as PayloadAction<{ ingredient: IBurgerIngredientUnique }>
+  const { type, payload } = action as PayloadAction<{
+    ingredient: IBurgerIngredientUnique
+    toIndex: number
+    fromIndex: number
+  }>
 
   switch (type) {
     case ActionKind.AddBun: {
@@ -148,6 +164,11 @@ export const burgerConstructorReducer = produce((draft, action: AnyAction) => {
       )
 
       if (index !== -1) draft.toppings.splice(index, 1)
+
+      return draft
+    }
+    case ActionKind.SortTopping: {
+      draft.toppings.splice(payload.toIndex, 0, draft.toppings.splice(payload.fromIndex, 1)[0])
 
       return draft
     }

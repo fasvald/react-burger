@@ -45,6 +45,11 @@
   opacity: .3;
 }
 
+.list.canDrop .listDnD::-webkit-scrollbar-track,
+.list.canDrop .listDnD::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
 .list.isOver .listItem,
 .list.isOver .listDnD .listDnDItem {
   opacity: 1;
