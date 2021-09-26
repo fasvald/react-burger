@@ -2,7 +2,9 @@ import React, { useCallback, useMemo } from 'react'
 
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
+import { useDrag } from 'react-dnd'
 
+import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
 import { useAppSelector } from '../../../hooks'
 import { selectBurgerConstructorIngredientCountById } from '../../burger-constructor/burger-constructor.slice'
 
@@ -15,16 +17,6 @@ const BurgerIngredientsCard = ({
   className,
   onClick,
 }: IBurgerIngredientsCardProps): JSX.Element => {
-  const cardClass = useMemo(() => classNames(styles.card, className), [className])
-  const priceValueClass = useMemo(
-    () => classNames('text text_type_digits-default', styles.priceValue),
-    [],
-  )
-  const titleValueClass = useMemo(
-    () => classNames('text text_type_main-default', styles.titleValue),
-    [],
-  )
-
   // The most easiest way how to use Redux + Reselect :) and calculate how many times it has duplication :)
   const count = useAppSelector((state) =>
     selectBurgerConstructorIngredientCountById(state)(ingredient._id),
@@ -32,16 +24,56 @@ const BurgerIngredientsCard = ({
 
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
-  // Because of passing it like arrow function it will cause the re-render of the card.
-  // So we can do it like this down below, to prevent re-render, or make it like this:
-  // <div className={cardClass} onClick={() => onClick(ingredient)} aria-hidden='true'>
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type:
+      ingredient.type === 'bun'
+        ? DnDItemTypes.INGREDIENT_BUN_CARD
+        : DnDItemTypes.INGREDIENT_TOPPING_CARD,
+    item: { ingredient },
+    options: {
+      dropEffect: 'copy',
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }))
+
+  /**
+   * Because of passing it like arrow function it will cause the re-render of the card.
+   * So we can do it like this down below, to prevent re-render, or make it like this:
+   * <div className={cardClass} onClick={() => onClick(ingredient)} aria-hidden='true'>
+   */
   const handleClick = useCallback(() => {
     onClick(ingredient)
   }, [ingredient, onClick])
 
+  const CounterMemo = useMemo(
+    () => (
+      <div className={styles.cardCounter}>
+        <Counter count={count} size='default' />
+      </div>
+    ),
+    [count],
+  )
+
+  const cardClass = useMemo(
+    () => classNames(styles.card, className, isDragging ? styles.isDragging : ''),
+    [className, isDragging],
+  )
+
+  const priceValueClass = useMemo(
+    () => classNames('text text_type_digits-default', styles.priceValue),
+    [],
+  )
+
+  const titleValueClass = useMemo(
+    () => classNames('text text_type_main-default', styles.titleValue),
+    [],
+  )
+
   return (
-    <div className={cardClass} onClick={handleClick} aria-hidden='true'>
-      {!!count && <Counter count={count} size='default' />}
+    <div className={cardClass} onClick={handleClick} ref={dragRef} aria-hidden='true'>
+      {!!count && CounterMemo}
       <img src={ingredient.image} alt='test' className={styles.img} />
       <div className={styles.price}>
         <span className={priceValueClass}>{ingredient.price}</span>

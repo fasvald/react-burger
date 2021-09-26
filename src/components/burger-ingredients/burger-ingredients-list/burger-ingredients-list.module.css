@@ -24,12 +24,7 @@
 
 .list {
   display: flex;
-
-  /*
-    Regarding the adaptive layout it was said to (at least to me) focus mainly on desktop;
-    500px = 2x height of default ingredients row + 2x title row margin = 464px + 40px => round.
-  */
-  max-height: 500px;
+  max-height: 650px;
   margin-top: 40px;
   flex-wrap: wrap;
   overflow-y: scroll;
@@ -72,16 +67,7 @@
 /* Ingredient card */
 
 .card {
-  margin-bottom: 32px;
-}
-
-.card:last-of-type {
-  margin-bottom: 0;
-}
-
-.card:nth-child(even) {
-  margin-right: 24px;
-  margin-left: 16px;
+  margin: 0 auto 32px 12px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

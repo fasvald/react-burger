@@ -22,10 +22,32 @@
   padding: 100px 20px 0;
 }
 
-/* List */
+/* List + DnD Reaction Styling */
 
 .list {
+  position: relative;
+  padding: 5px 0;
   flex: 1;
+  border: 2px solid transparent;
+}
+
+.list.canDrop {
+  background-color: rgba(133, 133, 173, .1);
+  border: 2px dashed var(--dark-grey);
+}
+
+.list.isOver {
+  background-color: transparent;
+}
+
+.list.canDrop .listItem,
+.list.canDrop .listDnD .listDnDItem {
+  opacity: .3;
+}
+
+.list.isOver .listItem,
+.list.isOver .listDnD .listDnDItem {
+  opacity: 1;
 }
 
 /* DnD list */

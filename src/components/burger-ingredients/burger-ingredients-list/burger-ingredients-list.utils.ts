@@ -38,8 +38,7 @@ const useDynamicTabsWithIntersection = (
       const options = {
         root: scrollRoot,
         rootMargin: `${header.offsetHeight * -1}px`,
-        threshold: 0,
-
+        threshold: 0.1,
         // Intersection Observer v2 API
         trackVisibility: true,
         delay: 100,

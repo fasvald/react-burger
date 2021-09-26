@@ -45,13 +45,6 @@ const BurgerIngredientsList = (): JSX.Element => {
         modal.current.open()
 
         dispatch(ingredientDetailsSave(ingredient))
-
-        // Temporary solution
-        if (ingredient.type === 'bun') {
-          dispatch(bunIngredientAddThunk(ingredient))
-        } else {
-          dispatch(toppingIngredientAdd(ingredient))
-        }
       }
     },
     [dispatch],
@@ -61,12 +54,14 @@ const BurgerIngredientsList = (): JSX.Element => {
     dispatch(ingredientDetailsRemove())
   }, [dispatch])
 
-  // We can use either useMemo or React.memo, but I've decided to use React.memo().
-  // Possible enhancement => separate component.
-  // For "scroll" to section we can use either or Element.scrollIntoView + behavior
-  // (https://robinvdvleuten.nl/blog/scroll-a-react-component-into-view/), but it will trigger
-  // useDynamicTabsWithIntersection hook :), so potentially we can write check, but it will requires tons of work
-  // (https://gomakethings.com/detecting-when-a-visitor-has-stopped-scrolling-with-vanilla-javascript/)
+  /**
+   * NOTE: We can use either useMemo or React.memo, but I've decided to use React.memo().
+   * Possible enhancement => separate component.
+   * For "scroll" to section we can use either or Element.scrollIntoView + behavior
+   * (https://robinvdvleuten.nl/blog/scroll-a-react-component-into-view/), but it will trigger
+   * useDynamicTabsWithIntersection hook :), so potentially we can write check, but it will requires tons of work
+   * (https://gomakethings.com/detecting-when-a-visitor-has-stopped-scrolling-with-vanilla-javascript/).
+   */
   const TabBun = React.memo(() => (
     <a href='#ingredients-buns' className={styles.tabsLink}>
       <Tab value='bun' active={currentListSection === 'bun'} onClick={setCurrentListSection}>

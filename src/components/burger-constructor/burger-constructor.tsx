@@ -2,8 +2,10 @@ import React, { useCallback, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
+import { useDrop } from 'react-dnd'
 
-import { IBurgerIngredientUnique } from '../../common/models/data.model'
+import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
+import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { burgerIngredientsStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader/loader'
@@ -19,10 +21,12 @@ import {
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
 import {
+  bunIngredientAddThunk,
   burgerConstructorBunSelector,
   burgerConstructorToppingsSelector,
   selectBurgerConstructorIDs,
   selectBurgerConstructorTotalPrice,
+  toppingIngredientAdd,
   toppingIngredientRemove,
 } from './burger-constructor.slice'
 
@@ -61,6 +65,23 @@ const BurgerConstructor = (): JSX.Element => {
     })
   }, [dispatch, ingredientsIDs, burgerIngredientsStatus, toppings, buns])
 
+  const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
+    accept: [DnDItemTypes.INGREDIENT_BUN_CARD, DnDItemTypes.INGREDIENT_TOPPING_CARD],
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+    drop(item: { ingredient: IBurgerIngredient }, monitor) {
+      if (monitor.getItemType() === DnDItemTypes.INGREDIENT_BUN_CARD) {
+        dispatch(bunIngredientAddThunk(item.ingredient))
+      }
+
+      if (monitor.getItemType() === DnDItemTypes.INGREDIENT_TOPPING_CARD) {
+        dispatch(toppingIngredientAdd(item.ingredient))
+      }
+    },
+  }))
+
   const priceSectionClassName = useMemo(
     () =>
       classNames(
@@ -77,9 +98,14 @@ const BurgerConstructor = (): JSX.Element => {
     [],
   )
 
+  const listClass = useMemo(
+    () => classNames(styles.list, canDrop ? styles.canDrop : '', isOver ? styles.isOver : ''),
+    [canDrop, isOver],
+  )
+
   return (
     <section className={styles.section}>
-      <div className={styles.list}>
+      <div className={listClass} ref={dropRef}>
         {buns?.length > 0 && (
           <BurgerConstructorIngredientBun
             className={styles.listItem}
