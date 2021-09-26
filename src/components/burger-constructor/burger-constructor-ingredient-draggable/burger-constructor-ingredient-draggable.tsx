@@ -18,8 +18,6 @@ const BurgerConstructorIngredientDraggable = ({
 }: IBurgerConstructorIngredientDraggable): JSX.Element => {
   const DragIconMemo = useMemo(() => <DragIcon type='primary' />, [])
 
-  const wrapperClass = useMemo(() => classNames(styles.wrapper, className), [className])
-
   // Same thing as for BurgerIngredientsCard => preventing re-render, but there is an option to
   // use arrow function on ConstructorElement, because it's a last element in chain.
   const handleClose = useCallback(() => {
@@ -33,10 +31,6 @@ const BurgerConstructorIngredientDraggable = ({
       type: 'TEST',
 
       item: { id, originalIndexx: originalIndex },
-
-      options: {
-        dropEffect: 'copy',
-      },
 
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
@@ -75,13 +69,18 @@ const BurgerConstructorIngredientDraggable = ({
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const opacity = isDragging ? 0 : 1
-
   drag(drop(ref))
 
+  const wrapperClass = useMemo(
+    () => classNames(styles.wrapper, isDragging ? styles.isDragging : '', className),
+    [className, isDragging],
+  )
+
   return (
-    <div className={wrapperClass} ref={dragPreview} style={{ opacity }}>
-      <div ref={ref}>{DragIconMemo}</div>
+    <div className={wrapperClass} ref={dragPreview}>
+      <div className={styles.wrapperDndIcon} ref={ref}>
+        {DragIconMemo}
+      </div>
       <ConstructorElement
         text={ingredient.name}
         price={ingredient.price}
