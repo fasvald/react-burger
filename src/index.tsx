@@ -9,8 +9,6 @@ import 'normalize.css'
 import './index.css'
 import store from './store'
 
-/* NOTE: There will be FOUC, but still there are a lot of approaches how to deal with it */
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

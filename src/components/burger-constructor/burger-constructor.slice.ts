@@ -17,7 +17,7 @@ enum ActionKind {
   ReplaceBun = 'burgerConstructor/replaceBun',
   AddTopping = 'burgerConstructor/addTopping',
   RemoveTopping = 'burgerConstructor/removeTopping',
-  SortTopping = 'burgerConstructor/sortTopping',
+  SwapTopping = 'burgerConstructor/swapTopping',
 }
 
 /** Initial state */
@@ -32,27 +32,23 @@ export const initialState: IBurgerConstructorIngredientState = {
 export const burgerConstructorSelector = (state: RootState): IBurgerConstructorIngredientState =>
   state.burgerConstructor
 
-export const burgerConstructorBunSelector = (state: RootState): IBurgerIngredientUnique[] =>
+export const bunsSelector = (state: RootState): IBurgerIngredientUnique[] =>
   state.burgerConstructor.buns
 
-export const burgerConstructorToppingsSelector = (state: RootState): IBurgerIngredientUnique[] =>
+export const toppingsSelector = (state: RootState): IBurgerIngredientUnique[] =>
   state.burgerConstructor.toppings
 
-export const selectBurgerConstructorTotalPrice = createSelector(
+export const selectIngredientsTotalPrice = createSelector(
   [burgerConstructorSelector],
   (constructor) =>
     memoize(() => calculateTotalPrice([...constructor.buns, ...constructor.toppings])),
 )
 
-export const selectBurgerConstructorIDs = createSelector(
-  [burgerConstructorSelector],
-  (constructor) =>
-    memoize(() =>
-      [...constructor.buns, ...constructor.toppings].map((ingredient) => ingredient._id),
-    ),
+export const selectIngredientsID = createSelector([burgerConstructorSelector], (constructor) =>
+  memoize(() => [...constructor.buns, ...constructor.toppings].map((ingredient) => ingredient._id)),
 )
 
-export const selectBurgerConstructorIngredientCountById = createSelector(
+export const selectIngredientIterationByID = createSelector(
   [burgerConstructorSelector],
   (constructor) =>
     memoize((id: string) =>
@@ -68,28 +64,28 @@ export const selectBurgerConstructorIngredientCountById = createSelector(
 
 /** Action creators */
 
-const getIngredientInsertingPayload = (ingredient: IBurgerIngredient) => ({
+const getUniqueIngredientPayload = (ingredient: IBurgerIngredient) => ({
   ingredient: {
     ...ingredient,
     nanoid: nanoid(),
   },
 })
 
-export const bunIngredientAdd = (
+const addBun = (
   ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.AddBun> => ({
   type: ActionKind.AddBun,
-  payload: getIngredientInsertingPayload(ingredient),
+  payload: getUniqueIngredientPayload(ingredient),
 })
 
-export const bunIngredientReplace = (
+const replaceBun = (
   ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.ReplaceBun> => ({
   type: ActionKind.ReplaceBun,
-  payload: getIngredientInsertingPayload(ingredient),
+  payload: getUniqueIngredientPayload(ingredient),
 })
 
-export const bunIngredientAddThunk =
+export const addBunWithReplacement =
   (ingredient: IBurgerIngredient): AppThunk =>
   (dispatch, getState) => {
     const {
@@ -97,22 +93,22 @@ export const bunIngredientAddThunk =
     } = getState()
 
     if (buns.length && buns[0]._id !== ingredient._id) {
-      dispatch(bunIngredientReplace(ingredient))
+      dispatch(replaceBun(ingredient))
     }
 
     if (!buns.length) {
-      dispatch(bunIngredientAdd(ingredient))
+      dispatch(addBun(ingredient))
     }
   }
 
-export const toppingIngredientAdd = (
+export const addTopping = (
   ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.AddTopping> => ({
   type: ActionKind.AddTopping,
-  payload: getIngredientInsertingPayload(ingredient),
+  payload: getUniqueIngredientPayload(ingredient),
 })
 
-export const toppingIngredientRemove = (
+export const removeTopping = (
   ingredient: IBurgerIngredientUnique,
 ): PayloadAction<{ ingredient: IBurgerIngredientUnique }, ActionKind.RemoveTopping> => ({
   type: ActionKind.RemoveTopping,
@@ -121,11 +117,11 @@ export const toppingIngredientRemove = (
   },
 })
 
-export const toppingIngredientSwap = (
+export const swapTopping = (
   toIndex: number,
   fromIndex: number,
-): PayloadAction<{ toIndex: number; fromIndex: number }, ActionKind.SortTopping> => ({
-  type: ActionKind.SortTopping,
+): PayloadAction<{ toIndex: number; fromIndex: number }, ActionKind.SwapTopping> => ({
+  type: ActionKind.SwapTopping,
   payload: {
     toIndex,
     fromIndex,
@@ -167,7 +163,7 @@ export const burgerConstructorReducer = produce((draft, action: AnyAction) => {
 
       return draft
     }
-    case ActionKind.SortTopping: {
+    case ActionKind.SwapTopping: {
       draft.toppings.splice(payload.toIndex, 0, draft.toppings.splice(payload.fromIndex, 1)[0])
 
       return draft

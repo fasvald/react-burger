@@ -4,6 +4,8 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { useDrag, useDrop } from 'react-dnd'
 
+import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
+
 import { IBurgerConstructorIngredientDraggable } from './burger-constructor-ingredient-draggable.model'
 
 import styles from './burger-constructor-ingredient-draggable.module.css'
@@ -11,73 +13,69 @@ import styles from './burger-constructor-ingredient-draggable.module.css'
 const BurgerConstructorIngredientDraggable = ({
   className,
   ingredient,
-  id,
-  moveCard,
-  findCard,
-  handleRemove,
+  moveIngredient,
+  findIngredient,
+  removeIngredient,
 }: IBurgerConstructorIngredientDraggable): JSX.Element => {
   const DragIconMemo = useMemo(() => <DragIcon type='primary' />, [])
 
   // Same thing as for BurgerIngredientsCard => preventing re-render, but there is an option to
   // use arrow function on ConstructorElement, because it's a last element in chain.
   const handleClose = useCallback(() => {
-    handleRemove(ingredient)
-  }, [handleRemove, ingredient])
+    removeIngredient(ingredient)
+  }, [removeIngredient, ingredient])
 
-  const originalIndex = findCard(id).index
+  const originalIndex = useMemo(
+    () => findIngredient(ingredient.nanoid).index,
+    [findIngredient, ingredient],
+  )
 
-  const [{ isDragging }, drag, dragPreview] = useDrag(
+  const [{ isDragging }, dragRef, dragPreviewRef] = useDrag(
     () => ({
-      type: 'TEST',
-
-      item: { id, originalIndexx: originalIndex },
-
+      type: DnDItemTypes.INGREDIENT_TOPPING_CONSTRUCTOR_ITEM,
+      item: { id: ingredient.nanoid, primaryIndex: originalIndex },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
-
       end: (item, monitor) => {
-        const { id: droppedId, originalIndexx } = item
+        const { id: droppedId, primaryIndex } = item
 
         const didDrop = monitor.didDrop()
 
         if (!didDrop) {
-          moveCard(droppedId, originalIndexx)
+          moveIngredient(droppedId, primaryIndex)
         }
       },
     }),
-
-    [id, originalIndex, moveCard],
+    [originalIndex, moveIngredient],
   )
 
-  const [, drop] = useDrop(
+  const [, dropRef] = useDrop(
     () => ({
-      accept: 'TEST',
-
+      accept: DnDItemTypes.INGREDIENT_TOPPING_CONSTRUCTOR_ITEM,
       canDrop: () => false,
+      hover({ id: draggedId }: { id: string }) {
+        if (draggedId !== ingredient.nanoid) {
+          const { index: overIndex } = findIngredient(ingredient.nanoid)
 
-      hover({ id: draggedId }: any) {
-        if (draggedId !== id) {
-          const { index: overIndex } = findCard(id)
-
-          moveCard(draggedId, overIndex)
+          moveIngredient(draggedId, overIndex)
         }
       },
     }),
-    [findCard, moveCard],
+    [findIngredient, moveIngredient],
   )
 
   const ref = useRef<HTMLDivElement>(null)
-
-  drag(drop(ref))
 
   const wrapperClass = useMemo(
     () => classNames(styles.wrapper, isDragging ? styles.isDragging : '', className),
     [className, isDragging],
   )
 
+  dragRef(dropRef(ref))
+
   return (
-    <div className={wrapperClass} ref={dragPreview}>
+    <div className={wrapperClass} ref={dragPreviewRef}>
       <div className={styles.wrapperDndIcon} ref={ref}>
         {DragIconMemo}
       </div>

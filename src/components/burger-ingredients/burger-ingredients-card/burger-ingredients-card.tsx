@@ -6,7 +6,7 @@ import { useDrag } from 'react-dnd'
 
 import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
 import { useAppSelector } from '../../../hooks'
-import { selectBurgerConstructorIngredientCountById } from '../../burger-constructor/burger-constructor.slice'
+import { selectIngredientIterationByID } from '../../burger-constructor/burger-constructor.slice'
 
 import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model'
 
@@ -18,11 +18,7 @@ const BurgerIngredientsCard = ({
   onClick,
 }: IBurgerIngredientsCardProps): JSX.Element => {
   // The most easiest way how to use Redux + Reselect :) and calculate how many times it has duplication :)
-  const count = useAppSelector((state) =>
-    selectBurgerConstructorIngredientCountById(state)(ingredient._id),
-  )
-
-  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
+  const count = useAppSelector((state) => selectIngredientIterationByID(state)(ingredient._id))
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type:
@@ -46,6 +42,8 @@ const BurgerIngredientsCard = ({
   const handleClick = useCallback(() => {
     onClick(ingredient)
   }, [ingredient, onClick])
+
+  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   const CounterMemo = useMemo(
     () => (

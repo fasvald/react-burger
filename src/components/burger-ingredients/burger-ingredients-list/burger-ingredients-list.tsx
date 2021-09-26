@@ -4,29 +4,25 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { IBurgerIngredient } from '../../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
-import {
-  bunIngredientAddThunk,
-  toppingIngredientAdd,
-} from '../../burger-constructor/burger-constructor.slice'
 import IngredientDetails from '../../ingredient-details/ingredient-details'
 import {
-  ingredientDetailsRemove,
-  ingredientDetailsSave,
+  removeIngredientDetails,
+  saveIngredientDetails,
   ingredientDetailsSelector,
 } from '../../ingredient-details/ingredient-details.slice'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
-import { selectBurgerIngredientsByType } from '../burger-ingredients.slice'
+import { selectIngredientsByType } from '../burger-ingredients.slice'
 
 import useDynamicTabsWithIntersection from './burger-ingredients-list.utils'
 
 import styles from './burger-ingredients-list.module.css'
 
 const BurgerIngredientsList = (): JSX.Element => {
-  const buns = useAppSelector((state) => selectBurgerIngredientsByType(state)('bun'))
-  const sauces = useAppSelector((state) => selectBurgerIngredientsByType(state)('sauce'))
-  const mains = useAppSelector((state) => selectBurgerIngredientsByType(state)('main'))
+  const buns = useAppSelector((state) => selectIngredientsByType(state)('bun'))
+  const sauces = useAppSelector((state) => selectIngredientsByType(state)('sauce'))
+  const mains = useAppSelector((state) => selectIngredientsByType(state)('main'))
   const chosenIngredient = useAppSelector(ingredientDetailsSelector)
 
   const dispatch = useAppDispatch()
@@ -44,14 +40,14 @@ const BurgerIngredientsList = (): JSX.Element => {
       if (modal.current) {
         modal.current.open()
 
-        dispatch(ingredientDetailsSave(ingredient))
+        dispatch(saveIngredientDetails(ingredient))
       }
     },
     [dispatch],
   )
 
   const handleClose = useCallback(() => {
-    dispatch(ingredientDetailsRemove())
+    dispatch(removeIngredientDetails())
   }, [dispatch])
 
   /**

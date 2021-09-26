@@ -35,23 +35,21 @@ const initialState: IBurgerIngredientsState = {
 
 /** Selectors */
 
-export const burgerIngredientsSelector = (state: RootState): IBurgerIngredient[] =>
+export const ingredientsSelector = (state: RootState): IBurgerIngredient[] =>
   state.burgerIngredients.items
 
-export const burgerIngredientsStatusSelector = (state: RootState): TFetchProcess =>
+export const ingredientsFetchStatusSelector = (state: RootState): TFetchProcess =>
   state.burgerIngredients.status
 
-export const selectBurgerIngredientsByType = createSelector(
-  [burgerIngredientsSelector],
-  (ingredients) =>
-    memoize((type: TBurgerIngredientType) =>
-      ingredients.filter((ingredient) => ingredient.type === type),
-    ),
+export const selectIngredientsByType = createSelector([ingredientsSelector], (ingredients) =>
+  memoize((type: TBurgerIngredientType) =>
+    ingredients.filter((ingredient) => ingredient.type === type),
+  ),
 )
 
 /** Action creators */
 
-export const burgerIngredientsPending = (): PayloadAction<
+export const startIngredientsFetching = (): PayloadAction<
   { status: TFetchProcessLoading },
   ActionKind.Pending
 > => ({
@@ -61,7 +59,7 @@ export const burgerIngredientsPending = (): PayloadAction<
   },
 })
 
-export const burgerIngredientsFulfilled = (
+export const finishIngredientsFetching = (
   data: IBurgerIngredient[],
 ): PayloadAction<
   {
@@ -74,7 +72,7 @@ export const burgerIngredientsFulfilled = (
   payload: { status: 'loaded', items: data },
 })
 
-export const burgerIngredientsFailed = (): PayloadAction<
+export const rejectIngredientsFetching = (): PayloadAction<
   { status: TFetchProcessError },
   ActionKind.Rejected
 > => ({
@@ -82,11 +80,11 @@ export const burgerIngredientsFailed = (): PayloadAction<
   payload: { status: 'error' },
 })
 
-export const fetchBurgerIngredients = (): AppThunk => async (dispatch, getState) => {
+export const fetchIngredients = (): AppThunk => async (dispatch, getState) => {
   const controller = new AbortController()
   const { signal } = controller
 
-  dispatch(burgerIngredientsPending())
+  dispatch(startIngredientsFetching())
 
   try {
     const response = await fetch(INGREDIENTS_API_ENDPOINT, { signal })
@@ -97,13 +95,13 @@ export const fetchBurgerIngredients = (): AppThunk => async (dispatch, getState)
 
     const result: IBurgerIngredientFetch = await response.json()
 
-    dispatch(burgerIngredientsFulfilled(result.data))
+    dispatch(finishIngredientsFetching(result.data))
   } catch (e) {
     if (!controller.signal.aborted) {
-      dispatch(burgerIngredientsFailed())
-
       // eslint-disable-next-line no-console
       console.error(e)
+
+      dispatch(rejectIngredientsFetching())
     }
   }
 }

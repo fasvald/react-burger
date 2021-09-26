@@ -7,66 +7,85 @@ import { useDrop } from 'react-dnd'
 import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { burgerIngredientsStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
+import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
 import {
   createOrder,
-  orderDetailsSelector,
-  orderDetailsStatusSelector,
+  orderSelector,
+  orderCreationStatusSelector,
 } from '../order-details/order-details.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
 import {
-  bunIngredientAddThunk,
-  burgerConstructorBunSelector,
-  burgerConstructorToppingsSelector,
-  selectBurgerConstructorIDs,
-  selectBurgerConstructorTotalPrice,
-  toppingIngredientAdd,
-  toppingIngredientRemove,
-  toppingIngredientSwap,
+  addBunWithReplacement,
+  bunsSelector,
+  toppingsSelector,
+  selectIngredientsID,
+  selectIngredientsTotalPrice,
+  addTopping,
+  removeTopping,
+  swapTopping,
 } from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
-  const buns = useAppSelector(burgerConstructorBunSelector)
-  const toppings = useAppSelector(burgerConstructorToppingsSelector)
-  const ingredientsIDs = useAppSelector((state) => selectBurgerConstructorIDs(state)())
-  const totalPrice = useAppSelector((state) => selectBurgerConstructorTotalPrice(state)())
-  const burgerIngredientsStatus = useAppSelector(burgerIngredientsStatusSelector)
-  const order = useAppSelector(orderDetailsSelector)
-  const orderStatus = useAppSelector(orderDetailsStatusSelector)
+  const buns = useAppSelector(bunsSelector)
+  const toppings = useAppSelector(toppingsSelector)
+  const ingredientsID = useAppSelector((state) => selectIngredientsID(state)())
+  const totalPrice = useAppSelector((state) => selectIngredientsTotalPrice(state)())
+  const order = useAppSelector(orderSelector)
+  const orderCreationStatus = useAppSelector(orderCreationStatusSelector)
+  const ingredientsFetchStatus = useAppSelector(ingredientsFetchStatusSelector)
 
   const dispatch = useAppDispatch()
 
   const modal = useRef<IModalRefObject>(null)
 
-  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
-
-  const handleRemoveIngredient = useCallback(
+  const removeIngredient = useCallback(
     (ingredient: IBurgerIngredientUnique) => {
-      dispatch(toppingIngredientRemove(ingredient))
+      dispatch(removeTopping(ingredient))
     },
     [dispatch],
   )
 
-  const handleClick = useCallback(() => {
+  const bookOrder = useCallback(() => {
     // Check if burger has at least 1 topping and if there is no error from ingredients fetching
-    if (burgerIngredientsStatus === 'error' || !toppings.length || !buns.length) {
+    if (ingredientsFetchStatus === 'error' || !toppings.length || !buns.length) {
       return
     }
 
-    dispatch(createOrder({ ingredients: ingredientsIDs })).then(() => {
+    dispatch(createOrder({ ingredients: ingredientsID })).then(() => {
       modal.current?.open()
     })
-  }, [dispatch, ingredientsIDs, burgerIngredientsStatus, toppings, buns])
+  }, [dispatch, ingredientsID, ingredientsFetchStatus, toppings, buns])
 
-  const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
+  const findIngredient = useCallback(
+    (id: string) => {
+      const topping = toppings.filter((t) => `${t.nanoid}` === id)[0]
+
+      return {
+        topping,
+        index: toppings.indexOf(topping),
+      }
+    },
+    [toppings],
+  )
+
+  const moveIngredient = useCallback(
+    (id: string, atIndex: number) => {
+      const { index } = findIngredient(id)
+
+      dispatch(swapTopping(index, atIndex))
+    },
+    [dispatch, findIngredient],
+  )
+
+  const [{ isOver, canDrop }, ingredientsDropRef] = useDrop(() => ({
     accept: [DnDItemTypes.INGREDIENT_BUN_CARD, DnDItemTypes.INGREDIENT_TOPPING_CARD],
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -74,24 +93,30 @@ const BurgerConstructor = (): JSX.Element => {
     }),
     drop(item: { ingredient: IBurgerIngredient }, monitor) {
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_BUN_CARD) {
-        dispatch(bunIngredientAddThunk(item.ingredient))
+        dispatch(addBunWithReplacement(item.ingredient))
       }
 
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_TOPPING_CARD) {
-        dispatch(toppingIngredientAdd(item.ingredient))
+        dispatch(addTopping(item.ingredient))
       }
     },
   }))
+
+  const [, toppingsDropRef] = useDrop(() => ({
+    accept: DnDItemTypes.INGREDIENT_TOPPING_CONSTRUCTOR_ITEM,
+  }))
+
+  const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   const priceSectionClassName = useMemo(
     () =>
       classNames(
         styles.price,
-        burgerIngredientsStatus === 'error' || !toppings.length || !buns.length
+        ingredientsFetchStatus === 'error' || !toppings.length || !buns.length
           ? styles.isDisabled
           : '',
       ),
-    [burgerIngredientsStatus, toppings.length, buns.length],
+    [ingredientsFetchStatus, toppings.length, buns.length],
   )
 
   const priceValueClass = useMemo(
@@ -104,28 +129,9 @@ const BurgerConstructor = (): JSX.Element => {
     [canDrop, isOver],
   )
 
-  const findCard = (id: string) => {
-    const card = toppings.filter((c) => `${c.nanoid}` === id)[0]
-
-    const foo = toppings.indexOf(card)
-
-    return {
-      card,
-      index: foo,
-    }
-  }
-
-  const moveCard = (id: string, atIndex: number) => {
-    const { card, index } = findCard(id)
-
-    dispatch(toppingIngredientSwap(index, atIndex))
-  }
-
-  const [, drop] = useDrop(() => ({ accept: 'TEST' }))
-
   return (
     <section className={styles.section}>
-      <div className={listClass} ref={dropRef}>
+      <div className={listClass} ref={ingredientsDropRef}>
         {buns?.length > 0 && (
           <BurgerConstructorIngredientBun
             className={styles.listItem}
@@ -134,16 +140,15 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
         {toppings?.length > 0 && (
-          <div className={styles.listDnD} ref={drop}>
+          <div className={styles.listDnD} ref={toppingsDropRef}>
             {toppings.map((ingredient) => (
               <BurgerConstructorIngredientDraggable
                 key={ingredient.nanoid}
                 className={styles.listDnDItem}
                 ingredient={ingredient}
-                id={ingredient.nanoid}
-                moveCard={moveCard}
-                findCard={findCard}
-                handleRemove={handleRemoveIngredient}
+                moveIngredient={moveIngredient}
+                findIngredient={findIngredient}
+                removeIngredient={removeIngredient}
               />
             ))}
           </div>
@@ -161,9 +166,11 @@ const BurgerConstructor = (): JSX.Element => {
           {totalPrice}
           {CurrencyIconMemo}
         </span>
-        <Button type='primary' size='large' onClick={handleClick}>
-          {(orderStatus === 'idle' || orderStatus === 'loaded') && <span>Оформить заказ</span>}
-          {orderStatus === 'loading' && (
+        <Button type='primary' size='large' onClick={bookOrder}>
+          {(orderCreationStatus === 'idle' || orderCreationStatus === 'loaded') && (
+            <span>Оформить заказ</span>
+          )}
+          {orderCreationStatus === 'loading' && (
             <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
           )}
         </Button>

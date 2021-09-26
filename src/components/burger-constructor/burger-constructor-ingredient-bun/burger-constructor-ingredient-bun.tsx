@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -12,7 +12,7 @@ const BurgerConstructorIngredientBun = ({
   ingredient,
   direction,
 }: IBurgerConstructorIngredientBunProps): JSX.Element => {
-  const wrapperClass = classNames(styles.wrapper, className)
+  const wrapperClass = useMemo(() => classNames(styles.wrapper, className), [className])
 
   return (
     <div className={wrapperClass}>

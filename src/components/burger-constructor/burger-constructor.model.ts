@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 import { IBurgerIngredientUnique } from '../../common/models/data.model'
 
 export interface IBurgerConstructorIngredientProps {
@@ -9,10 +7,6 @@ export interface IBurgerConstructorIngredientProps {
 
 export interface IBurgerConstructorState {
   ingredients: IBurgerIngredientUnique[]
-}
-
-export interface IBurgerConstructorProviderProps {
-  children: ReactNode
 }
 
 export interface IGroupedIngredients {

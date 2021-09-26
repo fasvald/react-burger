@@ -13,14 +13,14 @@ import { IAppHeaderProps } from './app-header.model'
 import styles from './app-header.module.css'
 
 const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
-  const headerClass = useMemo(() => classNames(styles.header, className), [className])
-  const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
-  const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])
-
   const BurgerIconMemo = useMemo(() => <BurgerIcon type='primary' />, [])
   const ListIconMemo = useMemo(() => <ListIcon type='primary' />, [])
   const ProfileIconMemo = useMemo(() => <ProfileIcon type='primary' />, [])
   const LogoMemo = useMemo(() => <Logo />, [])
+
+  const headerClass = useMemo(() => classNames(styles.header, className), [className])
+  const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
+  const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])
 
   return (
     /**

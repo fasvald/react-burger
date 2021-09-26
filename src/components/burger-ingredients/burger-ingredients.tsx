@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import classNames from 'classnames'
 
@@ -7,24 +7,24 @@ import Loader from '../loader/loader'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
 import {
-  burgerIngredientsSelector,
-  burgerIngredientsStatusSelector,
-  fetchBurgerIngredients,
+  ingredientsSelector,
+  ingredientsFetchStatusSelector,
+  fetchIngredients,
 } from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
 
 const BurgerIngredients = (): JSX.Element => {
+  const ingredients = useAppSelector(ingredientsSelector)
+  const status = useAppSelector(ingredientsFetchStatusSelector)
+
   const dispatch = useAppDispatch()
 
-  const ingredients = useAppSelector(burgerIngredientsSelector)
-  const status = useAppSelector(burgerIngredientsStatusSelector)
-
-  const sectionTitleClass = classNames('text text_type_main-large', styles.title)
-
   useEffect(() => {
-    dispatch(fetchBurgerIngredients())
+    dispatch(fetchIngredients())
   }, [dispatch])
+
+  const sectionTitleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])
 
   return (
     <section className={styles.section}>

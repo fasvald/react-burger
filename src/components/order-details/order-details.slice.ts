@@ -33,15 +33,14 @@ const initialState: IOrderDetailsState = {
 
 /** Selectors */
 
-export const orderDetailsSelector = (state: RootState): IOrderDetails | null =>
-  state.orderDetails.order
+export const orderSelector = (state: RootState): IOrderDetails | null => state.orderDetails.order
 
-export const orderDetailsStatusSelector = (state: RootState): TFetchProcess =>
+export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
   state.orderDetails.status
 
 /** Action creators */
 
-export const orderDetailsPending = (): PayloadAction<
+const startOrderCreation = (): PayloadAction<
   { status: TFetchProcessLoading },
   ActionKind.Pending
 > => ({
@@ -51,7 +50,7 @@ export const orderDetailsPending = (): PayloadAction<
   },
 })
 
-export const orderDetailsFulfilled = (
+const finishOrderCreation = (
   order: IOrderDetails,
 ): PayloadAction<
   {
@@ -64,7 +63,7 @@ export const orderDetailsFulfilled = (
   payload: { status: 'loaded', item: order },
 })
 
-export const orderDetailsFailed = (): PayloadAction<
+const rejectOrderCreation = (): PayloadAction<
   { status: TFetchProcessError },
   ActionKind.Rejected
 > => ({
@@ -72,14 +71,14 @@ export const orderDetailsFailed = (): PayloadAction<
   payload: { status: 'error' },
 })
 
-// We return Promise to catch the finish result of this action creator
 export const createOrder =
   (body: IOrderDetailsBody): AppThunk<Promise<IOrderDetails>> =>
   (dispatch, getState) => {
+    // We can return [controller, Promise] for further request cancellation outside
     const controller = new AbortController()
     const { signal } = controller
 
-    dispatch(orderDetailsPending())
+    dispatch(startOrderCreation())
 
     return new Promise((resolve, reject) => {
       fetch(ORDER_CREATION_API_ENDPOINT, getOrderDetailsPostBody(body, signal))
@@ -91,7 +90,7 @@ export const createOrder =
           return response.json()
         })
         .then((result: IOrderDetails) => {
-          dispatch(orderDetailsFulfilled(result))
+          dispatch(finishOrderCreation(result))
 
           resolve(result)
         })
@@ -100,8 +99,7 @@ export const createOrder =
             // eslint-disable-next-line no-console
             console.error(err)
 
-            dispatch(orderDetailsFailed())
-
+            dispatch(rejectOrderCreation())
             reject(err)
           }
         })

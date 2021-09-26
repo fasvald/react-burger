@@ -29,14 +29,14 @@ export const ingredientDetailsSelector = (state: RootState): IBurgerIngredient |
 
 /** Action creators */
 
-export const ingredientDetailsSave = (
+export const saveIngredientDetails = (
   ingredient: IBurgerIngredient,
 ): PayloadAction<{ ingredient: IBurgerIngredient }, ActionKind.Save> => ({
   type: ActionKind.Save,
   payload: { ingredient },
 })
 
-export const ingredientDetailsRemove = (): Action<ActionKind.Remove> => ({
+export const removeIngredientDetails = (): Action<ActionKind.Remove> => ({
   type: ActionKind.Remove,
 })
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
@@ -10,7 +10,7 @@ const IngredientDetailsFoodEnergy = ({
   className,
   foodEnergy,
 }: IIngredientDetailsFoodEnergyProps): JSX.Element => {
-  const foodEnergyWrapperClass = classNames(styles.list, className)
+  const foodEnergyWrapperClass = useMemo(() => classNames(styles.list, className), [className])
 
   return (
     <div className={foodEnergyWrapperClass}>
