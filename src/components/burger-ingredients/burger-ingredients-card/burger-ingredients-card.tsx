@@ -6,7 +6,7 @@ import { useDrag } from 'react-dnd'
 
 import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
 import { useAppSelector } from '../../../hooks'
-import { selectIngredientIterationByID } from '../../burger-constructor/burger-constructor.slice'
+import { selectIngredientIterationByID } from '../../../services/selectors/burger-constructor.selector'
 
 import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model'
 

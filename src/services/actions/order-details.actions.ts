@@ -1,44 +1,23 @@
-/* eslint-disable no-param-reassign */
-
-/** Actions */
-
 import { PayloadAction } from '@reduxjs/toolkit'
-import produce from 'immer'
-import { AnyAction } from 'redux'
 
 import {
-  TFetchProcess,
   TFetchProcessError,
   TFetchProcessLoaded,
   TFetchProcessLoading,
 } from '../../common/models/data.model'
-import { AppThunk, RootState } from '../../store'
-import { ORDER_CREATION_API_ENDPOINT } from '../app/app.constant'
+import { ORDER_CREATION_API_ENDPOINT } from '../../components/app/app.constant'
+import {
+  IOrderDetails,
+  IOrderDetailsBody,
+} from '../../components/order-details/order-details.model'
+import getOrderDetailsPostBody from '../../components/order-details/order-details.utils'
+import { AppThunk } from '../../store'
 
-import { IOrderDetails, IOrderDetailsBody, IOrderDetailsState } from './order-details.model'
-import getOrderDetailsPostBody from './order-details.utils'
-
-enum ActionKind {
+export enum ActionKind {
   Pending = 'orderDetails/requestStatus/pending',
   Fulfilled = 'orderDetails/requestStatus/fulfilled',
   Rejected = 'orderDetails/requestStatus/rejected',
 }
-
-/** Initial state */
-
-const initialState: IOrderDetailsState = {
-  status: 'idle',
-  order: null,
-}
-
-/** Selectors */
-
-export const orderSelector = (state: RootState): IOrderDetails | null => state.orderDetails.order
-
-export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
-  state.orderDetails.status
-
-/** Action creators */
 
 const startOrderCreation = (): PayloadAction<
   { status: TFetchProcessLoading },
@@ -105,31 +84,3 @@ export const createOrder =
         })
     })
   }
-
-/** Reducer */
-
-export const orderDetailsReducer = produce((draft, action: AnyAction) => {
-  const { type, payload } = action as PayloadAction<{ status: TFetchProcess; item: IOrderDetails }>
-
-  switch (type) {
-    case ActionKind.Pending: {
-      draft.status = payload.status
-
-      return draft
-    }
-    case ActionKind.Fulfilled: {
-      draft.status = payload.status
-      draft.order = payload.item
-
-      return draft
-    }
-    case ActionKind.Rejected: {
-      draft.status = payload.status
-      draft.order = null
-
-      return draft
-    }
-    default:
-      return draft
-  }
-}, initialState)

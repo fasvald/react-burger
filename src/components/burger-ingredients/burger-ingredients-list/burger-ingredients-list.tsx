@@ -4,16 +4,16 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 
 import { IBurgerIngredient } from '../../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
-import IngredientDetails from '../../ingredient-details/ingredient-details'
 import {
   removeIngredientDetails,
   saveIngredientDetails,
-  ingredientDetailsSelector,
-} from '../../ingredient-details/ingredient-details.slice'
+} from '../../../services/actions/ingredient-details.actions'
+import { selectIngredientsByType } from '../../../services/selectors/burger-ingredients.selector'
+import ingredientDetailsSelector from '../../../services/selectors/ingredient-details.selector'
+import IngredientDetails from '../../ingredient-details/ingredient-details'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
-import { selectIngredientsByType } from '../burger-ingredients.slice'
 
 import useDynamicTabsWithIntersection from './burger-ingredients-list.utils'
 

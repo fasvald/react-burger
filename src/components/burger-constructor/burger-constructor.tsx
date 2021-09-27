@@ -7,29 +7,31 @@ import { useDrop } from 'react-dnd'
 import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
+import {
+  addBunWithReplacement,
+  addTopping,
+  removeTopping,
+  swapTopping,
+} from '../../services/actions/burger-constructor.actions'
+import { createOrder } from '../../services/actions/order-details.actions'
+import {
+  bunsSelector,
+  selectIngredientsID,
+  selectIngredientsTotalPrice,
+  toppingsSelector,
+} from '../../services/selectors/burger-constructor.selector'
+import { ingredientsFetchStatusSelector } from '../../services/selectors/burger-ingredients.selector'
+import {
+  orderCreationStatusSelector,
+  orderSelector,
+} from '../../services/selectors/order-details.selector'
 import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
-import {
-  createOrder,
-  orderSelector,
-  orderCreationStatusSelector,
-} from '../order-details/order-details.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
-import {
-  addBunWithReplacement,
-  bunsSelector,
-  toppingsSelector,
-  selectIngredientsID,
-  selectIngredientsTotalPrice,
-  addTopping,
-  removeTopping,
-  swapTopping,
-} from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
 

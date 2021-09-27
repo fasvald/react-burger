@@ -3,14 +3,14 @@ import React, { useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { fetchIngredients } from '../../services/actions/burger-ingredients.actions'
+import {
+  ingredientsFetchStatusSelector,
+  ingredientsSelector,
+} from '../../services/selectors/burger-ingredients.selector'
 import Loader from '../loader/loader'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
-import {
-  ingredientsSelector,
-  ingredientsFetchStatusSelector,
-  fetchIngredients,
-} from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
 
