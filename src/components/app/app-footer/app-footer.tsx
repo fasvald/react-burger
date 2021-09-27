@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
 import { IAppFooterProps } from './app-footer.model'
 
 const AppFooter = ({ children, className = '' }: IAppFooterProps): JSX.Element => {
-  const footerClass = classNames(className)
+  const footerClass = useMemo(() => classNames(className), [className])
 
   return <footer className={footerClass}>{children}</footer>
 }

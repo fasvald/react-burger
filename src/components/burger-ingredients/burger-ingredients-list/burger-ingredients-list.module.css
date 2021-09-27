@@ -1,0 +1,77 @@
+@import '../../../common/styles/variables.css';
+
+/* Component wrapper */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabs sections (tab like switchers) */
+
+.tabs {
+  display: flex;
+}
+
+/* Tabs links */
+
+.tabsLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* List of ingredients */
+
+.list {
+  display: flex;
+  max-height: 650px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
+
+/* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background-color: var(--dark-grey);
+  border-radius: 0;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--dark-grey-dim);
+  border-radius: 0;
+}
+
+/* List section */
+
+.listSection {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* A small hack :) because each card inside has 32px bottom margin so we add 8 here, so in total => 40px */
+.listSection:not(:last-of-type) {
+  margin-bottom: 8px;
+}
+
+.listSection h2 {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Ingredient card */
+
+.card {
+  margin: 0 auto 32px 12px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .list {
+    scroll-behavior: smooth;
+  }
+}

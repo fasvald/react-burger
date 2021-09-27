@@ -25,3 +25,8 @@ export interface IUseOrderDetails {
 export interface IOrderDetailsProps {
   orderDetails: IOrderDetails
 }
+
+export interface IOrderDetailsState {
+  status: TFetchProcess
+  order: IOrderDetails | null
+}

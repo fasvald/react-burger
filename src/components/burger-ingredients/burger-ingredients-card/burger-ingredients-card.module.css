@@ -1,0 +1,71 @@
+@import '../../../common/styles/variables.css';
+
+.card {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: var(--card-width-default);
+  border: 2px solid transparent;
+
+  /* cursor: pointer; */
+}
+
+.card:hover {
+  border: 2px solid var(--dark-grey);
+  border-radius: 10px;
+  cursor: grab;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card.isDragging {
+  opacity: .3;
+  background-image:
+  linear-gradient(
+    45deg,
+    var(--dark-grey) 25%,
+    var(--dark-grey-dim) 25%,
+    var(--dark-grey-dim) 50%,
+    var(--dark-grey) 50%,
+    var(--dark-grey) 75%,
+    var(--dark-grey-dim) 75%,
+    var(--dark-grey-dim) 100%
+  );
+  background-size: 11.31px 11.31px;
+}
+
+.cardCounter {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+/* To prevent content shrink after loading */
+.img {
+  min-height: 120px;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.priceValue {
+  margin-right: 8px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  height: 48px;
+}
+
+.titleValue {
+  text-align: center;
+}

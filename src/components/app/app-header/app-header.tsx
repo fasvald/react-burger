@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import {
   Logo,
@@ -13,9 +13,14 @@ import { IAppHeaderProps } from './app-header.model'
 import styles from './app-header.module.css'
 
 const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
-  const headerClass = classNames(styles.header, className)
-  const navLeftClass = classNames(styles.nav, styles.navLeft)
-  const navRightClass = classNames(styles.nav, styles.navRight)
+  const BurgerIconMemo = useMemo(() => <BurgerIcon type='primary' />, [])
+  const ListIconMemo = useMemo(() => <ListIcon type='primary' />, [])
+  const ProfileIconMemo = useMemo(() => <ProfileIcon type='primary' />, [])
+  const LogoMemo = useMemo(() => <Logo />, [])
+
+  const headerClass = useMemo(() => classNames(styles.header, className), [className])
+  const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
+  const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])
 
   return (
     /**
@@ -33,14 +38,14 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
             <li className={styles.menuItem}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a href='#' className={styles.menuItemLink}>
-                <BurgerIcon type='primary' />
+                {BurgerIconMemo}
                 <span className='text text_type_main-default'>Конструктор</span>
               </a>
             </li>
             <li className={styles.menuItem}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a href='#' className={styles.menuItemLink}>
-                <ListIcon type='primary' />
+                {ListIconMemo}
                 <span className='text text_type_main-default'>Лента заказов</span>
               </a>
             </li>
@@ -48,14 +53,14 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
         </nav>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a href='#' className={styles.logo}>
-          <Logo />
+          {LogoMemo}
         </a>
         <nav className={navRightClass}>
           <ul className={styles.menu}>
             <li className={styles.menuItem}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a href='#' className={styles.menuItemLink}>
-                <ProfileIcon type='primary' />
+                {ProfileIconMemo}
                 <span className='text text_type_main-default'>Личный кабинет</span>
               </a>
             </li>

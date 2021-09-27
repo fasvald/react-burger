@@ -1,28 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { CircularProgress } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import classNames from 'classnames'
 
+import themeOptions from './loader.constant'
 import { ILoaderProps } from './loader.model'
 
 import styles from './loader.module.css'
 
-const themeOptions = createTheme({
-  palette: {
-    primary: {
-      main: '#8585ad',
-      dark: '#2f2f37',
-    },
-    secondary: {
-      main: '#fff',
-      dark: '#2f2f37',
-    },
-  },
-})
-
 const Loader = ({ className, circularProgressProps }: ILoaderProps): JSX.Element => {
-  const wrapperClass = classNames(styles.wrapper, className)
+  const wrapperClass = useMemo(() => classNames(styles.wrapper, className), [className])
 
   return (
     <div className={wrapperClass}>

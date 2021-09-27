@@ -1,0 +1,149 @@
+@import '../../common/styles/variables.css';
+
+/* Common */
+
+.list,
+.listDnD {
+  display: flex;
+}
+
+.list,
+.listDnD {
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+/* Section (root element) */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  padding: 100px 20px 0;
+}
+
+/* List + DnD Reaction Styling */
+
+.list {
+  position: relative;
+  padding: 5px 0;
+  flex: 1;
+  border: 2px solid transparent;
+}
+
+.list.canDrop {
+  background-color: rgba(133, 133, 173, .1);
+  border: 2px dashed var(--dark-grey);
+}
+
+.list.isOver {
+  background-color: transparent;
+}
+
+.list.canDrop .listItem,
+.list.canDrop .listDnD .listDnDItem {
+  opacity: .3;
+}
+
+.list.canDrop .listDnD::-webkit-scrollbar-track,
+.list.canDrop .listDnD::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.list.isOver .listItem,
+.list.isOver .listDnD .listDnDItem {
+  opacity: 1;
+}
+
+/* DnD list */
+
+.listDnD {
+  max-height: 464px;
+  overflow-y: scroll;
+}
+
+/* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.listDnD::-webkit-scrollbar {
+  width: 8px;
+}
+
+.listDnD::-webkit-scrollbar-track {
+  background-color: var(--dark-grey);
+  border-radius: 0;
+}
+
+.listDnD::-webkit-scrollbar-thumb {
+  background-color: var(--dark-grey-dim);
+  border-radius: 0;
+}
+
+/* List item */
+
+/* Because of design we need to shift the first and last item, we can't use any flex rules due to custom scrollbar */
+.listItem {
+  margin-left: calc(var(--icon-width) + var(--dnd-icon-margin-right));
+}
+
+.listItem:first-of-type {
+  margin-bottom: 10px;
+}
+
+.listItem:last-of-type {
+  margin-top: 10px;
+}
+
+/* DnD list item */
+
+.listDnDItem:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+/* Total price section */
+
+.price {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 40px;
+  margin-right: calc(var(--section-width) - var(--burger-constructor-width-total) - var(--icon-width) - var(--dnd-icon-margin-right));
+}
+
+.price.isDisabled button {
+  background: var(--dark-grey-dim);
+  cursor: not-allowed;
+}
+
+.price.isDisabled button:hover {
+  box-shadow: none;
+  filter: none;
+}
+
+.price button {
+  display: inline-flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  min-width: 215px;
+  min-height: 66px;
+}
+
+/* Total price value (with icon) */
+
+.priceValue {
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 40px;
+  text-align: right;
+}
+
+.priceValue svg {
+  margin-left: 9px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .listDnD {
+    scroll-behavior: smooth;
+  }
+}

@@ -45,7 +45,10 @@ import styles from './modal.module.css'
 
 const modalRootEl = document.getElementById('modal-root')
 
-const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Element | null => {
+const Modal = (
+  { children, onClose }: IModalProps,
+  ref: Ref<IModalRefObject>,
+): JSX.Element | null => {
   // We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
@@ -59,7 +62,11 @@ const Modal = ({ children }: IModalProps, ref: Ref<IModalRefObject>): JSX.Elemen
   const close = useCallback(() => {
     setIsShown(false)
     unblockBrowserScroll()
-  }, [])
+
+    if (onClose) {
+      onClose()
+    }
+  }, [onClose])
 
   const handleEscape = useCallback(
     (event) => {
