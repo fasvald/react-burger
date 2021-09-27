@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import { PayloadAction } from '@reduxjs/toolkit'
 import produce from 'immer'
 import { AnyAction } from 'redux'
@@ -46,6 +48,12 @@ const burgerConstructorReducer = produce((draft, action: AnyAction) => {
     }
     case ActionKind.SwapTopping: {
       draft.toppings.splice(payload.toIndex, 0, draft.toppings.splice(payload.fromIndex, 1)[0])
+
+      return draft
+    }
+    case ActionKind.ClearIngredients: {
+      draft.buns = []
+      draft.toppings = []
 
       return draft
     }

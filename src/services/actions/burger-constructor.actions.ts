@@ -1,4 +1,4 @@
-import { PayloadAction } from '@reduxjs/toolkit'
+import { Action, PayloadAction } from '@reduxjs/toolkit'
 import { nanoid } from 'nanoid'
 
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
@@ -10,6 +10,7 @@ export enum ActionKind {
   AddTopping = 'burgerConstructor/addTopping',
   RemoveTopping = 'burgerConstructor/removeTopping',
   SwapTopping = 'burgerConstructor/swapTopping',
+  ClearIngredients = 'burgerConstructor/clearIngredients',
 }
 
 const getUniqueIngredientPayload = (ingredient: IBurgerIngredient) => ({
@@ -74,4 +75,8 @@ export const swapTopping = (
     toIndex,
     fromIndex,
   },
+})
+
+export const clearIngredients = (): Action<ActionKind.ClearIngredients> => ({
+  type: ActionKind.ClearIngredients,
 })

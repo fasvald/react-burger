@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import {
   addBunWithReplacement,
   addTopping,
+  clearIngredients,
   removeTopping,
   swapTopping,
 } from '../../services/actions/burger-constructor.actions'
@@ -62,6 +63,7 @@ const BurgerConstructor = (): JSX.Element => {
     }
 
     dispatch(createOrder({ ingredients: ingredientsID })).then(() => {
+      dispatch(clearIngredients())
       modal.current?.open()
     })
   }, [dispatch, ingredientsID, ingredientsFetchStatus, toppings, buns])
