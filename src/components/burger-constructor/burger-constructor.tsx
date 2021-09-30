@@ -7,32 +7,30 @@ import { useDrop } from 'react-dnd'
 import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import {
-  addBunWithReplacement,
-  addTopping,
-  clearIngredients,
-  removeTopping,
-  swapTopping,
-} from '../../services/actions/burger-constructor.actions'
-import { createOrder } from '../../services/actions/order-details.actions'
-import {
-  bunsSelector,
-  selectIngredientsID,
-  selectIngredientsTotalPrice,
-  toppingsSelector,
-} from '../../services/selectors/burger-constructor.selector'
-import { ingredientsFetchStatusSelector } from '../../services/selectors/burger-ingredients.selector'
-import {
-  orderCreationStatusSelector,
-  orderSelector,
-} from '../../services/selectors/order-details.selector'
+import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader/loader'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
+import {
+  orderSelector,
+  orderCreationStatusSelector,
+  createOrder,
+} from '../order-details/order-details.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
+import {
+  bunsSelector,
+  toppingsSelector,
+  selectIngredientsID,
+  selectIngredientsTotalPrice,
+  addTopping,
+  clearIngredients,
+  removeTopping,
+  swapTopping,
+  addBun,
+} from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
 
@@ -84,7 +82,7 @@ const BurgerConstructor = (): JSX.Element => {
     (id: string, atIndex: number) => {
       const { index } = findIngredient(id)
 
-      dispatch(swapTopping(index, atIndex))
+      dispatch(swapTopping({ toIndex: index, fromIndex: atIndex }))
     },
     [dispatch, findIngredient],
   )
@@ -97,7 +95,7 @@ const BurgerConstructor = (): JSX.Element => {
     }),
     drop(item: { ingredient: IBurgerIngredient }, monitor) {
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_BUN_CARD) {
-        dispatch(addBunWithReplacement(item.ingredient))
+        dispatch(addBun(item.ingredient))
       }
 
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_TOPPING_CARD) {

@@ -1,0 +1,95 @@
+/* eslint-disable no-param-reassign */
+
+import { createAsyncThunk, createSelector, createSlice, SerializedError } from '@reduxjs/toolkit'
+import { memoize } from 'lodash'
+
+import {
+  IBurgerIngredient,
+  IBurgerIngredientFetch,
+  TBurgerIngredientType,
+  TFetchProcess,
+} from '../../common/models/data.model'
+import { RootState } from '../../store'
+import { INGREDIENTS_API_ENDPOINT } from '../app/app.constant'
+
+import { IBurgerIngredientsState } from './burger-ingredients.model'
+
+const initialState: IBurgerIngredientsState = {
+  status: 'idle',
+  items: [],
+}
+
+export const ingredientsSelector = (state: RootState): IBurgerIngredient[] =>
+  state.burgerIngredients.items
+
+export const ingredientsFetchStatusSelector = (state: RootState): TFetchProcess =>
+  state.burgerIngredients.status
+
+export const selectIngredientsByType = createSelector([ingredientsSelector], (ingredients) =>
+  memoize((type: TBurgerIngredientType) =>
+    ingredients.filter((ingredient) => ingredient.type === type),
+  ),
+)
+
+/**
+ * NOTE: Could be changed via RTK Query feature => createAPI, but it's a little bit harder and there are
+ * a lot of theory and new info how to use it. I do not like that in that case all selectors should be like
+ * an http query and you still need to inject this thing as extra reducer. Use createApi and injectEndpoints, from
+ * this link => https://redux-toolkit.js.org/rtk-query/usage/code-splitting.
+ *
+ * Anyway this thing https://redux-toolkit.js.org/rtk-query/overview is very cool, but for me it seems like
+ * overcomplicated and overwhelming for this kind of project. Personally for me I kinda understand how to work
+ * with it... I need to create one emptyBaseApi, set reducerPath, inject endpoints, pass to store creation function
+ * and using it inside extra reducers for some of the store sections, additionally rewrite all the selectors which be
+ * under createApi method.
+ *
+ * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project.
+ */
+export const fetchIngredients = createAsyncThunk(
+  'burgerIngredients/fetch',
+  async (_, { rejectWithValue, signal }) => {
+    try {
+      const response = await fetch(INGREDIENTS_API_ENDPOINT)
+
+      if (!response.ok) {
+        // Error type: string
+        throw new Error(
+          `Ingredients fetching was failed with "HTTP status code": ${response.status}`,
+        )
+      }
+
+      const result: IBurgerIngredientFetch = await response.json()
+
+      return result.data
+    } catch (err) {
+      // https://github.com/microsoft/TypeScript/issues/20024
+      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+      if (signal.aborted) {
+        return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
+      }
+
+      return rejectWithValue((err as SerializedError)?.message)
+    }
+  },
+)
+
+export const burgerIngredientsSlice = createSlice({
+  name: 'burgerIngredients',
+  initialState,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchIngredients.pending, (state, action) => {
+      state.status = 'loading'
+    })
+    builder.addCase(fetchIngredients.fulfilled, (state, action) => {
+      state.status = 'loaded'
+      state.items = action.payload
+    })
+    builder.addCase(fetchIngredients.rejected, (state, action) => {
+      state.items = []
+      state.status = 'error'
+    })
+  },
+})
+
+export default burgerIngredientsSlice.reducer

@@ -1,9 +1,6 @@
 import { IOrderDetailsBody } from './order-details.model'
 
-export default function getOrderDetailsPostBody(
-  body: IOrderDetailsBody,
-  signal: AbortSignal,
-): RequestInit {
+export default function getOrderDetailsPostBody(body: IOrderDetailsBody): RequestInit {
   return {
     method: 'POST',
     body: JSON.stringify(body),
@@ -11,6 +8,5 @@ export default function getOrderDetailsPostBody(
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    signal,
   }
 }

@@ -1,7 +1,7 @@
-import burgerConstructorReducer from './services/reducers/burger-constructor.reducer'
-import burgerIngredientsReducer from './services/reducers/burger-ingredients.reducer'
-import ingredientDetailsReducer from './services/reducers/ingredient-details.reducer'
-import orderDetailsReducer from './services/reducers/order-details.reducer'
+import burgerConstructorReducer from './components/burger-constructor/burger-constructor.slice'
+import burgerIngredientsReducer from './components/burger-ingredients/burger-ingredients.slice'
+import ingredientDetailsReducer from './components/ingredient-details/ingredient-details.slice'
+import orderDetailsReducer from './components/order-details/order-details.slice'
 
 const rootReducer = {
   burgerIngredients: burgerIngredientsReducer,
