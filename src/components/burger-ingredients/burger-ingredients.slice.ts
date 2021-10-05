@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
-import { createAsyncThunk, createSelector, createSlice, SerializedError } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
+import axios, { AxiosError } from 'axios'
 import { memoize } from 'lodash'
 
 import {
@@ -49,26 +50,24 @@ export const fetchIngredients = createAsyncThunk(
   'burgerIngredients/fetch',
   async (_, { rejectWithValue, signal }) => {
     try {
-      const response = await fetch(INGREDIENTS_API_ENDPOINT)
+      const source = axios.CancelToken.source()
+      signal.addEventListener('abort', () => {
+        source.cancel('Operation stop the work.')
+      })
 
-      if (!response.ok) {
-        // Error type: string
-        throw new Error(
-          `Ingredients fetching was failed with "HTTP status code": ${response.status}`,
-        )
-      }
+      const response = await axios.get<IBurgerIngredientFetch>(INGREDIENTS_API_ENDPOINT, {
+        cancelToken: source.token,
+      })
 
-      const result: IBurgerIngredientFetch = await response.json()
-
-      return result.data
+      return response.data.data
     } catch (err) {
       // https://github.com/microsoft/TypeScript/issues/20024
       // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (signal.aborted) {
+      if (axios.isCancel(err)) {
         return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
       }
 
-      return rejectWithValue((err as SerializedError)?.message)
+      return rejectWithValue((err as AxiosError)?.message)
     }
   },
 )

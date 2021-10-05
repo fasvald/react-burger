@@ -60,6 +60,10 @@ const BurgerConstructor = (): JSX.Element => {
       return
     }
 
+    // NOTE: Not working aborting for this request, spend 3 hrs to debug and search, no results... Need help!!!
+    // const promise = dispatch(createOrder({ ingredients: ingredientsID }))
+    // promise.abort()
+
     dispatch(createOrder({ ingredients: ingredientsID })).then(() => {
       dispatch(clearIngredients())
       modal.current?.open()

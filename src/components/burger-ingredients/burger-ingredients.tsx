@@ -21,7 +21,11 @@ const BurgerIngredients = (): JSX.Element => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchIngredients())
+    const promise = dispatch(fetchIngredients())
+
+    return () => {
+      promise.abort()
+    }
   }, [dispatch])
 
   const sectionTitleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])

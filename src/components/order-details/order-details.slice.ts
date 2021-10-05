@@ -1,13 +1,18 @@
 /* eslint-disable no-param-reassign */
 
-import { createAsyncThunk, createSlice, SerializedError } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 
 import { TFetchProcess } from '../../common/models/data.model'
 import { RootState } from '../../store'
 import { ORDER_CREATION_API_ENDPOINT } from '../app/app.constant'
 
-import { IOrderDetails, IOrderDetailsBody, IOrderDetailsState } from './order-details.model'
-import getOrderDetailsPostBody from './order-details.utils'
+import {
+  IOrderDetails,
+  IOrderDetailsBody,
+  IOrderDetailsResponse,
+  IOrderDetailsState,
+} from './order-details.model'
 
 const initialState: IOrderDetailsState = {
   status: 'idle',
@@ -21,25 +26,30 @@ export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
 
 export const createOrder = createAsyncThunk(
   'orderDetails/creation',
-  async (body: IOrderDetailsBody, { rejectWithValue, signal }) => {
+  async (data: IOrderDetailsBody, { rejectWithValue, signal }) => {
     try {
-      const response = await fetch(ORDER_CREATION_API_ENDPOINT, getOrderDetailsPostBody(body))
+      const source = axios.CancelToken.source()
+      signal.addEventListener('abort', () => {
+        source.cancel('Operation stop the work.')
+      })
 
-      if (!response.ok) {
-        throw new Error(`Order creation was failed with "HTTP status code": ${response.status}`)
-      }
+      const response = await axios.post<IOrderDetailsBody, AxiosResponse<IOrderDetailsResponse>>(
+        ORDER_CREATION_API_ENDPOINT,
+        data,
+        {
+          cancelToken: source.token,
+        },
+      )
 
-      const result: IOrderDetails = await response.json()
-
-      return result
+      return response.data
     } catch (err) {
       // https://github.com/microsoft/TypeScript/issues/20024
       // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (signal.aborted) {
+      if (axios.isCancel(err)) {
         return rejectWithValue('Order creation stop the work. This has been aborted!')
       }
 
-      return rejectWithValue((err as SerializedError)?.message)
+      return rejectWithValue((err as AxiosError)?.message)
     }
   },
 )
