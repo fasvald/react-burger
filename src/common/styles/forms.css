@@ -1,0 +1,74 @@
+@import './variables.css';
+
+/* Global styles for all forms */
+
+/* NOTE: "sb" prefix stands for "Stellar Burger" to prevent overlapping with other components libraries selectors, etc. */
+
+.sb-form,
+.sb-form__body,
+.sb-form__body-input-el {
+  display: flex;
+  justify-content: center;
+}
+
+.sb-form {
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.sb-form_default .sb-form__body-input-el:not(:last-of-type) {
+  margin-bottom: 24px;
+}
+
+.sb-form__title {
+  width: 100%;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.sb-form__body {
+  flex-wrap: wrap;
+}
+
+.sb-form__body-input-el {
+  width: 100%;
+}
+
+.sb-form__body > button {
+  margin-top: 24px;
+}
+
+.sb-form__content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.sb-form__content-link {
+  text-align: center;
+}
+
+.sb-form__content-link:not(:last-of-type) {
+  margin-bottom: 16px;
+}
+
+/* Global link style inside of forms */
+
+.sb-form__link {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+.sb-form__link:hover {
+  text-decoration: underline;
+}
+
+.sb-form__link:active {
+  color: var(--primary-light);
+}
+
+
+
+
+
