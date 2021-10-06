@@ -7,12 +7,23 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { Link, useHistory } from 'react-router-dom'
+
+import { authSelector, signUp } from '../../common/services/slices/auth/auth.slice'
+import getBearerToken from '../../common/services/slices/auth/auth.utils'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 
 import styles from './register-page.module.css'
 
 const RegisterPage = (): JSX.Element => {
+  const history = useHistory()
+
   const [form, setForm] = useState({ name: '', email: '', password: '' })
+
+  const auth = useAppSelector(authSelector)
+
+  const dispatch = useAppDispatch()
 
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
@@ -21,9 +32,21 @@ const RegisterPage = (): JSX.Element => {
     }))
   }, [])
 
-  const handleFormSubmit = useCallback((e: SyntheticEvent) => {
-    e.preventDefault()
-  }, [])
+  const handleFormSubmit = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault()
+
+      dispatch(signUp(form)).then(() => {
+        if (auth) {
+          Cookies.set('sb-authToken', getBearerToken(auth.accessToken))
+          Cookies.set('sb-refreshToken', auth.refreshToken)
+        }
+
+        history.push('/')
+      })
+    },
+    [dispatch, form, history, auth],
+  )
 
   const formClass = useMemo(() => classNames('sb-form sb-form_default', styles.wrapper), [])
 

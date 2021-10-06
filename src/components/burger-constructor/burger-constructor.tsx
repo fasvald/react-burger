@@ -54,20 +54,24 @@ const BurgerConstructor = (): JSX.Element => {
     [dispatch],
   )
 
-  const bookOrder = useCallback(() => {
+  const bookOrder = useCallback(async () => {
     // Check if burger has at least 1 topping and if there is no error from ingredients fetching
     if (ingredientsFetchStatus === 'error' || !toppings.length || !buns.length) {
       return
     }
 
-    // NOTE: Not working aborting for this request, spend 3 hrs to debug and search, no results... Need help!!!
+    // NOTE: This request will be not "cancellable" because of it's speed. The code will work, but the request will be fulfilled
     // const promise = dispatch(createOrder({ ingredients: ingredientsID }))
     // promise.abort()
 
-    dispatch(createOrder({ ingredients: ingredientsID })).then(() => {
-      dispatch(clearIngredients())
-      modal.current?.open()
-    })
+    const resultAction = await dispatch(createOrder({ ingredients: ingredientsID }))
+
+    if (createOrder.rejected.match(resultAction)) {
+      return
+    }
+
+    dispatch(clearIngredients())
+    modal.current?.open()
   }, [dispatch, ingredientsID, ingredientsFetchStatus, toppings, buns])
 
   const findIngredient = useCallback(

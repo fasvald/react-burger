@@ -1,14 +1,26 @@
 import React, { SyntheticEvent, useCallback, useMemo, useState } from 'react'
 
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { Link, useHistory } from 'react-router-dom'
+
+import { isValidEmail } from '../../common/utils/utils'
+import Loader from '../../components/loader/loader'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+
+import {
+  forgotPasswordStatusSelector,
+  sendEmailWithRestorationCode,
+} from './forgot-password-page.slice'
 
 import styles from './forgot-password-page.module.css'
 
 const ForgotPasswordPage = (): JSX.Element => {
-  const history = useHistory()
   const [form, setForm] = useState({ email: '' })
+  const forgotPasswordStatus = useAppSelector(forgotPasswordStatusSelector)
+
+  const history = useHistory()
+  const dispatch = useAppDispatch()
 
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
@@ -17,33 +29,57 @@ const ForgotPasswordPage = (): JSX.Element => {
     }))
   }, [])
 
-  const handleFormSubmit = useCallback((e: SyntheticEvent) => {
-    e.preventDefault()
-  }, [])
+  const handleFormSubmit = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault()
 
-  const handleClick = useCallback(() => {
-    history.push('/reset-password')
-  }, [history])
+      // Due to not supporting props drilling of UI library I can't use such libraries like react-hook-forms and can't do
+      // a proper form validation, so I got an approval to omit it at all, but I will try to check is via JS + RegExp...
+      if (!isValidEmail(form.email)) {
+        return
+      }
 
-  const formClass = useMemo(() => classNames('sb-form sb-form_default', styles.wrapper), [])
+      const resultAction = await dispatch(sendEmailWithRestorationCode({ email: form.email }))
+
+      if (sendEmailWithRestorationCode.rejected.match(resultAction)) {
+        return
+      }
+
+      history.push('/reset-password')
+    },
+    [dispatch, form.email, history],
+  )
+
+  const formWrapperClass = useMemo(
+    () => classNames('sb-form sb-form_default sb-form_forgot-password', styles.wrapper),
+    [],
+  )
+
+  const formClass = useMemo(
+    () =>
+      classNames(
+        'sb-form__body',
+        forgotPasswordStatus === 'error' || !form.email || !isValidEmail(form.email)
+          ? 'isDisabled'
+          : '',
+      ),
+    [forgotPasswordStatus, form.email],
+  )
 
   return (
-    <div className={formClass}>
+    <div className={formWrapperClass}>
       <p className='sb-form__title text text_type_main-medium'>Восстановление пароля</p>
-      <form className='sb-form__body' onSubmit={handleFormSubmit}>
+      <form className={formClass} onSubmit={handleFormSubmit}>
         <div className='sb-form__body-input-el'>
-          <Input
-            type='text'
-            placeholder='Укажите e-mail'
-            onChange={handleFormChange}
-            value={form.email}
-            name='email'
-            size='default'
-          />
+          <EmailInput onChange={handleFormChange} value={form.email} name='email' />
         </div>
-        {/* Temporary solution */}
-        <Button type='primary' size='large' onClick={handleClick}>
-          Восстановить
+        <Button type='primary' size='large'>
+          {(forgotPasswordStatus === 'idle' || forgotPasswordStatus === 'loaded') && (
+            <span>Восстановить</span>
+          )}
+          {forgotPasswordStatus === 'loading' && (
+            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+          )}
         </Button>
       </form>
       <div className='sb-form__content'>

@@ -47,7 +47,7 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
  * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project.
  */
 export const fetchIngredients = createAsyncThunk(
-  'burgerIngredients/fetch',
+  'burgerIngredients/get',
   async (_, { rejectWithValue, signal }) => {
     try {
       const source = axios.CancelToken.source()

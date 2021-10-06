@@ -25,7 +25,7 @@ export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
   state.orderDetails.status
 
 export const createOrder = createAsyncThunk(
-  'orderDetails/creation',
+  'orderDetails/post',
   async (data: IOrderDetailsBody, { rejectWithValue, signal }) => {
     try {
       const source = axios.CancelToken.source()
