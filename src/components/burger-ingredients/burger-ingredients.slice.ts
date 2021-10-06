@@ -4,6 +4,7 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import { memoize } from 'lodash'
 
+import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import {
   IBurgerIngredient,
   IBurgerIngredientFetch,
@@ -11,7 +12,6 @@ import {
   TFetchProcess,
 } from '../../common/models/data.model'
 import { RootState } from '../../store'
-import { INGREDIENTS_API_ENDPOINT } from '../app/app.constant'
 
 import { IBurgerIngredientsState } from './burger-ingredients.model'
 
@@ -44,7 +44,8 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
  * and using it inside extra reducers for some of the store sections, additionally rewrite all the selectors which be
  * under createApi method.
  *
- * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project.
+ * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project. Also because of
+ * integration with Axios library for HTTP requests.
  */
 export const fetchIngredients = createAsyncThunk(
   'burgerIngredients/get',
@@ -55,7 +56,7 @@ export const fetchIngredients = createAsyncThunk(
         source.cancel('Operation stop the work.')
       })
 
-      const response = await axios.get<IBurgerIngredientFetch>(INGREDIENTS_API_ENDPOINT, {
+      const response = await axios.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
         cancelToken: source.token,
       })
 

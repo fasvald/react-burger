@@ -4,7 +4,7 @@ import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-co
 import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
 
-import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
+import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
@@ -177,9 +177,7 @@ const BurgerConstructor = (): JSX.Element => {
           {CurrencyIconMemo}
         </span>
         <Button type='primary' size='large' onClick={bookOrder}>
-          {(orderCreationStatus === 'idle' || orderCreationStatus === 'loaded') && (
-            <span>Оформить заказ</span>
-          )}
+          {orderCreationStatus !== 'loading' && <span>Оформить заказ</span>}
           {orderCreationStatus === 'loading' && (
             <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
           )}

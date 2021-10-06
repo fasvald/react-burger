@@ -1,7 +1,5 @@
 @import './variables.css';
 
-/* TODO: Refactor */
-
 /* Global styles for all forms (because modules are encapsulated it's easier to make it as global styles) */
 
 /* NOTE: "sb" prefix stands for "Stellar Burger" to prevent overlapping with other components libraries selectors, etc. */
@@ -30,6 +28,16 @@
 
 .sb-form_reset-password .sb-form__body button {
   min-width: 167px;
+  min-height: 66px;
+}
+
+.sb-form_login .sb-form__body button {
+  min-width: 128px;
+  min-height: 66px;
+}
+
+.sb-form_register .sb-form__body button {
+  min-width: 253px;
   min-height: 66px;
 }
 

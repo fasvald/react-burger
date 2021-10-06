@@ -4,7 +4,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { useDrag, useDrop } from 'react-dnd'
 
-import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
+import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
 
 import { IBurgerConstructorIngredientDraggable } from './burger-constructor-ingredient-draggable.model'
 

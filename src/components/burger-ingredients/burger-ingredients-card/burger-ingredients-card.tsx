@@ -4,7 +4,7 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import classNames from 'classnames'
 import { useDrag } from 'react-dnd'
 
-import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
+import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
 import { useAppSelector } from '../../../hooks'
 import { selectIngredientIterationByID } from '../../burger-constructor/burger-constructor.slice'
 

@@ -6,12 +6,25 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { Link, useHistory } from 'react-router-dom'
+
+import { getBearerToken } from '../../common/utils/auth.utils'
+import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
+import Loader from '../../components/loader/loader'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { saveAuthorizedUser } from '../../services/slices/auth.slice'
+
+import { signIn, signInStatusSelector } from './login-page.slice'
 
 import styles from './login-page.module.css'
 
 const LoginPage = (): JSX.Element => {
   const [form, setForm] = useState({ email: '', password: '' })
+  const signInStatus = useAppSelector(signInStatusSelector)
+
+  const dispatch = useAppDispatch()
+  const history = useHistory()
 
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
@@ -20,16 +33,47 @@ const LoginPage = (): JSX.Element => {
     }))
   }, [])
 
-  const handleFormSubmit = useCallback((e: SyntheticEvent) => {
-    e.preventDefault()
-  }, [])
+  const handleFormSubmit = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault()
 
-  const formClass = useMemo(() => classNames('sb-form sb-form_default', styles.wrapper), [])
+      const resultAction = await dispatch(signIn(form))
+
+      if (signIn.rejected.match(resultAction)) {
+        return
+      }
+
+      dispatch(saveAuthorizedUser(resultAction.payload))
+
+      Cookies.set('sb-authToken', getBearerToken(resultAction.payload.accessToken), {
+        expires: new Date(Date.now() + 20 * 60000),
+        path: '/',
+      })
+      Cookies.set('sb-refreshToken', resultAction.payload.refreshToken, { path: '/' })
+
+      history.push('/')
+    },
+    [dispatch, form, history],
+  )
+
+  const formWrapperClass = useMemo(
+    () => classNames('sb-form sb-form_default sb-form_login', styles.wrapper),
+    [],
+  )
+
+  const formClass = useMemo(
+    () =>
+      classNames(
+        'sb-form__body',
+        !isPasswordValid(form.password) || !isEmailValid(form.email) ? 'isDisabled' : '',
+      ),
+    [form],
+  )
 
   return (
-    <div className={formClass}>
+    <div className={formWrapperClass}>
       <p className='sb-form__title text text_type_main-medium'>Вход</p>
-      <form className='sb-form__body' onSubmit={handleFormSubmit}>
+      <form className={formClass} onSubmit={handleFormSubmit}>
         <div className='sb-form__body-input-el'>
           <EmailInput onChange={handleFormChange} value={form.email} name='email' />
         </div>
@@ -37,7 +81,10 @@ const LoginPage = (): JSX.Element => {
           <PasswordInput onChange={handleFormChange} value={form.password} name='password' />
         </div>
         <Button type='primary' size='large'>
-          Войти
+          {signInStatus !== 'loading' && <span>Войти</span>}
+          {signInStatus === 'loading' && (
+            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+          )}
         </Button>
       </form>
       <div className='sb-form__content'>

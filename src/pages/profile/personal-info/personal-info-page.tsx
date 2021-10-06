@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
-import CustomInput from './custom-input/custom-input'
+import CustomInput from '../../../components/custom-input/custom-input'
 
 import styles from './personal-info-page.module.css'
 

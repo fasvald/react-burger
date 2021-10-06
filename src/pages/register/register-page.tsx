@@ -7,23 +7,23 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import Cookies from 'js-cookie'
 import { Link, useHistory } from 'react-router-dom'
 
-import { authSelector, signUp } from '../../common/services/slices/auth/auth.slice'
-import getBearerToken from '../../common/services/slices/auth/auth.utils'
+import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
+import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+
+import { signUp, signUpStatusSelector } from './register-page.slice'
 
 import styles from './register-page.module.css'
 
 const RegisterPage = (): JSX.Element => {
-  const history = useHistory()
-
   const [form, setForm] = useState({ name: '', email: '', password: '' })
 
-  const auth = useAppSelector(authSelector)
+  const signUpStatus = useAppSelector(signUpStatusSelector)
 
   const dispatch = useAppDispatch()
+  const history = useHistory()
 
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
@@ -33,27 +33,38 @@ const RegisterPage = (): JSX.Element => {
   }, [])
 
   const handleFormSubmit = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       e.preventDefault()
 
-      dispatch(signUp(form)).then(() => {
-        if (auth) {
-          Cookies.set('sb-authToken', getBearerToken(auth.accessToken))
-          Cookies.set('sb-refreshToken', auth.refreshToken)
-        }
+      const resultAction = await dispatch(signUp(form))
 
-        history.push('/')
-      })
+      if (signUp.rejected.match(resultAction)) {
+        return
+      }
+
+      history.push('/login')
     },
-    [dispatch, form, history, auth],
+    [dispatch, form, history],
   )
 
-  const formClass = useMemo(() => classNames('sb-form sb-form_default', styles.wrapper), [])
+  const isValidForm = useCallback(() => {
+    return isEmailValid(form.email) && isPasswordValid(form.password) && isNameValid(form.name)
+  }, [form.email, form.password, form.name])
+
+  const formWrapperClass = useMemo(
+    () => classNames('sb-form sb-form_default sb-form_register', styles.wrapper),
+    [],
+  )
+
+  const formClass = useMemo(
+    () => classNames('sb-form__body', !isValidForm() ? 'isDisabled' : ''),
+    [isValidForm],
+  )
 
   return (
-    <div className={formClass}>
+    <div className={formWrapperClass}>
       <p className='sb-form__title text text_type_main-medium'>Регистрация</p>
-      <form className='sb-form__body' onSubmit={handleFormSubmit}>
+      <form className={formClass} onSubmit={handleFormSubmit}>
         <div className='sb-form__body-input-el'>
           <Input
             type='text'
@@ -71,7 +82,10 @@ const RegisterPage = (): JSX.Element => {
           <PasswordInput onChange={handleFormChange} value={form.password} name='password' />
         </div>
         <Button type='primary' size='large'>
-          Зарегистрироваться
+          {signUpStatus !== 'loading' && <span>Зарегистрироваться</span>}
+          {signUpStatus === 'loading' && (
+            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+          )}
         </Button>
       </form>
       <div className='sb-form__content'>

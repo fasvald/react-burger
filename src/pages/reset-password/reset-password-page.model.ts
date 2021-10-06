@@ -1,15 +1,7 @@
+import { TPasswordResetResponse } from '../../common/models/auth.model'
 import { TFetchProcess } from '../../common/models/data.model'
 
-export interface IResetPasswordRequestBody {
-  password: string
-  token: string
-}
-
-export interface IResetPasswordResponse {
-  success: boolean
-  message: string
-}
-
-export interface IResetPasswordState extends IResetPasswordResponse {
+export interface IResetPasswordPageState {
   status: TFetchProcess
+  res: TPasswordResetResponse | null
 }

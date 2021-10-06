@@ -3,28 +3,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
+import { API_ENDPOINTS } from '../../common/constants/api.constant'
+import { IPasswordResetRequestBody, TPasswordResetResponse } from '../../common/models/auth.model'
 import { TFetchProcess } from '../../common/models/data.model'
-import { AUTH_RESET_PASSWORD_ENDPOINT } from '../../components/app/app.constant'
 import { RootState } from '../../store'
 
-import {
-  IResetPasswordRequestBody,
-  IResetPasswordResponse,
-  IResetPasswordState,
-} from './reset-password-page.model'
+import { IResetPasswordPageState } from './reset-password-page.model'
 
-const initialState: IResetPasswordState = {
+const initialState: IResetPasswordPageState = {
   status: 'idle',
-  success: false,
-  message: '',
+  res: null,
 }
 
-export const resetPasswordStatusSelector = (state: RootState): TFetchProcess =>
+export const passwordResetStatusSelector = (state: RootState): TFetchProcess =>
   state.resetPassword.status
 
 export const resetPassword = createAsyncThunk(
   'resetPassword/post',
-  async (data: IResetPasswordRequestBody, { rejectWithValue, signal }) => {
+  async (data: IPasswordResetRequestBody, { rejectWithValue, signal }) => {
     try {
       const source = axios.CancelToken.source()
       signal.addEventListener('abort', () => {
@@ -32,9 +28,9 @@ export const resetPassword = createAsyncThunk(
       })
 
       const response = await axios.post<
-        IResetPasswordRequestBody,
-        AxiosResponse<IResetPasswordResponse>
-      >(AUTH_RESET_PASSWORD_ENDPOINT, data, {
+        IPasswordResetRequestBody,
+        AxiosResponse<TPasswordResetResponse>
+      >(API_ENDPOINTS.passwordReset, data, {
         cancelToken: source.token,
       })
 
@@ -61,13 +57,11 @@ const resetPasswordSlice = createSlice({
     })
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = 'loaded'
-      state.message = action.payload.message
-      state.success = action.payload.success
+      state.res = action.payload
     })
     builder.addCase(resetPassword.rejected, (state, action) => {
       state.status = 'error'
-      state.message = ''
-      state.success = false
+      state.res = null
     })
   },
 })

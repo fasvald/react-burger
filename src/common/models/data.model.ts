@@ -25,7 +25,6 @@ export interface IBurgerIngredient {
   __v: number
 }
 
-// Powered by "nanoid" library
 export interface IBurgerIngredientUnique extends IBurgerIngredient {
   nanoid: string
 }

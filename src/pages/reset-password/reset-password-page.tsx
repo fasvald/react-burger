@@ -4,16 +4,17 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { Link, useHistory } from 'react-router-dom'
 
+import { isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 
-import { resetPassword, resetPasswordStatusSelector } from './reset-password-page.slice'
+import { passwordResetStatusSelector, resetPassword } from './reset-password-page.slice'
 
 import styles from './reset-password-page.module.css'
 
 const ResetPasswordPage = (): JSX.Element => {
-  const resetPasswordStatus = useAppSelector(resetPasswordStatusSelector)
-  const [form, setForm] = useState({ password: '', code: '' })
+  const [form, setForm] = useState({ password: '', token: '' })
+  const resetPasswordStatus = useAppSelector(passwordResetStatusSelector)
 
   const dispatch = useAppDispatch()
   const history = useHistory()
@@ -34,8 +35,7 @@ const ResetPasswordPage = (): JSX.Element => {
         return
       }
 
-      // TODO: Inject token from cookie OR interceptor
-      const resultAction = await dispatch(resetPassword({ password: form.password, token: '' }))
+      const resultAction = await dispatch(resetPassword(form))
 
       // Based on https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
       if (resetPassword.rejected.match(resultAction)) {
@@ -44,7 +44,7 @@ const ResetPasswordPage = (): JSX.Element => {
 
       history.push('/login')
     },
-    [dispatch, form.password, history],
+    [dispatch, form, history],
   )
 
   const formWrapperClass = useMemo(
@@ -53,8 +53,7 @@ const ResetPasswordPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () =>
-      classNames('sb-form__body', !form.password || form.password.length < 6 ? 'isDisabled' : ''),
+    () => classNames('sb-form__body', !isPasswordValid(form.password) ? 'isDisabled' : ''),
     [form.password],
   )
 
@@ -70,8 +69,8 @@ const ResetPasswordPage = (): JSX.Element => {
             type='text'
             placeholder='Введите код из письма'
             onChange={handleFormChange}
-            value={form.code}
-            name='code'
+            value={form.token}
+            name='token'
             size='default'
           />
         </div>

@@ -4,23 +4,23 @@ import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-comp
 import classNames from 'classnames'
 import { Link, useHistory } from 'react-router-dom'
 
-import { isValidEmail } from '../../common/utils/utils'
+import { isEmailValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 
 import {
-  forgotPasswordStatusSelector,
-  sendEmailWithRestorationCode,
+  passwordForgotStatusSelector,
+  sendPasswordRestorationEmail,
 } from './forgot-password-page.slice'
 
 import styles from './forgot-password-page.module.css'
 
 const ForgotPasswordPage = (): JSX.Element => {
   const [form, setForm] = useState({ email: '' })
-  const forgotPasswordStatus = useAppSelector(forgotPasswordStatusSelector)
+  const passwordForgotStatus = useAppSelector(passwordForgotStatusSelector)
 
-  const history = useHistory()
   const dispatch = useAppDispatch()
+  const history = useHistory()
 
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
@@ -35,19 +35,19 @@ const ForgotPasswordPage = (): JSX.Element => {
 
       // Due to not supporting props drilling of UI library I can't use such libraries like react-hook-forms and can't do
       // a proper form validation, so I got an approval to omit it at all, but I will try to check is via JS + RegExp...
-      if (!isValidEmail(form.email)) {
+      if (!isEmailValid(form.email)) {
         return
       }
 
-      const resultAction = await dispatch(sendEmailWithRestorationCode({ email: form.email }))
+      const resultAction = await dispatch(sendPasswordRestorationEmail(form))
 
-      if (sendEmailWithRestorationCode.rejected.match(resultAction)) {
+      if (sendPasswordRestorationEmail.rejected.match(resultAction)) {
         return
       }
 
       history.push('/reset-password')
     },
-    [dispatch, form.email, history],
+    [dispatch, form, history],
   )
 
   const formWrapperClass = useMemo(
@@ -56,14 +56,8 @@ const ForgotPasswordPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () =>
-      classNames(
-        'sb-form__body',
-        forgotPasswordStatus === 'error' || !form.email || !isValidEmail(form.email)
-          ? 'isDisabled'
-          : '',
-      ),
-    [forgotPasswordStatus, form.email],
+    () => classNames('sb-form__body', !isEmailValid(form.email) ? 'isDisabled' : ''),
+    [form.email],
   )
 
   return (
@@ -74,10 +68,8 @@ const ForgotPasswordPage = (): JSX.Element => {
           <EmailInput onChange={handleFormChange} value={form.email} name='email' />
         </div>
         <Button type='primary' size='large'>
-          {(forgotPasswordStatus === 'idle' || forgotPasswordStatus === 'loaded') && (
-            <span>Восстановить</span>
-          )}
-          {forgotPasswordStatus === 'loading' && (
+          {passwordForgotStatus !== 'loading' && <span>Восстановить</span>}
+          {passwordForgotStatus === 'loading' && (
             <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
           )}
         </Button>

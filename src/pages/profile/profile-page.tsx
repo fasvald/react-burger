@@ -5,8 +5,8 @@ import { nanoid } from 'nanoid'
 import { Route, Switch, useRouteMatch } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
-import OrderListPage from './order-list-page/order-list-page'
-import PersonalInfoPage from './personal-info-page/personal-info-page'
+import OrderListPage from './order-list/order-list-page'
+import PersonalInfoPage from './personal-info/personal-info-page'
 
 import styles from './profile-page.module.css'
 

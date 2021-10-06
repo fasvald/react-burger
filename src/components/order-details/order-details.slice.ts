@@ -3,9 +3,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
+import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { TFetchProcess } from '../../common/models/data.model'
 import { RootState } from '../../store'
-import { ORDER_CREATION_API_ENDPOINT } from '../app/app.constant'
 
 import {
   IOrderDetails,
@@ -34,7 +34,7 @@ export const createOrder = createAsyncThunk(
       })
 
       const response = await axios.post<IOrderDetailsBody, AxiosResponse<IOrderDetailsResponse>>(
-        ORDER_CREATION_API_ENDPOINT,
+        API_ENDPOINTS.orders,
         data,
         {
           cancelToken: source.token,

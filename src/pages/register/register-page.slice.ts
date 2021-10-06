@@ -1,36 +1,33 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosError } from 'axios'
 
-import { AUTH_SIGN_UP_ENDPOINT } from '../../../../components/app/app.constant'
-import { RootState } from '../../../../store'
+import { API_ENDPOINTS } from '../../common/constants/api.constant'
+import { ISignUpRequestBody, TSignUpResponse } from '../../common/models/auth.model'
+import { TFetchProcess } from '../../common/models/data.model'
+import { RootState } from '../../store'
 
-import { IAuthSignUpBodyRequest, IAuthSignUpResponse, IAuthState } from './auth.model'
+import { IRegisterPageState } from './register-page.model'
 
-const initialState: IAuthState | null = {
+const initialState: IRegisterPageState = {
   status: 'idle',
-  user: {
-    name: '',
-    email: '',
-  },
-  accessToken: '',
-  refreshToken: '',
+  res: null,
 }
 
-export const authSelector = (state: RootState): IAuthState | null => state.auth
+export const signUpStatusSelector = (state: RootState): TFetchProcess => state.signUp.status
 
 export const signUp = createAsyncThunk(
   'signUp/post',
-  async (data: IAuthSignUpBodyRequest, { rejectWithValue, signal }) => {
+  async (data: ISignUpRequestBody, { rejectWithValue, signal }) => {
     try {
       const source = axios.CancelToken.source()
       signal.addEventListener('abort', () => {
         source.cancel('Operation stop the work.')
       })
 
-      const response = await axios.post<IAuthSignUpBodyRequest, AxiosResponse<IAuthSignUpResponse>>(
-        AUTH_SIGN_UP_ENDPOINT,
+      const response = await axios.post<ISignUpRequestBody, AxiosResponse<TSignUpResponse>>(
+        API_ENDPOINTS.signUp,
         data,
         {
           cancelToken: source.token,
@@ -50,8 +47,8 @@ export const signUp = createAsyncThunk(
   },
 )
 
-const authSlice = createSlice({
-  name: 'auth',
+export const registerPageSlice = createSlice({
+  name: 'signUp',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -60,17 +57,13 @@ const authSlice = createSlice({
     })
     builder.addCase(signUp.fulfilled, (state, action) => {
       state.status = 'loaded'
-      state.user = action.payload.user
-      state.accessToken = action.payload.accessToken
-      state.refreshToken = action.payload.refreshToken
+      state.res = action.payload
     })
     builder.addCase(signUp.rejected, (state, action) => {
       state.status = 'error'
-      state.user = { name: '', email: '' }
-      state.accessToken = ''
-      state.refreshToken = ''
+      state.res = null
     })
   },
 })
 
-export default authSlice.reducer
+export default registerPageSlice.reducer
