@@ -83,11 +83,13 @@ const useDynamicTabsWithIntersection = (
           return true
         }
 
-        if (direction === 'up' && entry.isIntersecting) {
+        /* if (direction === 'up' && entry.isIntersecting) {
           return true
         }
 
-        return false
+        return false */
+
+        return direction === 'up' && entry.isIntersecting
       }
 
       const onIntersect = (entries: IntersectionObserverEntry[]) => {

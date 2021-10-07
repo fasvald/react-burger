@@ -17,11 +17,9 @@ const BurgerConstructorIngredientDraggable = ({
   findIngredient,
   removeIngredient,
 }: IBurgerConstructorIngredientDraggable): JSX.Element => {
-  const DragIconMemo = useMemo(() => <DragIcon type='primary' />, [])
-
   // Same thing as for BurgerIngredientsCard => preventing re-render, but there is an option to
   // use arrow function on ConstructorElement, because it's a last element in chain.
-  const handleClose = useCallback(() => {
+  const onClose = useCallback(() => {
     removeIngredient(ingredient)
   }, [removeIngredient, ingredient])
 
@@ -67,6 +65,8 @@ const BurgerConstructorIngredientDraggable = ({
 
   const ref = useRef<HTMLDivElement>(null)
 
+  const DragIconMemo = useMemo(() => <DragIcon type='primary' />, [])
+
   const wrapperClass = useMemo(
     () => classNames(styles.wrapper, isDragging ? styles.isDragging : '', className),
     [className, isDragging],
@@ -83,7 +83,7 @@ const BurgerConstructorIngredientDraggable = ({
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={handleClose}
+        handleClose={onClose}
       />
     </div>
   )

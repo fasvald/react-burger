@@ -39,7 +39,7 @@ const BurgerIngredientsCard = ({
    * So we can do it like this down below, to prevent re-render, or make it like this:
    * <div className={cardClass} onClick={() => onClick(ingredient)} aria-hidden='true'>
    */
-  const handleClick = useCallback(() => {
+  const onClickWrapper = useCallback(() => {
     onClick(ingredient)
   }, [ingredient, onClick])
 
@@ -70,7 +70,7 @@ const BurgerIngredientsCard = ({
   )
 
   return (
-    <div className={cardClass} onClick={handleClick} ref={dragRef} aria-hidden='true'>
+    <div className={cardClass} onClick={onClickWrapper} ref={dragRef} aria-hidden='true'>
       {!!count && CounterMemo}
       <img src={ingredient.image} alt='test' className={styles.img} />
       <div className={styles.price}>

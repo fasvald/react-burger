@@ -18,7 +18,6 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
   const ListIconMemo = useMemo(() => <ListIcon type='primary' />, [])
   const ProfileIconMemo = useMemo(() => <ProfileIcon type='primary' />, [])
   const LogoMemo = useMemo(() => <Logo />, [])
-
   const headerClass = useMemo(() => classNames(styles.header, className), [className])
   const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
   const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])

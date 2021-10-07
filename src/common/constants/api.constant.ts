@@ -8,4 +8,5 @@ export const API_ENDPOINTS = {
   signIn: `${BASE_URL}/auth/login`,
   signUp: `${BASE_URL}/auth/register`,
   profile: `${BASE_URL}/auth/user`,
+  token: `${BASE_URL}/auth/token`,
 }

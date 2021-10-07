@@ -21,9 +21,7 @@ export const isEmailValid = (email: string): boolean => {
  *
  * @link https://github.com/yandex-praktikum/react-developer-burger-ui-components/blob/main/src/ui/password-input.tsx
  */
-export const isPasswordValid = (password: string): boolean => {
-  return password.length > 6
-}
+export const isPasswordValid = (password: string): boolean => password.length > 6
 
 /**
  * Validate name on client (due to impossibility to do it using custom input elements)
@@ -32,9 +30,7 @@ export const isPasswordValid = (password: string): boolean => {
  * @returns Validation results
  *
  */
-export const isNameValid = (name: string): boolean => {
-  return name.length > 0
-}
+export const isNameValid = (name: string): boolean => name.length > 0
 
 /**
  * Validate token on client (due to impossibility to do it using custom input elements)
@@ -43,6 +39,4 @@ export const isNameValid = (name: string): boolean => {
  * @returns Validation results
  *
  */
-export const isTokenPasswordChangeValid = (token: string): boolean => {
-  return token.length > 0
-}
+export const isTokenPasswordChangeValid = (token: string): boolean => token.length > 0

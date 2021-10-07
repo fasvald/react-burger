@@ -1,7 +1,7 @@
 interface IAuthDefaultResponse {
   success: boolean
   user: IAuthUser
-  accessToken: TAcessToken
+  accessToken: TAccessToken
   refreshToken: TRefreshToken
 }
 
@@ -10,7 +10,7 @@ interface IPasswordResetDefaultResponse {
   message: string
 }
 
-export type TAcessToken = string
+export type TAccessToken = string
 
 export type TRefreshToken = string
 
