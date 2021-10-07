@@ -19,7 +19,7 @@ const BurgerConstructorIngredientDraggable = ({
 }: IBurgerConstructorIngredientDraggable): JSX.Element => {
   // Same thing as for BurgerIngredientsCard => preventing re-render, but there is an option to
   // use arrow function on ConstructorElement, because it's a last element in chain.
-  const onClose = useCallback(() => {
+  const handleClose = useCallback(() => {
     removeIngredient(ingredient)
   }, [removeIngredient, ingredient])
 
@@ -83,7 +83,7 @@ const BurgerConstructorIngredientDraggable = ({
         text={ingredient.name}
         price={ingredient.price}
         thumbnail={ingredient.image}
-        handleClose={onClose}
+        handleClose={handleClose}
       />
     </div>
   )

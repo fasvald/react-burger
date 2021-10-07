@@ -35,7 +35,7 @@ const BurgerIngredientsList = (): JSX.Element => {
     'bun',
   )
 
-  const onClick = useCallback(
+  const handleClick = useCallback(
     (ingredient: IBurgerIngredient) => {
       if (modal.current) {
         modal.current.open()
@@ -46,7 +46,7 @@ const BurgerIngredientsList = (): JSX.Element => {
     [dispatch],
   )
 
-  const onClose = useCallback(() => {
+  const handleClose = useCallback(() => {
     dispatch(removeIngredientDetails())
   }, [dispatch])
 
@@ -97,7 +97,7 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={bun._id}
               className={styles.card}
               ingredient={bun}
-              onClick={onClick}
+              onClick={handleClick}
             />
           ))}
         </div>
@@ -108,7 +108,7 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={sauce._id}
               className={styles.card}
               ingredient={sauce}
-              onClick={onClick}
+              onClick={handleClick}
             />
           ))}
         </div>
@@ -119,12 +119,12 @@ const BurgerIngredientsList = (): JSX.Element => {
               key={main._id}
               className={styles.card}
               ingredient={main}
-              onClick={onClick}
+              onClick={handleClick}
             />
           ))}
         </div>
       </div>
-      <Modal ref={modal} onClose={onClose}>
+      <Modal ref={modal} onClose={handleClose}>
         {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} />}
       </Modal>
     </div>

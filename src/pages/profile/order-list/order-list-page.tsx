@@ -8,4 +8,4 @@ const OrderListPage = (): JSX.Element => {
   )
 }
 
-export default OrderListPage
+export default React.memo(OrderListPage)

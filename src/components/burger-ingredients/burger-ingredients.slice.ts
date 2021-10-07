@@ -11,6 +11,8 @@ import {
   TBurgerIngredientType,
   TFetchProcess,
 } from '../../common/models/data.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
+import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import { RootState } from '../../store'
 
 import { IBurgerIngredientsState } from './burger-ingredients.model'
@@ -47,31 +49,39 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
  * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project. Also because of
  * integration with Axios library for HTTP requests.
  */
-export const fetchIngredients = createAsyncThunk(
-  'burgerIngredients/get',
-  async (_, { rejectWithValue, signal }) => {
-    try {
-      const source = axios.CancelToken.source()
-      signal.addEventListener('abort', () => {
-        source.cancel('Operation stop the work.')
-      })
+export const fetchIngredients = createAsyncThunk<
+  IBurgerIngredient[],
+  undefined,
+  {
+    signal: AbortSignal
+    rejectValue: IAxiosSerializedError | string
+  }
+>('burgerIngredients/get', async (_, thunkApi) => {
+  try {
+    const source = axios.CancelToken.source()
+    thunkApi.signal.addEventListener('abort', () => {
+      source.cancel('Operation stop the work.')
+    })
 
-      const response = await axios.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
-        cancelToken: source.token,
-      })
+    const response = await axios.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
+      cancelToken: source.token,
+    })
 
-      return response.data.data
-    } catch (err) {
-      // https://github.com/microsoft/TypeScript/issues/20024
-      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (axios.isCancel(err)) {
-        return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
-      }
-
-      return rejectWithValue((err as AxiosError)?.message)
+    return response.data.data
+  } catch (err) {
+    // https://github.com/microsoft/TypeScript/issues/20024
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+    if (axios.isCancel(err)) {
+      return thunkApi.rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
     }
-  },
-)
+
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+    }
+
+    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
+  }
+})
 
 export const burgerIngredientsSlice = createSlice({
   name: 'burgerIngredients',

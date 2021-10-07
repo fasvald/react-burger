@@ -22,7 +22,7 @@ const CustomInput = ({
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const onIconClick = useCallback(() => {
+  const handleIconClick = useCallback(() => {
     setDisabled(false)
     setTimeout(() => inputRef.current?.focus(), 0)
   }, [])
@@ -36,11 +36,11 @@ const CustomInput = ({
     [validationCb],
   )
 
-  const onFocus = useCallback(() => {
+  const handleFocus = useCallback(() => {
     setError(false)
   }, [])
 
-  const onBlur = useCallback(
+  const handleBlur = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
       // NOTE: I don't want to customize it too deeply, again ui library is terrible raw and it's hard to check form status
       // like in Angular => dirty, pristine, etc. So will check it in JS
@@ -64,12 +64,12 @@ const CustomInput = ({
       icon='EditIcon'
       value={value}
       ref={inputRef}
-      onBlur={onBlur}
-      onFocus={onFocus}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
       name={name}
       error={error}
       disabled={fieldDisabled}
-      onIconClick={onIconClick}
+      onIconClick={handleIconClick}
       errorText='Ой, произошла ошибка!'
       size={size}
     />

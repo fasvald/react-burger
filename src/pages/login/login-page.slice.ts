@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { ISignInRequestBody, TSignInResponse } from '../../common/models/auth.model'
 import { TFetchProcess } from '../../common/models/data.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
+import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import { RootState } from '../../store'
 
 import { ILoginPageState } from './login-page.model'
@@ -17,35 +19,43 @@ const initialState: ILoginPageState = {
 
 export const signInStatusSelector = (state: RootState): TFetchProcess => state.signIn.status
 
-export const signIn = createAsyncThunk(
-  'signIn/post',
-  async (data: ISignInRequestBody, { rejectWithValue, signal }) => {
-    try {
-      const source = axios.CancelToken.source()
-      signal.addEventListener('abort', () => {
-        source.cancel('Operation stop the work.')
-      })
+export const signIn = createAsyncThunk<
+  TSignInResponse,
+  ISignInRequestBody,
+  {
+    signal: AbortSignal
+    rejectValue: IAxiosSerializedError | string
+  }
+>('signIn/post', async (data: ISignInRequestBody, thunkApi) => {
+  try {
+    const source = axios.CancelToken.source()
+    thunkApi.signal.addEventListener('abort', () => {
+      source.cancel('Operation stop the work.')
+    })
 
-      const response = await axios.post<ISignInRequestBody, AxiosResponse<TSignInResponse>>(
-        API_ENDPOINTS.signIn,
-        data,
-        {
-          cancelToken: source.token,
-        },
-      )
+    const response = await axios.post<ISignInRequestBody, AxiosResponse<TSignInResponse>>(
+      API_ENDPOINTS.signIn,
+      data,
+      {
+        cancelToken: source.token,
+      },
+    )
 
-      return response.data
-    } catch (err) {
-      // https://github.com/microsoft/TypeScript/issues/20024
-      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (axios.isCancel(err)) {
-        return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
-      }
-
-      return rejectWithValue((err as AxiosError)?.message)
+    return response.data as TSignInResponse
+  } catch (err) {
+    // https://github.com/microsoft/TypeScript/issues/20024
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+    if (axios.isCancel(err)) {
+      return thunkApi.rejectWithValue('Sign in stop the work. This has been aborted!')
     }
-  },
-)
+
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+    }
+
+    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
+  }
+})
 
 export const loginPageSlice = createSlice({
   name: 'signIn',

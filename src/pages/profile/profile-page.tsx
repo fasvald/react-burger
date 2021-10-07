@@ -74,7 +74,6 @@ const ProfilePage = (): JSX.Element => {
           <Switch>
             {routes.map((route) => (
               <Route key={route.id} path={route.path} exact={route.exact}>
-                {/* TODO: Think about better solution */}
                 <p className='text text_type_main-default text_color_inactive'>
                   {route.sidebar.description || ''}
                 </p>
@@ -103,4 +102,4 @@ const ProfilePage = (): JSX.Element => {
   )
 }
 
-export default ProfilePage
+export default React.memo(ProfilePage)

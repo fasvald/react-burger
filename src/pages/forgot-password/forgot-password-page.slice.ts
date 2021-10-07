@@ -1,11 +1,13 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { IPasswordForgotRequestBody, TPasswordForgotResponse } from '../../common/models/auth.model'
 import { TFetchProcess } from '../../common/models/data.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
+import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import { RootState } from '../../store'
 
 import { IForgotPasswordPageState } from './forgot-password-page.model'
@@ -18,34 +20,42 @@ const initialState: IForgotPasswordPageState = {
 export const passwordForgotStatusSelector = (state: RootState): TFetchProcess =>
   state.forgotPassword.status
 
-export const sendPasswordRestorationEmail = createAsyncThunk(
-  'forgotPassword/post',
-  async (data: IPasswordForgotRequestBody, { rejectWithValue, signal }) => {
-    try {
-      const source = axios.CancelToken.source()
-      signal.addEventListener('abort', () => {
-        source.cancel('Operation stop the work.')
-      })
+export const sendPasswordRestorationEmail = createAsyncThunk<
+  TPasswordForgotResponse,
+  IPasswordForgotRequestBody,
+  {
+    signal: AbortSignal
+    rejectValue: IAxiosSerializedError | string
+  }
+>('forgotPassword/post', async (data: IPasswordForgotRequestBody, thunkApi) => {
+  try {
+    const source = axios.CancelToken.source()
+    thunkApi.signal.addEventListener('abort', () => {
+      source.cancel('Operation stop the work.')
+    })
 
-      const response = await axios.post<
-        IPasswordForgotRequestBody,
-        AxiosResponse<TPasswordForgotResponse>
-      >(API_ENDPOINTS.passwordForgot, data, {
-        cancelToken: source.token,
-      })
+    const response = await axios.post<
+      IPasswordForgotRequestBody,
+      AxiosResponse<TPasswordForgotResponse>
+    >(API_ENDPOINTS.passwordForgot, data, {
+      cancelToken: source.token,
+    })
 
-      return response.data
-    } catch (err) {
-      // https://github.com/microsoft/TypeScript/issues/20024
-      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (axios.isCancel(err)) {
-        return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
-      }
-
-      return rejectWithValue((err as AxiosError)?.message)
+    return response.data
+  } catch (err) {
+    // https://github.com/microsoft/TypeScript/issues/20024
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+    if (axios.isCancel(err)) {
+      return thunkApi.rejectWithValue('Forgot password stop the work. This has been aborted!')
     }
-  },
-)
+
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+    }
+
+    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
+  }
+})
 
 const forgotPasswordPageSlice = createSlice({
   name: 'forgotPassword',

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -43,9 +43,11 @@ const BurgerConstructor = (): JSX.Element => {
   const orderCreationStatus = useAppSelector(orderCreationStatusSelector)
   const ingredientsFetchStatus = useAppSelector(ingredientsFetchStatusSelector)
 
-  const dispatch = useAppDispatch()
-
   const modal = useRef<IModalRefObject>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const promiseRef = useRef<any>(null)
+
+  const dispatch = useAppDispatch()
 
   const removeIngredient = useCallback(
     (ingredient: IBurgerIngredientUnique) => {
@@ -61,13 +63,12 @@ const BurgerConstructor = (): JSX.Element => {
       return
     }
 
-    // NOTE: This request will be not "cancellable" because of it's speed. The code will work, but the request will be fulfilled
-    // const promise = dispatch(createOrder({ ingredients: ingredientsID }))
-    // promise.abort()
+    promiseRef.current = dispatch(createOrder({ ingredients: ingredientsID }))
 
-    const resultAction = await dispatch(createOrder({ ingredients: ingredientsID }))
+    const resultAction = await promiseRef.current
 
     if (createOrder.rejected.match(resultAction)) {
+      // I can show the snackbar but I've tried to prevent all possibilities of an error using client validation
       return
     }
 
@@ -116,6 +117,12 @@ const BurgerConstructor = (): JSX.Element => {
   const [, toppingsDropRef] = useDrop(() => ({
     accept: DnDItemTypes.INGREDIENT_TOPPING_CONSTRUCTOR_ITEM,
   }))
+
+  useEffect(() => {
+    return () => {
+      promiseRef.current?.abort()
+    }
+  }, [])
 
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 

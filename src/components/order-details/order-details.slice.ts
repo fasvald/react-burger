@@ -5,6 +5,8 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { TFetchProcess } from '../../common/models/data.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
+import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import { RootState } from '../../store'
 
 import {
@@ -24,35 +26,43 @@ export const orderSelector = (state: RootState): IOrderDetails | null => state.o
 export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
   state.orderDetails.status
 
-export const createOrder = createAsyncThunk(
-  'orderDetails/post',
-  async (data: IOrderDetailsBody, { rejectWithValue, signal }) => {
-    try {
-      const source = axios.CancelToken.source()
-      signal.addEventListener('abort', () => {
-        source.cancel('Operation stop the work.')
-      })
+export const createOrder = createAsyncThunk<
+  IOrderDetailsResponse,
+  IOrderDetailsBody,
+  {
+    signal: AbortSignal
+    rejectValue: IAxiosSerializedError | string
+  }
+>('orderDetails/post', async (data: IOrderDetailsBody, thunkApi) => {
+  try {
+    const source = axios.CancelToken.source()
+    thunkApi.signal.addEventListener('abort', () => {
+      source.cancel('Operation stop the work.')
+    })
 
-      const response = await axios.post<IOrderDetailsBody, AxiosResponse<IOrderDetailsResponse>>(
-        API_ENDPOINTS.orders,
-        data,
-        {
-          cancelToken: source.token,
-        },
-      )
+    const response = await axios.post<IOrderDetailsBody, AxiosResponse<IOrderDetailsResponse>>(
+      API_ENDPOINTS.orders,
+      data,
+      {
+        cancelToken: source.token,
+      },
+    )
 
-      return response.data
-    } catch (err) {
-      // https://github.com/microsoft/TypeScript/issues/20024
-      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (axios.isCancel(err)) {
-        return rejectWithValue('Order creation stop the work. This has been aborted!')
-      }
-
-      return rejectWithValue((err as AxiosError)?.message)
+    return response.data
+  } catch (err) {
+    // https://github.com/microsoft/TypeScript/issues/20024
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+    if (axios.isCancel(err)) {
+      return thunkApi.rejectWithValue('Order creation stop the work. This has been aborted!')
     }
-  },
-)
+
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+    }
+
+    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
+  }
+})
 
 export const orderDetailsSlice = createSlice({
   name: 'orderDetails',
