@@ -9,7 +9,7 @@ import classNames from 'classnames'
 import Cookies from 'js-cookie'
 import { Link, useHistory } from 'react-router-dom'
 
-import { getBearerToken } from '../../common/utils/auth.utils'
+import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
 import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -26,6 +26,10 @@ const LoginPage = (): JSX.Element => {
   const dispatch = useAppDispatch()
   const history = useHistory()
 
+  const isFormValid = useCallback(() => {
+    return isPasswordValid(form.password) && isEmailValid(form.email)
+  }, [form.password, form.email])
+
   const handleFormChange = useCallback((e: SyntheticEvent) => {
     setForm((prevState) => ({
       ...prevState,
@@ -37,6 +41,11 @@ const LoginPage = (): JSX.Element => {
     async (e: SyntheticEvent) => {
       e.preventDefault()
 
+      // Can't set disable state for a button, so we just check it here to prevent sending a request
+      if (!isFormValid()) {
+        return
+      }
+
       const resultAction = await dispatch(signIn(form))
 
       if (signIn.rejected.match(resultAction)) {
@@ -46,14 +55,15 @@ const LoginPage = (): JSX.Element => {
       dispatch(saveAuthorizedUser(resultAction.payload))
 
       Cookies.set('sb-authToken', getBearerToken(resultAction.payload.accessToken), {
-        expires: new Date(Date.now() + 20 * 60000),
+        expires: getTokenExpirationDate(),
         path: '/',
       })
+
       Cookies.set('sb-refreshToken', resultAction.payload.refreshToken, { path: '/' })
 
       history.push('/')
     },
-    [dispatch, form, history],
+    [dispatch, form, history, isFormValid],
   )
 
   const formWrapperClass = useMemo(
@@ -62,12 +72,8 @@ const LoginPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () =>
-      classNames(
-        'sb-form__body',
-        !isPasswordValid(form.password) || !isEmailValid(form.email) ? 'isDisabled' : '',
-      ),
-    [form],
+    () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
+    [isFormValid],
   )
 
   return (

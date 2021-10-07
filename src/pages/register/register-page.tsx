@@ -19,7 +19,6 @@ import styles from './register-page.module.css'
 
 const RegisterPage = (): JSX.Element => {
   const [form, setForm] = useState({ name: '', email: '', password: '' })
-
   const signUpStatus = useAppSelector(signUpStatusSelector)
 
   const dispatch = useAppDispatch()
@@ -32,9 +31,18 @@ const RegisterPage = (): JSX.Element => {
     }))
   }, [])
 
+  const isFormValid = useCallback(() => {
+    return isEmailValid(form.email) && isPasswordValid(form.password) && isNameValid(form.name)
+  }, [form.email, form.password, form.name])
+
   const handleFormSubmit = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault()
+
+      // Can't set disable state for a button, so we just check it here to prevent sending a request
+      if (!isFormValid()) {
+        return
+      }
 
       const resultAction = await dispatch(signUp(form))
 
@@ -44,12 +52,8 @@ const RegisterPage = (): JSX.Element => {
 
       history.push('/login')
     },
-    [dispatch, form, history],
+    [dispatch, form, history, isFormValid],
   )
-
-  const isValidForm = useCallback(() => {
-    return isEmailValid(form.email) && isPasswordValid(form.password) && isNameValid(form.name)
-  }, [form.email, form.password, form.name])
 
   const formWrapperClass = useMemo(
     () => classNames('sb-form sb-form_default sb-form_register', styles.wrapper),
@@ -57,8 +61,8 @@ const RegisterPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () => classNames('sb-form__body', !isValidForm() ? 'isDisabled' : ''),
-    [isValidForm],
+    () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
+    [isFormValid],
   )
 
   return (

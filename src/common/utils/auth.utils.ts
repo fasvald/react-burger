@@ -19,3 +19,12 @@ export const setBearerToken = (accessToken: string): string => {
 export const getBearerToken = (accessToken: string): string => {
   return accessToken.split(' ').pop() as string
 }
+
+/**
+ * Returns tokens max age (expiration) value, 20 min
+ *
+ * @returns Token expiration value
+ */
+export const getTokenExpirationDate = (): Date => {
+  return new Date(Date.now() + 20 * 60000)
+}

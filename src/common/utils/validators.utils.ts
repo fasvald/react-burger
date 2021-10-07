@@ -35,3 +35,14 @@ export const isPasswordValid = (password: string): boolean => {
 export const isNameValid = (name: string): boolean => {
   return name.length > 0
 }
+
+/**
+ * Validate token on client (due to impossibility to do it using custom input elements)
+ *
+ * @param token Token to validate
+ * @returns Validation results
+ *
+ */
+export const isTokenPasswordChangeValid = (token: string): boolean => {
+  return token.length > 0
+}

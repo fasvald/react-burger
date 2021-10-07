@@ -4,6 +4,8 @@
 
 /* NOTE: "sb" prefix stands for "Stellar Burger" to prevent overlapping with other components libraries selectors, etc. */
 
+/* Common styles */
+
 .sb-form,
 .sb-form__body,
 .sb-form__body-input-el {
@@ -17,29 +19,41 @@
 
 /* Themes, customized personally per each form/page (P.S. Yes it's not a good quality but it works for this course) */
 
+/* Default theme */
+
 .sb-form_default .sb-form__body-input-el:not(:last-of-type) {
-  margin-bottom: 24px;
+  margin-bottom: var(--form-element-gap-default);
 }
+
+/* Form on Forgot Password page */
 
 .sb-form_forgot-password .sb-form__body button {
   min-width: 196px;
-  min-height: 66px;
+  min-height: var(--submit-btn-height-default);
 }
+
+/* Form on Reset Password page */
 
 .sb-form_reset-password .sb-form__body button {
   min-width: 167px;
-  min-height: 66px;
+  min-height: var(--submit-btn-height-default);
 }
+
+/* Form on Login page */
 
 .sb-form_login .sb-form__body button {
   min-width: 128px;
-  min-height: 66px;
+  min-height: var(--submit-btn-height-default);
 }
+
+/* Form on Register page */
 
 .sb-form_register .sb-form__body button {
   min-width: 253px;
-  min-height: 66px;
+  min-height: var(--submit-btn-height-default);
 }
+
+/* Form on Profile => Personal info page */
 
 .sb-form_profile .sb-form__body-input-el {
   justify-content: flex-start;
@@ -51,18 +65,26 @@
 
 .sb-form_profile .sb-form__body button {
   min-width: 167px;
-  min-height: 66px;
+  min-height: var(--submit-btn-height-default);
 }
+
+/* Common styles for all forms on variety of pages */
+
+/* Form title */
 
 .sb-form__title {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: var(--form-element-gap-default);
   text-align: center;
 }
+
+/* Form itself */
 
 .sb-form__body {
   flex-wrap: wrap;
 }
+
+/* Disabled styles for a button (because we can't set disabled state so it will at least visually understandable) */
 
 .sb-form__body.isDisabled button {
   background: var(--dark-grey-dim);
@@ -74,6 +96,8 @@
   filter: none;
 }
 
+/* Form submit button */
+
 .sb-form__body button {
   display: inline-flex;
   justify-content: center;
@@ -81,13 +105,17 @@
   align-items: center;
 }
 
+.sb-form__body > button {
+  margin-top: var(--form-element-gap-default);
+}
+
+/* Form input element (wrappers) */
+
 .sb-form__body-input-el {
   width: 100%;
 }
 
-.sb-form__body > button {
-  margin-top: 24px;
-}
+/* Side content of form (basically some links to other pages, etc.) */
 
 .sb-form__content {
   display: flex;
@@ -95,6 +123,8 @@
   justify-content: center;
   margin-top: 80px;
 }
+
+/* Side content link wrappers */
 
 .sb-form__content-link {
   text-align: center;

@@ -4,7 +4,7 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { Link, useHistory } from 'react-router-dom'
 
-import { isPasswordValid } from '../../common/utils/validators.utils'
+import { isPasswordValid, isTokenPasswordChangeValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 
@@ -26,12 +26,17 @@ const ResetPasswordPage = (): JSX.Element => {
     }))
   }, [])
 
+  const isFormValid = useCallback(() => {
+    return isPasswordValid(form.password) && isTokenPasswordChangeValid(form.token)
+  }, [form.password, form.token])
+
   // TODO: Add request aborting feature here + in other places
   const handleFormSubmit = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault()
 
-      if (!form.password || form.password.length < 6) {
+      // Can't set disable state for a button, so we just check it here to prevent sending a request
+      if (!isFormValid()) {
         return
       }
 
@@ -44,7 +49,7 @@ const ResetPasswordPage = (): JSX.Element => {
 
       history.push('/login')
     },
-    [dispatch, form, history],
+    [dispatch, form, history, isFormValid],
   )
 
   const formWrapperClass = useMemo(
@@ -53,8 +58,8 @@ const ResetPasswordPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () => classNames('sb-form__body', !isPasswordValid(form.password) ? 'isDisabled' : ''),
-    [form.password],
+    () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
+    [isFormValid],
   )
 
   return (

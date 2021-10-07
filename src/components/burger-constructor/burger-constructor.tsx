@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -55,7 +55,8 @@ const BurgerConstructor = (): JSX.Element => {
   )
 
   const bookOrder = useCallback(async () => {
-    // Check if burger has at least 1 topping and if there is no error from ingredients fetching
+    // Check if burger has at least 1 topping and if there is no error from ingredients fetching, because you can't
+    // set disable attribute to a button without ref + js query
     if (ingredientsFetchStatus === 'error' || !toppings.length || !buns.length) {
       return
     }
@@ -118,7 +119,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
-  const priceSectionClassName = useMemo(
+  const priceSectionClass = useMemo(
     () =>
       classNames(
         styles.price,
@@ -171,7 +172,7 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
       </div>
-      <div className={priceSectionClassName}>
+      <div className={priceSectionClass}>
         <span className={priceValueClass}>
           {totalPrice}
           {CurrencyIconMemo}

@@ -29,13 +29,17 @@ const ForgotPasswordPage = (): JSX.Element => {
     }))
   }, [])
 
+  const isFormValid = useCallback(() => {
+    return isEmailValid(form.email)
+  }, [form.email])
+
   const handleFormSubmit = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault()
 
       // Due to not supporting props drilling of UI library I can't use such libraries like react-hook-forms and can't do
       // a proper form validation, so I got an approval to omit it at all, but I will try to check is via JS + RegExp...
-      if (!isEmailValid(form.email)) {
+      if (!isFormValid()) {
         return
       }
 
@@ -47,7 +51,7 @@ const ForgotPasswordPage = (): JSX.Element => {
 
       history.push('/reset-password')
     },
-    [dispatch, form, history],
+    [dispatch, form, history, isFormValid],
   )
 
   const formWrapperClass = useMemo(
@@ -56,8 +60,8 @@ const ForgotPasswordPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () => classNames('sb-form__body', !isEmailValid(form.email) ? 'isDisabled' : ''),
-    [form.email],
+    () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
+    [isFormValid],
   )
 
   return (
