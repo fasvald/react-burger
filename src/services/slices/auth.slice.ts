@@ -2,8 +2,21 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { IAuthPayloadActionData, IAuthState } from '../../common/models/auth.model'
+import { IAuthUser } from '../../common/models/auth.model'
 import { RootState } from '../../store'
+
+interface IAuthState {
+  isLoggedIn: boolean
+  user: IAuthUser | null
+  accessToken: string | null
+  refreshToken: string | null
+}
+
+interface IAuthPayloadActionData {
+  user: IAuthUser
+  accessToken: string
+  refreshToken: string
+}
 
 const initialState: IAuthState = {
   isLoggedIn: false,

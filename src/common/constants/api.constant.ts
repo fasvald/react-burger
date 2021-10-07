@@ -7,4 +7,5 @@ export const API_ENDPOINTS = {
   passwordReset: `${BASE_URL}/password-reset/reset`,
   signIn: `${BASE_URL}/auth/login`,
   signUp: `${BASE_URL}/auth/register`,
+  profile: `${BASE_URL}/auth/user`,
 }

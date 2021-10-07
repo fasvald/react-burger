@@ -45,17 +45,7 @@ export interface IPasswordResetRequestBody {
   token: string
 }
 
-// For auth.slice initial state purpose
-export interface IAuthState {
-  isLoggedIn: boolean
-  user: IAuthUser | null
-  accessToken: string | null
-  refreshToken: string | null
-}
-
-// For auth.slice payloads in action creators
-export interface IAuthPayloadActionData {
+export interface IProfileResponse {
+  success: boolean
   user: IAuthUser
-  accessToken: string
-  refreshToken: string
 }

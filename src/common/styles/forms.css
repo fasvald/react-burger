@@ -59,6 +59,7 @@
   justify-content: flex-start;
 }
 
+.sb-form_profile.sb-form,
 .sb-form_profile .sb-form__body {
   justify-content: flex-start;
 }
@@ -86,12 +87,12 @@
 
 /* Disabled styles for a button (because we can't set disabled state so it will at least visually understandable) */
 
-.sb-form__body.isDisabled button {
+.sb-form__body.isDisabled button:first-of-type {
   background: var(--dark-grey-dim);
   cursor: not-allowed;
 }
 
-.sb-form__body.isDisabled button:hover {
+.sb-form__body.isDisabled button:first-of-type:hover {
   box-shadow: none;
   filter: none;
 }

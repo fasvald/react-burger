@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components'
 
@@ -18,32 +18,44 @@ const CustomInput = ({
   validationCb,
 }: ICustomInputProps): JSX.Element => {
   const [fieldDisabled, setDisabled] = useState(true)
-
   const [error, setError] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const onIconClick = () => {
+  const onIconClick = useCallback(() => {
     setDisabled(false)
     setTimeout(() => inputRef.current?.focus(), 0)
-  }
+  }, [])
 
-  const validateField = (valuee: string) => {
-    // setError(!validateEmail(value))
-  }
+  const validateField = useCallback(
+    (currentValue: string) => {
+      if (validationCb) {
+        setError(!validationCb(currentValue))
+      }
+    },
+    [validationCb],
+  )
 
-  const onFocus = () => {
+  const onFocus = useCallback(() => {
     setError(false)
-  }
+  }, [])
 
-  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (e.target.value) {
-      validateField(e.target.value)
-    } else {
-      setError(false)
-    }
-    setDisabled(true)
-  }
+  const onBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      // NOTE: I don't want to customize it too deeply, again ui library is terrible raw and it's hard to check form status
+      // like in Angular => dirty, pristine, etc. So will check it in JS
+      // if (e.target.value || e.target.value === '') {
+      if (e.target.value) {
+        validateField(e.target.value)
+      } else {
+        setError(false)
+      }
+
+      setDisabled(true)
+    },
+    [validateField],
+  )
+
   return (
     <Input
       type={type}
@@ -64,4 +76,4 @@ const CustomInput = ({
   )
 }
 
-export default CustomInput
+export default React.memo(CustomInput)
