@@ -13,10 +13,11 @@ import ProfilePage from '../../pages/profile/profile-page'
 import RegisterPage from '../../pages/register/register-page'
 import ResetPasswordPage from '../../pages/reset-password/reset-password-page'
 import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
-import { getProfile, updateProfileManually } from '../../services/slices/profile.slice'
+import { getProfile } from '../../services/slices/profile.slice'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import Loader from '../loader/loader'
+import ProtectedRoute from '../protected-route/protected-route'
 
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
@@ -25,46 +26,42 @@ import AppHeader from './app-header/app-header'
 import styles from './app.module.css'
 
 const App = (): JSX.Element => {
-  // Using local state we just making sure that firstly we check if there is a user or not and after that show the main app
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [userIsReady, setUserIsReady] = useState(false)
 
   const auth = useAppSelector(authSelector)
 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const authToken = Cookies.get('sb-authToken')
     const refreshToken = Cookies.get('sb-refreshToken')
 
-    const fetchProfile = async () => {
-      const resultAction = await dispatch(getProfile())
+    const setUpUser = async () => {
+      if (refreshToken && !auth.user) {
+        const resultAction = await dispatch(getProfile())
 
-      if (getProfile.fulfilled.match(resultAction)) {
-        const { user: profile } = resultAction.payload
-
-        dispatch(saveAuthorizedUser(profile))
-        dispatch(updateProfileManually(profile))
+        if (getProfile.fulfilled.match(resultAction)) {
+          dispatch(saveAuthorizedUser(resultAction.payload.user))
+        }
       }
+
+      setUserIsReady(true)
+
+      return Promise.resolve()
     }
 
-    if (!auth.isLoggedIn && (authToken || refreshToken)) {
-      fetchProfile()
-    }
-
-    setIsLoaded(true)
-  }, [auth.isLoggedIn, dispatch])
+    setUpUser()
+  }, [auth.isLoggedIn, auth.user, dispatch])
 
   return (
     <Router>
       <div className={styles.wrapper}>
         <AppHeader className={styles.header} />
         <AppContent className={styles.content}>
-          {!isLoaded && (
+          {!userIsReady ? (
             <div className={styles.error}>
               <Loader />
             </div>
-          )}
-          {isLoaded && (
+          ) : (
             <Switch>
               <Route exact path='/'>
                 <DndProvider backend={HTML5Backend}>
@@ -72,11 +69,22 @@ const App = (): JSX.Element => {
                   <BurgerConstructor />
                 </DndProvider>
               </Route>
-              <Route path='/login' component={LoginPage} />
-              <Route path='/register' component={RegisterPage} />
-              <Route path='/forgot-password' component={ForgotPasswordPage} />
-              <Route path='/reset-password' component={ResetPasswordPage} />
-              <Route path='/profile' component={ProfilePage} />
+              <Route path='/login'>
+                <LoginPage />
+              </Route>
+              <Route path='/register'>
+                <RegisterPage />
+              </Route>
+              <Route path='/forgot-password'>
+                <ForgotPasswordPage />
+              </Route>
+              <Route path='/reset-password'>
+                <ResetPasswordPage />
+              </Route>
+              <ProtectedRoute path='/profile'>
+                <ProfilePage />
+              </ProtectedRoute>
+              {/* <Route path='/profile' component={ProfilePage} /> */}
               {/* NOTE: WE can omit asterisk character here */}
               <Route path='*' component={NotFoundPage} />
             </Switch>

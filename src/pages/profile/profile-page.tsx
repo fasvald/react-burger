@@ -7,7 +7,7 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router'
 import { NavLink } from 'react-router-dom'
 
 import { useAppDispatch } from '../../hooks'
-import { signOut } from '../../services/slices/auth.slice'
+import { clearAuthorizedUser, signOut } from '../../services/slices/auth.slice'
 
 import OrderListPage from './order-list/order-list-page'
 import PersonalInfoPage from './personal-info/personal-info-page'
@@ -55,7 +55,9 @@ const ProfilePage = (): JSX.Element => {
       Cookies.remove('sb-refreshToken', { path: '/' })
       Cookies.remove('sb-authToken', { path: '/' })
 
-      history.push('/')
+      dispatch(clearAuthorizedUser())
+
+      history.push('/login')
     }
   }, [dispatch, history])
 

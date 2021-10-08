@@ -9,7 +9,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import Cookies from 'js-cookie'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { TSignInResponse } from '../../common/models/auth.model'
 import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
@@ -17,7 +17,7 @@ import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { saveAuthorizedUser } from '../../services/slices/auth.slice'
+import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
 
 import { signIn, signInStatusSelector } from './login-page.slice'
 
@@ -38,6 +38,7 @@ const LoginPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>(ERROR_MESSAGES.default)
 
+  const auth = useAppSelector(authSelector)
   const signInStatus = useAppSelector(signInStatusSelector)
 
   const loginFormRef = useRef<HTMLFormElement>(null)
@@ -47,6 +48,7 @@ const LoginPage = (): JSX.Element => {
 
   const dispatch = useAppDispatch()
   const history = useHistory()
+  const { state } = useLocation<{ from: string }>()
 
   const isFormValid = useCallback(() => {
     return isPasswordValid(form.password) && isEmailValid(form.email)
@@ -91,8 +93,6 @@ const LoginPage = (): JSX.Element => {
 
       const { payload } = resultAction as { payload: TSignInResponse }
 
-      dispatch(saveAuthorizedUser(payload.user))
-
       Cookies.set('sb-authToken', getBearerToken(payload.accessToken), {
         expires: getTokenExpirationDate(),
         path: '/',
@@ -100,9 +100,11 @@ const LoginPage = (): JSX.Element => {
 
       Cookies.set('sb-refreshToken', payload.refreshToken, { path: '/' })
 
-      history.push('/')
+      dispatch(saveAuthorizedUser(payload.user))
+
+      history.push(state?.from || '/')
     },
-    [dispatch, form, history, isFormValid],
+    [dispatch, form, history, isFormValid, state],
   )
 
   useEffect(() => {
@@ -130,6 +132,10 @@ const LoginPage = (): JSX.Element => {
     () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
     [isFormValid],
   )
+
+  if (auth.user) {
+    return <Redirect to={state?.from || '/'} />
+  }
 
   return (
     <>

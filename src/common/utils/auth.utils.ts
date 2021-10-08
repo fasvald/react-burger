@@ -37,7 +37,11 @@ export const getTokenExpirationDate = (): Date => new Date(Date.now() + 20 * 600
  * @returns Refreshed auth token
  */
 export const refreshAuthToken = async (): Promise<IAuthRefreshTokenResponse> => {
-  const refreshToken = Cookies.get('sb-refreshToken') as string
+  const refreshToken = Cookies.get('sb-refreshToken')
+
+  if (!refreshToken) {
+    return Promise.reject(new Error('Refresh token is empty.'))
+  }
 
   const response = await apiInstance.post<
     IAuthRefreshTokenRequestBody,
@@ -54,4 +58,18 @@ export const refreshAuthToken = async (): Promise<IAuthRefreshTokenResponse> => 
   })
 
   return response.data
+}
+
+/**
+ * Get "Authorized" header for auth related requests (also to be sure that sending empty string will trigger non-auth errors)
+ *
+ * @returns Authorization header
+ */
+export const getAuthorizedHeader = (): { Authorization: string } => {
+  const refreshToken = Cookies.get('sb-refreshToken')
+  const authToken = Cookies.get('sb-authToken')
+
+  return {
+    Authorization: refreshToken ? `Bearer ${authToken}` : '',
+  }
 }

@@ -4,12 +4,13 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isPasswordValid, isTokenPasswordChangeValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { authSelector } from '../../services/slices/auth.slice'
 
 import { passwordResetStatusSelector, resetPassword } from './reset-password-page.slice'
 
@@ -30,6 +31,7 @@ const ResetPasswordPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>(ERROR_MESSAGES.default)
 
+  const auth = useAppSelector(authSelector)
   const resetPasswordStatus = useAppSelector(passwordResetStatusSelector)
 
   const loginFormRef = useRef<HTMLFormElement>(null)
@@ -38,6 +40,7 @@ const ResetPasswordPage = (): JSX.Element => {
 
   const dispatch = useAppDispatch()
   const history = useHistory()
+  const { state } = useLocation<{ fromForgotPasswordPage?: boolean; from: string }>()
 
   const isFormValid = useCallback(() => {
     return isPasswordValid(form.password) && isTokenPasswordChangeValid(form.token)
@@ -111,6 +114,10 @@ const ResetPasswordPage = (): JSX.Element => {
     () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
     [isFormValid],
   )
+
+  if (auth.user || !state?.fromForgotPasswordPage) {
+    return <Redirect to={state?.from || ''} />
+  }
 
   return (
     <>

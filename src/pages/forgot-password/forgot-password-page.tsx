@@ -4,12 +4,13 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { authSelector } from '../../services/slices/auth.slice'
 
 import {
   passwordForgotStatusSelector,
@@ -32,6 +33,7 @@ const ForgotPasswordPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>(ERROR_MESSAGES.default)
 
+  const auth = useAppSelector(authSelector)
   const passwordForgotStatus = useAppSelector(passwordForgotStatusSelector)
 
   const loginFormRef = useRef<HTMLFormElement>(null)
@@ -40,6 +42,18 @@ const ForgotPasswordPage = (): JSX.Element => {
 
   const dispatch = useAppDispatch()
   const history = useHistory()
+  const location = useLocation()
+
+  const locationTo = useMemo(
+    () => ({
+      pathname: '/reset-password',
+      state: {
+        fromForgotPasswordPage: true,
+        from: location.pathname,
+      },
+    }),
+    [location.pathname],
+  )
 
   const isFormValid = useCallback(() => {
     return isEmailValid(form.email)
@@ -83,7 +97,7 @@ const ForgotPasswordPage = (): JSX.Element => {
         return
       }
 
-      history.push('/reset-password')
+      history.push(locationTo)
     },
     [dispatch, form, history, isFormValid],
   )
@@ -113,6 +127,10 @@ const ForgotPasswordPage = (): JSX.Element => {
     () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
     [isFormValid],
   )
+
+  if (auth.user) {
+    return <Redirect to='/' />
+  }
 
   return (
     <>

@@ -9,12 +9,13 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader/loader'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { authSelector } from '../../services/slices/auth.slice'
 
 import { signUp, signUpStatusSelector } from './register-page.slice'
 
@@ -35,6 +36,7 @@ const RegisterPage = (): JSX.Element => {
   const [open, setOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>(ERROR_MESSAGES.default)
 
+  const auth = useAppSelector(authSelector)
   const signUpStatus = useAppSelector(signUpStatusSelector)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -115,6 +117,10 @@ const RegisterPage = (): JSX.Element => {
     () => classNames('sb-form__body', !isFormValid() ? 'isDisabled' : ''),
     [isFormValid],
   )
+
+  if (auth.user) {
+    return <Redirect to='/' />
+  }
 
   return (
     <>

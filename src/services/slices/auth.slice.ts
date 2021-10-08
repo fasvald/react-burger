@@ -64,16 +64,10 @@ const authSlice = createSlice({
       state.isLoggedIn = true
       state.user = action.payload
     },
-    clearAuthorizedUser: (state, action) => {
+    clearAuthorizedUser: (state) => {
       state.isLoggedIn = false
       state.user = null
     },
-  },
-  extraReducers(builder) {
-    builder.addCase(signOut.fulfilled, (state, action) => {
-      state.isLoggedIn = false
-      state.user = null
-    })
   },
 })
 

@@ -25,7 +25,7 @@ apiInstance.interceptors.request.use(
   (config) => {
     const authToken = Cookies.get('sb-authToken')
 
-    // We will attach authToken only for the requests with already included Authorization header
+    // Only apply 'Authorization' header when its necessary
     if (get(config, 'headers.Authorization') && authToken) {
       set(config, 'headers.Authorization', `Bearer ${authToken}`)
     }
@@ -40,14 +40,12 @@ apiInstance.interceptors.response.use(
   async (err: AxiosError) => {
     const originalRequest: IAxiosRequestConfigModified = err.config
 
-    // JWT token is expired
     if ((err as AxiosError).response?.status === 403 && !originalRequest?._retry) {
       originalRequest._retry = true
 
       try {
         const { accessToken } = await refreshAuthToken()
 
-        // Dunno why TS is showing error about "object could be unknown" for "apiInstance", so I am using lodash "set"
         set(apiInstance, 'defaults.headers.common.Authorization', accessToken)
 
         return apiInstance(originalRequest)
@@ -60,7 +58,6 @@ apiInstance.interceptors.response.use(
       }
     }
 
-    // Refresh token is invalid
     if (
       (err as AxiosError).response?.status === 401 &&
       (err as AxiosError).response?.data &&

@@ -2,12 +2,12 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios, { AxiosResponse } from 'axios'
-import Cookies from 'js-cookie'
 
 import { API_ENDPOINTS } from '../../../common/constants/api.constant'
 import { IAuthUser, IProfileResponse } from '../../../common/models/auth.model'
 import { TFetchProcess } from '../../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../../common/models/errors.model'
+import { getAuthorizedHeader } from '../../../common/utils/auth.utils'
 import { getSerializedAxiosError } from '../../../common/utils/errors.utils'
 import apiInstance from '../../../services/interceptors/client.interceptor'
 import { RootState } from '../../../store'
@@ -45,7 +45,7 @@ export const updateProfile = createAsyncThunk<
       {
         cancelToken: source.token,
         headers: {
-          Authorization: `Bearer ${Cookies.get('sb-authToken')}`,
+          ...getAuthorizedHeader(),
         },
       },
     )
