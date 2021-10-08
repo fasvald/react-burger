@@ -30,3 +30,11 @@
   flex-shrink: 0;
   height: 40px;
 }
+
+.error {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}

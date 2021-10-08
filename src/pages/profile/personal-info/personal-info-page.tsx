@@ -15,7 +15,7 @@ import {
   getProfile,
   profileFetchStatusSelector,
   profileSelector,
-  updateProfileInStore,
+  updateProfileManually,
 } from '../../../services/slices/profile.slice'
 
 import { updateProfile, updateProfileStatusSelector } from './personal-info-page.slice'
@@ -97,7 +97,7 @@ const PersonalInfoPage = (): JSX.Element => {
         setSeverity('success')
         setOpen(true)
 
-        dispatch(updateProfileInStore(form))
+        dispatch(updateProfileManually(form))
       }
     },
     [dispatch, form, isFormValid, profile],
@@ -144,12 +144,17 @@ const PersonalInfoPage = (): JSX.Element => {
       }
     }
 
-    fetchProfile()
+    // So we check if the user is logged in (with tokens and fetch the data)
+    if (profile) {
+      setForm(profile)
+    } else {
+      fetchProfile()
+    }
 
     return () => {
       promise?.abort()
     }
-  }, [dispatch])
+  }, [dispatch, profile])
 
   useEffect(() => {
     setIsResetAvailable(!isEqual(form, profile))

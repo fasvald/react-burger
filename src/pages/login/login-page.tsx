@@ -91,7 +91,7 @@ const LoginPage = (): JSX.Element => {
 
       const { payload } = resultAction as { payload: TSignInResponse }
 
-      dispatch(saveAuthorizedUser(payload))
+      dispatch(saveAuthorizedUser(payload.user))
 
       Cookies.set('sb-authToken', getBearerToken(payload.accessToken), {
         expires: getTokenExpirationDate(),

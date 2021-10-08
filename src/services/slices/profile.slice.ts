@@ -67,8 +67,8 @@ export const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    updateProfileInStore(state, action: PayloadAction<IAuthUser>) {
-      // state.status = 'idle'
+    updateProfileManually(state, action: PayloadAction<IAuthUser>) {
+      state.status = 'loaded'
       state.user = action.payload
     },
     clearProfile(state, action) {
@@ -91,6 +91,6 @@ export const profileSlice = createSlice({
   },
 })
 
-export const { clearProfile, updateProfileInStore } = profileSlice.actions
+export const { clearProfile, updateProfileManually } = profileSlice.actions
 
 export default profileSlice.reducer
