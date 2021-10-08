@@ -1,9 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import classNames from 'classnames'
+import Cookies from 'js-cookie'
 import { nanoid } from 'nanoid'
-import { Route, Switch, useRouteMatch } from 'react-router'
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router'
 import { NavLink } from 'react-router-dom'
+
+import { useAppDispatch } from '../../hooks'
+import { signOut } from '../../services/slices/auth.slice'
 
 import OrderListPage from './order-list/order-list-page'
 import PersonalInfoPage from './personal-info/personal-info-page'
@@ -39,11 +43,34 @@ const ProfilePage = (): JSX.Element => {
   // relative to the parent route, while the `url` lets
   // us build relative links.
   const { path, url } = useRouteMatch()
+  const history = useHistory()
+  const dispatch = useAppDispatch()
 
   const routes = useMemo(() => getRoutes(path, url), [path, url])
 
+  const handleClick = useCallback(async () => {
+    const resultAction = await dispatch(signOut())
+
+    if (signOut.fulfilled.match(resultAction)) {
+      Cookies.remove('sb-refreshToken', { path: '/' })
+      Cookies.remove('sb-authToken', { path: '/' })
+
+      history.push('/')
+    }
+  }, [dispatch, history])
+
   const listItemLinkClass = useMemo(
     () => classNames('text text_type_main-medium text_color_inactive', styles.listItemLink),
+    [],
+  )
+
+  const listItemLinkBtnClass = useMemo(
+    () =>
+      classNames(
+        'text text_type_main-medium text_color_inactive',
+        styles.listItemLink,
+        styles.listItemLink_btn,
+      ),
     [],
   )
 
@@ -65,9 +92,9 @@ const ProfilePage = (): JSX.Element => {
           ))}
           <li className={styles.listItem}>
             {/* NOTE: Either button or https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md#case-i-need-the-html-to-be-interactive-dont-i-need-to-use-an-a-tag-for-that (div with role) */}
-            <div role='menuitem' className={listItemLinkClass}>
+            <button type='button' className={listItemLinkBtnClass} onClick={handleClick}>
               Выход
-            </div>
+            </button>
           </li>
         </ul>
         <div className={styles.description}>

@@ -36,6 +36,13 @@
   text-decoration: none;
 }
 
+.listItemLink_btn {
+  background: none;
+  border: 0;
+  text-align: left;
+  outline: none;
+}
+
 .listItemLink:hover,
 .listItemLinkActive {
   color: var(--primary-light);

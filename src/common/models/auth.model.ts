@@ -46,6 +46,11 @@ export interface ISignUpRequestBody extends ISignInRequestBody {
   name: string
 }
 
+export interface ISignOutResponse {
+  success: boolean
+  message: string
+}
+
 export interface IPasswordForgotRequestBody {
   email: string
 }
