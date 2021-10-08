@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { memoize } from 'lodash'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
@@ -13,6 +13,7 @@ import {
 } from '../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
 import { getSerializedAxiosError } from '../../common/utils/errors.utils'
+import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
 import { IBurgerIngredientsState } from './burger-ingredients.model'
@@ -63,7 +64,7 @@ export const fetchIngredients = createAsyncThunk<
       source.cancel('Operation stop the work.')
     })
 
-    const response = await axios.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
+    const response = await apiInstance.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
       cancelToken: source.token,
     })
 

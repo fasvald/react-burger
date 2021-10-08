@@ -1,13 +1,16 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import Cookies from 'js-cookie'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { IAuthUser, IProfileResponse } from '../../common/models/auth.model'
 import { TFetchProcess } from '../../common/models/data.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
+import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import { RootState } from '../../store'
+import apiInstance from '../interceptors/client.interceptor'
 
 interface IProfileState {
   status: TFetchProcess
@@ -23,35 +26,42 @@ export const profileSelector = (state: RootState): IAuthUser | null => state.pro
 
 export const profileFetchStatusSelector = (state: RootState): TFetchProcess => state.profile.status
 
-export const getProfile = createAsyncThunk(
-  'profile/get',
-  async (_, { rejectWithValue, signal }) => {
-    try {
-      const source = axios.CancelToken.source()
-      signal.addEventListener('abort', () => {
-        source.cancel('Operation stop the work.')
-      })
+export const getProfile = createAsyncThunk<
+  IProfileResponse,
+  undefined,
+  {
+    signal: AbortSignal
+    rejectValue: IAxiosSerializedError | string
+  }
+>('profile/get', async (_, thunkApi) => {
+  try {
+    const source = axios.CancelToken.source()
+    thunkApi.signal.addEventListener('abort', () => {
+      source.cancel('Operation stop the work.')
+    })
 
-      const response = await axios.get<IProfileResponse>(API_ENDPOINTS.profile, {
-        cancelToken: source.token,
-        headers: {
-          Authorization: `Bearer ${Cookies.get('sb-authToken')}`,
-        },
-      })
+    const response = await apiInstance.get<IProfileResponse>(API_ENDPOINTS.profile, {
+      cancelToken: source.token,
+      headers: {
+        Authorization: `Bearer ${Cookies.get('sb-authToken')}`,
+      },
+    })
 
-      return response.data
-    } catch (err) {
-      // https://github.com/microsoft/TypeScript/issues/20024
-      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (axios.isCancel(err)) {
-        // TODO: FIX THE TEXT !!!
-        return rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
-      }
-
-      return rejectWithValue((err as AxiosError)?.message)
+    return response.data
+  } catch (err) {
+    // https://github.com/microsoft/TypeScript/issues/20024
+    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+    if (axios.isCancel(err)) {
+      return thunkApi.rejectWithValue('Profile fetching stop the work. This has been aborted!')
     }
-  },
-)
+
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+    }
+
+    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
+  }
+})
 
 export const profileSlice = createSlice({
   name: 'profile',

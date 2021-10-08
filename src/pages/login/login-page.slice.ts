@@ -8,6 +8,7 @@ import { ISignInRequestBody, TSignInResponse } from '../../common/models/auth.mo
 import { TFetchProcess } from '../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
 import { getSerializedAxiosError } from '../../common/utils/errors.utils'
+import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
 import { ILoginPageState } from './login-page.model'
@@ -33,7 +34,7 @@ export const signIn = createAsyncThunk<
       source.cancel('Operation stop the work.')
     })
 
-    const response = await axios.post<ISignInRequestBody, AxiosResponse<TSignInResponse>>(
+    const response = await apiInstance.post<ISignInRequestBody, AxiosResponse<TSignInResponse>>(
       API_ENDPOINTS.signIn,
       data,
       {

@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { API_ENDPOINTS } from '../../common/constants/api.constant'
 import { TFetchProcess } from '../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
 import { getSerializedAxiosError } from '../../common/utils/errors.utils'
+import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
 import {
@@ -40,13 +41,12 @@ export const createOrder = createAsyncThunk<
       source.cancel('Operation stop the work.')
     })
 
-    const response = await axios.post<IOrderDetailsBody, AxiosResponse<IOrderDetailsResponse>>(
-      API_ENDPOINTS.orders,
-      data,
-      {
-        cancelToken: source.token,
-      },
-    )
+    const response = await apiInstance.post<
+      IOrderDetailsBody,
+      AxiosResponse<IOrderDetailsResponse>
+    >(API_ENDPOINTS.orders, data, {
+      cancelToken: source.token,
+    })
 
     return response.data
   } catch (err) {

@@ -54,7 +54,7 @@
     "react/jsx-props-no-spreading": ["error", {
       "exceptions": ["CircularProgress"]
     }],
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "no-underscore-dangle": ["error", { "allow": ["_id", "_retry"] }],
     // "space-before-function-paren": ["error", "always"],
     "camelcase": "off",
     "import/no-extraneous-dependencies": 1,

@@ -9,6 +9,7 @@ import { IAuthUser, IProfileResponse } from '../../../common/models/auth.model'
 import { TFetchProcess } from '../../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../../common/models/errors.model'
 import { getSerializedAxiosError } from '../../../common/utils/errors.utils'
+import apiInstance from '../../../services/interceptors/client.interceptor'
 import { RootState } from '../../../store'
 
 interface IPersonalInfoPageState {
@@ -38,7 +39,7 @@ export const updateProfile = createAsyncThunk<
       source.cancel('Operation stop the work.')
     })
 
-    const response = await axios.patch<IAuthUser, AxiosResponse<IProfileResponse>>(
+    const response = await apiInstance.patch<IAuthUser, AxiosResponse<IProfileResponse>>(
       API_ENDPOINTS.profile,
       data,
       {

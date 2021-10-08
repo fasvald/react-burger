@@ -27,6 +27,16 @@ export interface IAuthUser {
   name: string
 }
 
+export interface IAuthRefreshTokenRequestBody {
+  token: string
+}
+
+export interface IAuthRefreshTokenResponse {
+  success: boolean
+  accessToken: string
+  refreshToken: string
+}
+
 export interface ISignInRequestBody {
   email: string
   password: string

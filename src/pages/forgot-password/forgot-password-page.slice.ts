@@ -8,6 +8,7 @@ import { IPasswordForgotRequestBody, TPasswordForgotResponse } from '../../commo
 import { TFetchProcess } from '../../common/models/data.model'
 import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
 import { getSerializedAxiosError } from '../../common/utils/errors.utils'
+import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
 import { IForgotPasswordPageState } from './forgot-password-page.model'
@@ -34,7 +35,7 @@ export const sendPasswordRestorationEmail = createAsyncThunk<
       source.cancel('Operation stop the work.')
     })
 
-    const response = await axios.post<
+    const response = await apiInstance.post<
       IPasswordForgotRequestBody,
       AxiosResponse<TPasswordForgotResponse>
     >(API_ENDPOINTS.passwordForgot, data, {
