@@ -3,7 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { ISignOutResponse } from '../../common/models/auth.model'
-import { TFetchProcess } from '../../common/models/data.model'
+import { TFetchProcess } from '../../common/models/fetch-process.model'
 import { signOut } from '../../services/slices/auth.slice'
 import { RootState } from '../../store'
 

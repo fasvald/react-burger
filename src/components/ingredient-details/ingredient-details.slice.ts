@@ -3,8 +3,11 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { memoize, pick } from 'lodash'
 
-import { IBurgerIngredient, IBurgerIngredientFoodEnergy } from '../../common/models/data.model'
 import { RootState } from '../../store'
+import {
+  IBurgerIngredient,
+  IBurgerIngredientFoodEnergy,
+} from '../burger-ingredients/burger-ingredients.model'
 
 interface IIngredientDetailsState {
   ingredient: IBurgerIngredient | null

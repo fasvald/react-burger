@@ -1,33 +1,46 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Location } from 'history'
+import { useHistory, useLocation } from 'react-router-dom'
 
-import { IBurgerIngredient } from '../../../common/models/data.model'
+import { IModalRouteLocationState } from '../../../common/models/routing.model'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import IngredientDetails from '../../ingredient-details/ingredient-details'
 import {
-  ingredientDetailsSelector,
   removeIngredientDetails,
   saveIngredientDetails,
 } from '../../ingredient-details/ingredient-details.slice'
 import Modal from '../../modal/modal'
 import { IModalRefObject } from '../../modal/modal.model'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
+import { IBurgerIngredient } from '../burger-ingredients.model'
 import { selectIngredientsByType } from '../burger-ingredients.slice'
 
-import useDynamicTabsWithIntersection from './burger-ingredients-list.utils'
+import {
+  isModalRouteLocation,
+  useDynamicTabsWithIntersection,
+} from './burger-ingredients-list.utils'
 
 import styles from './burger-ingredients-list.module.css'
 
-const BurgerIngredientsList = (): JSX.Element => {
+interface IBurgerIngredientsListProps {
+  modalLocation: IModalRouteLocationState | Location<unknown>
+}
+
+const BurgerIngredientsList = ({ modalLocation }: IBurgerIngredientsListProps): JSX.Element => {
   const buns = useAppSelector((state) => selectIngredientsByType(state)('bun'))
   const sauces = useAppSelector((state) => selectIngredientsByType(state)('sauce'))
   const mains = useAppSelector((state) => selectIngredientsByType(state)('main'))
-  const chosenIngredient = useAppSelector(ingredientDetailsSelector)
+
+  const history = useHistory()
+  const location = useLocation()
+
+  const isModalLocation = useMemo(() => isModalRouteLocation(modalLocation), [modalLocation])
 
   const dispatch = useAppDispatch()
 
-  const modal = useRef<IModalRefObject>(null)
+  const modalRef = useRef<IModalRefObject>(null)
   const rootDynamicTabsRef = useRef(null)
 
   const [currentListSection, setCurrentListSection] = useDynamicTabsWithIntersection(
@@ -37,18 +50,24 @@ const BurgerIngredientsList = (): JSX.Element => {
 
   const handleClick = useCallback(
     (ingredient: IBurgerIngredient) => {
-      if (modal.current) {
-        modal.current.open()
+      history.push({
+        pathname: `/ingredients/${ingredient._id}`,
+        state: {
+          isModal: true,
+          background: location,
+        },
+      })
 
-        dispatch(saveIngredientDetails(ingredient))
-      }
+      dispatch(saveIngredientDetails(ingredient))
     },
-    [dispatch],
+    [dispatch, history, location],
   )
 
   const handleClose = useCallback(() => {
+    history.goBack()
+
     dispatch(removeIngredientDetails())
-  }, [dispatch])
+  }, [dispatch, history])
 
   /**
    * NOTE: We can use either useMemo or React.memo, but I've decided to use React.memo().
@@ -124,9 +143,11 @@ const BurgerIngredientsList = (): JSX.Element => {
           ))}
         </div>
       </div>
-      <Modal ref={modal} onClose={handleClose}>
-        {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} />}
-      </Modal>
+      {isModalLocation && (
+        <Modal onClose={handleClose} isModalRoute={isModalLocation} ref={modalRef}>
+          <IngredientDetails />
+        </Modal>
+      )}
     </div>
   )
 }

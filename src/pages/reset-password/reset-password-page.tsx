@@ -6,7 +6,7 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
-import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
+import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isPasswordValid, isTokenPasswordChangeValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -76,7 +76,7 @@ const ResetPasswordPage = (): JSX.Element => {
 
       // Based on https://redux-toolkit.js.org/usage/usage-with-typescript#createasyncthunk
       if (resetPassword.rejected.match(resultAction)) {
-        if (instanceOfAxiosSerializedError(resultAction.payload)) {
+        if (isInstanceOfAxiosSerializedError(resultAction.payload)) {
           setErrorMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setOpen(true)
         }

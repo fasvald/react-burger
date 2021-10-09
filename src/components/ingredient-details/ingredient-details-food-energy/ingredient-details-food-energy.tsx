@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { IBurgerIngredientFoodEnergy } from '../../../common/models/data.model'
+import { IBurgerIngredientFoodEnergy } from '../../burger-ingredients/burger-ingredients.model'
 
 import styles from './ingredient-details-food-energy.module.css'
 

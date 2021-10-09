@@ -11,7 +11,7 @@ import {
 import classNames from 'classnames'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
-import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
+import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -79,7 +79,7 @@ const RegisterPage = (): JSX.Element => {
       const resultAction = await promiseRef.current
 
       if (signUp.rejected.match(resultAction)) {
-        if (instanceOfAxiosSerializedError(resultAction.payload)) {
+        if (isInstanceOfAxiosSerializedError(resultAction.payload)) {
           setErrorMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setOpen(true)
         }

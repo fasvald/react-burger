@@ -4,8 +4,11 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { memoize } from 'lodash'
 import { nanoid } from 'nanoid'
 
-import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { RootState } from '../../store'
+import {
+  IBurgerIngredient,
+  IBurgerIngredientUnique,
+} from '../burger-ingredients/burger-ingredients.model'
 
 import { IBurgerConstructorIngredientState } from './burger-constructor.model'
 import calculateTotalPrice from './burger-constructor.utils'

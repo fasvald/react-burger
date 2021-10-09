@@ -11,9 +11,9 @@ import classNames from 'classnames'
 import Cookies from 'js-cookie'
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
+import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { TSignInResponse } from '../../common/models/auth.model'
 import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
-import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -83,7 +83,7 @@ const LoginPage = (): JSX.Element => {
       const resultAction = await promiseRef.current
 
       if (signIn.rejected.match(resultAction)) {
-        if (instanceOfAxiosSerializedError(resultAction.payload)) {
+        if (isInstanceOfAxiosSerializedError(resultAction.payload)) {
           setErrorMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setOpen(true)
         }

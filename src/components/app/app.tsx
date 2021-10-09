@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
+import { Location } from 'history'
 import Cookies from 'js-cookie'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Switch, Route, useLocation } from 'react-router-dom'
 
+import { isInstanceOfModalRouteLocationState } from '../../common/guards/routing.guards'
+import { IModalRouteLocationState } from '../../common/models/routing.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import ForgotPasswordPage from '../../pages/forgot-password/forgot-password-page'
 import LoginPage from '../../pages/login/login-page'
@@ -16,8 +19,9 @@ import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.sli
 import { getUser } from '../../services/slices/user.slice'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
+import IngredientDetails from '../ingredient-details/ingredient-details'
 import Loader from '../loader-circular/loader-circular'
-import ProtectedRoute from '../protected-route/protected-route'
+import ProtectedRoute from '../routing/protected-route/protected-route'
 
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
@@ -29,6 +33,16 @@ const App = (): JSX.Element => {
   const [userIsReady, setUserIsReady] = useState(false)
 
   const auth = useAppSelector(authSelector)
+
+  const location = useLocation<IModalRouteLocationState | Location>()
+
+  const backgroundLocation = useMemo(() => {
+    if (isInstanceOfModalRouteLocationState(location.state)) {
+      return location.state && location.state.background
+    }
+
+    return undefined
+  }, [location])
 
   const dispatch = useAppDispatch()
 
@@ -53,49 +67,52 @@ const App = (): JSX.Element => {
   }, [auth.isLoggedIn, auth.user, dispatch])
 
   return (
-    <Router>
-      <div className={styles.wrapper}>
-        <AppHeader className={styles.header} />
-        <AppContent className={styles.content}>
-          {!userIsReady ? (
-            <div className={styles.loaderWrapper}>
-              <Loader />
-            </div>
-          ) : (
-            <Switch>
-              <Route exact path='/'>
-                <DndProvider backend={HTML5Backend}>
-                  <BurgerIngredients />
-                  <BurgerConstructor />
-                </DndProvider>
-              </Route>
-              <Route path='/login'>
-                <LoginPage />
-              </Route>
-              <Route path='/register'>
-                <RegisterPage />
-              </Route>
-              <Route path='/forgot-password'>
-                <ForgotPasswordPage />
-              </Route>
-              <Route path='/reset-password'>
-                <ResetPasswordPage />
-              </Route>
-              <Route path='/not-found'>
-                <NotFoundPage />
-              </Route>
-              <ProtectedRoute path='/profile'>
-                <ProfilePage />
-              </ProtectedRoute>
-              <Route path='*'>
-                <RedirectToNotFound />
-              </Route>
-            </Switch>
-          )}
-        </AppContent>
-        <AppFooter className={styles.footer} />
-      </div>
-    </Router>
+    <div className={styles.wrapper}>
+      <AppHeader className={styles.header} />
+      <AppContent className={styles.content}>
+        {!userIsReady ? (
+          <div className={styles.loaderWrapper}>
+            <Loader />
+          </div>
+        ) : (
+          <Switch location={backgroundLocation || location}>
+            <Route exact path='/'>
+              <DndProvider backend={HTML5Backend}>
+                {/* NOTE: Because I want to pass custom click events to modal, I need to pass that
+                location.state obj because it will override by location value from Switch component */}
+                <BurgerIngredients modalLocation={location.state} />
+                <BurgerConstructor />
+              </DndProvider>
+            </Route>
+            <Route path='/ingredients/:id'>
+              <IngredientDetails ingredient={null} />
+            </Route>
+            <Route path='/login'>
+              <LoginPage />
+            </Route>
+            <Route path='/register'>
+              <RegisterPage />
+            </Route>
+            <Route path='/forgot-password'>
+              <ForgotPasswordPage />
+            </Route>
+            <Route path='/reset-password'>
+              <ResetPasswordPage />
+            </Route>
+            <Route path='/not-found'>
+              <NotFoundPage />
+            </Route>
+            <ProtectedRoute path='/profile'>
+              <ProfilePage />
+            </ProtectedRoute>
+            <Route path='*'>
+              <RedirectToNotFound />
+            </Route>
+          </Switch>
+        )}
+      </AppContent>
+      <AppFooter className={styles.footer} />
+    </div>
   )
 }
 

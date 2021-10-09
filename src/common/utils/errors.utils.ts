@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 import { AxiosError } from 'axios'
 
 import { IAxiosSerializedError } from '../models/errors.model'
@@ -15,24 +17,4 @@ export const getSerializedAxiosError = (err: AxiosError): Partial<IAxiosSerializ
     statusText: err.response?.statusText,
     data: err.response?.data,
   }
-}
-
-/**
- * Check if passing object is instance of 'AxiosSerializedError' interface
- *
- * @param object Passing object to check
- * @returns Result of checking
- *
- * @link https://stackoverflow.com/questions/14425568/interface-type-check-with-typescript
- */
-export const instanceOfAxiosSerializedError = (
-  object: unknown,
-): object is IAxiosSerializedError => {
-  return (
-    !!object &&
-    Object.prototype.hasOwnProperty.call(object, 'message') &&
-    Object.prototype.hasOwnProperty.call(object, 'status') &&
-    Object.prototype.hasOwnProperty.call(object, 'statusText') &&
-    Object.prototype.hasOwnProperty.call(object, 'data')
-  )
 }

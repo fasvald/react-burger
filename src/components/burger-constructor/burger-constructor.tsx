@@ -6,9 +6,12 @@ import { useDrop } from 'react-dnd'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
-import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector } from '../../services/slices/auth.slice'
+import {
+  IBurgerIngredient,
+  IBurgerIngredientUnique,
+} from '../burger-ingredients/burger-ingredients.model'
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'

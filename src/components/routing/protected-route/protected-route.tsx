@@ -2,8 +2,8 @@ import React from 'react'
 
 import { RouteProps, Route, Redirect } from 'react-router-dom'
 
-import { useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import { useAppSelector } from '../../../hooks'
+import { authSelector } from '../../../services/slices/auth.slice'
 
 const ProtectedRoute = ({ children, ...rest }: RouteProps): JSX.Element | null => {
   const auth = useAppSelector(authSelector)

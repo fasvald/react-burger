@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 
 import classNames from 'classnames'
+import { Location } from 'history'
 
+import { IModalRouteLocationState } from '../../common/models/routing.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import Loader from '../loader-circular/loader-circular'
 
@@ -14,7 +16,11 @@ import {
 
 import styles from './burger-ingredients.module.css'
 
-const BurgerIngredients = (): JSX.Element => {
+interface IBurgerIngredientsProps {
+  modalLocation: IModalRouteLocationState | Location<unknown>
+}
+
+const BurgerIngredients = ({ modalLocation }: IBurgerIngredientsProps): JSX.Element => {
   const ingredients = useAppSelector(ingredientsSelector)
   const status = useAppSelector(ingredientsFetchStatusSelector)
 
@@ -49,7 +55,7 @@ const BurgerIngredients = (): JSX.Element => {
       {status === 'loaded' && ingredients.length > 0 && (
         <>
           <h1 className={sectionTitleClass}>Соберите бургер</h1>
-          <BurgerIngredientsList />
+          <BurgerIngredientsList modalLocation={modalLocation} />
         </>
       )}
     </section>

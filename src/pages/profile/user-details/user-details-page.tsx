@@ -6,7 +6,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { isEqual } from 'lodash'
 
-import { instanceOfAxiosSerializedError } from '../../../common/utils/errors.utils'
+import { isInstanceOfAxiosSerializedError } from '../../../common/guards/errors.guards'
 import { isEmailValid, isNameValid } from '../../../common/utils/validators.utils'
 import CustomInput from '../../../components/custom-input/custom-input'
 import Loader from '../../../components/loader-circular/loader-circular'
@@ -79,7 +79,7 @@ const UserDetailsPage = (): JSX.Element => {
       const resultAction = await promiseUserUpdateRef.current
 
       if (updateUser.rejected.match(resultAction)) {
-        if (instanceOfAxiosSerializedError(resultAction.payload)) {
+        if (isInstanceOfAxiosSerializedError(resultAction.payload)) {
           setMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setSeverity('error')
           setOpen(true)

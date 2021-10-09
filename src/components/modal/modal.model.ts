@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 export interface IModalProps {
   children: ReactNode
+  isModalRoute?: boolean
   onClose?: () => void
 }
 

@@ -31,37 +31,45 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useRef,
   useState,
 } from 'react'
 
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import ReactDOM from 'react-dom'
 
 import ModalDialog from './modal-dialog/modal-dialog'
 import ModalOverlay from './modal-overlay/modal-overlay'
 import { IModalProps, IModalRefObject } from './modal.model'
-import { blockBrowserScroll, createInjectionElement, unblockBrowserScroll } from './modal.utils'
+import { createInjectionElement } from './modal.utils'
 
 import styles from './modal.module.css'
 
 const modalRootEl = document.getElementById('modal-root')
 
 const Modal = (
-  { children, onClose }: IModalProps,
+  { children, isModalRoute = false, onClose }: IModalProps,
   ref: Ref<IModalRefObject>,
 ): JSX.Element | null => {
   // We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
-  const [isShown, setIsShown] = useState<boolean>(false)
+  const [isShown, setIsShown] = useState<boolean>(isModalRoute || false)
+
+  const modalRef = useRef<HTMLDivElement>(null)
 
   const open = useCallback(() => {
     setIsShown(true)
-    blockBrowserScroll()
+
+    // blockBrowserScroll()
+    disableBodyScroll(modalRef.current as HTMLElement)
   }, [])
 
   const close = useCallback(() => {
     setIsShown(false)
-    unblockBrowserScroll()
+
+    // unblockBrowserScroll()
+    enableBodyScroll(modalRef.current as HTMLElement)
 
     if (onClose) {
       onClose()
@@ -88,16 +96,22 @@ const Modal = (
 
     document.addEventListener('keydown', handleEscape, false)
 
+    if (isModalRoute) {
+      disableBodyScroll(modalRef.current as HTMLElement)
+    }
+
     return () => {
       modalRootEl?.replaceChildren()
 
       document.removeEventListener('keydown', handleEscape, false)
+
+      clearAllBodyScrollLocks()
     }
-  }, [wrapperEl, handleEscape])
+  }, [wrapperEl, handleEscape, isModalRoute])
 
   return ReactDOM.createPortal(
     isShown ? (
-      <div className={styles.wrapper} role='dialog'>
+      <div className={styles.wrapper} role='dialog' ref={modalRef}>
         <ModalOverlay modal={ref as RefObject<IModalRefObject>} />
         <ModalDialog modal={ref as RefObject<IModalRefObject>}>{children}</ModalDialog>
       </div>

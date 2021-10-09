@@ -1,4 +1,4 @@
-import { IBurgerIngredient } from '../models/data.model'
+import {IBurgerIngredient} from "../../components/burger-ingredients/burger-ingredients.model";
 
 const ingredientsData: IBurgerIngredient[] = [
   {

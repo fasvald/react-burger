@@ -1,4 +1,4 @@
-import { IBurgerIngredientUnique } from '../../common/models/data.model'
+import { IBurgerIngredientUnique } from '../burger-ingredients/burger-ingredients.model'
 
 /**
  * Calculation of total price for all ingredients in burger constructor (can be used outside of component)

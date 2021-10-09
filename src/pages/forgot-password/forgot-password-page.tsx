@@ -6,7 +6,7 @@ import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-comp
 import classNames from 'classnames'
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
-import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
+import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isEmailValid } from '../../common/utils/validators.utils'
 import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -89,7 +89,7 @@ const ForgotPasswordPage = (): JSX.Element => {
       const resultAction = await promiseRef.current
 
       if (sendPasswordRestorationCode.rejected.match(resultAction)) {
-        if (instanceOfAxiosSerializedError(resultAction.payload)) {
+        if (isInstanceOfAxiosSerializedError(resultAction.payload)) {
           setErrorMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setOpen(true)
         }
