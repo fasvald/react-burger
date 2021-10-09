@@ -3,23 +3,25 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
 import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
-import Loader from '../loader/loader'
+import { authSelector } from '../../services/slices/auth.slice'
+import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
+import Loader from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'
 import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
 import {
   orderSelector,
   orderCreationStatusSelector,
-  createOrder,
+  checkoutOrder,
 } from '../order-details/order-details.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
-import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
+import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-dnd/burger-constructor-ingredient-dnd'
 import {
   bunsSelector,
   toppingsSelector,
@@ -35,18 +37,21 @@ import {
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
+  const auth = useAppSelector(authSelector)
   const buns = useAppSelector(bunsSelector)
   const toppings = useAppSelector(toppingsSelector)
   const ingredientsID = useAppSelector((state) => selectIngredientsID(state)())
   const totalPrice = useAppSelector((state) => selectIngredientsTotalPrice(state)())
   const order = useAppSelector(orderSelector)
   const orderCreationStatus = useAppSelector(orderCreationStatusSelector)
-  const ingredientsFetchStatus = useAppSelector(ingredientsFetchStatusSelector)
+  const ingredients = useAppSelector(ingredientsSelector)
 
   const modal = useRef<IModalRefObject>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
+  const location = useLocation()
+  const history = useHistory()
   const dispatch = useAppDispatch()
 
   const removeIngredient = useCallback(
@@ -57,24 +62,31 @@ const BurgerConstructor = (): JSX.Element => {
   )
 
   const bookOrder = useCallback(async () => {
-    // Check if burger has at least 1 topping and if there is no error from ingredients fetching, because you can't
-    // set disable attribute to a button without ref + js query
-    if (ingredientsFetchStatus === 'error' || !toppings.length || !buns.length) {
+    if (!auth.user) {
+      history.push({
+        pathname: '/login',
+        state: {
+          from: location.pathname,
+        },
+      })
+    }
+
+    // Check if burger has at least 1 topping and 1 bun
+    if (!toppings.length || !buns.length) {
       return
     }
 
-    promiseRef.current = dispatch(createOrder({ ingredients: ingredientsID }))
+    promiseRef.current = dispatch(checkoutOrder({ ingredients: ingredientsID }))
 
     const resultAction = await promiseRef.current
 
-    if (createOrder.rejected.match(resultAction)) {
-      // I can show the snackbar but I've tried to prevent all possibilities of an error using client validation
+    if (checkoutOrder.rejected.match(resultAction)) {
       return
     }
 
     dispatch(clearIngredients())
     modal.current?.open()
-  }, [dispatch, ingredientsID, ingredientsFetchStatus, toppings, buns])
+  }, [dispatch, ingredientsID, toppings, buns, auth.user, history, location.pathname])
 
   const findIngredient = useCallback(
     (id: string) => {
@@ -120,21 +132,15 @@ const BurgerConstructor = (): JSX.Element => {
 
   useEffect(() => {
     return () => {
-      promiseRef.current?.abort()
+      promiseRef.current && promiseRef.current?.abort()
     }
   }, [])
 
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   const priceSectionClass = useMemo(
-    () =>
-      classNames(
-        styles.price,
-        ingredientsFetchStatus === 'error' || !toppings.length || !buns.length
-          ? styles.isDisabled
-          : '',
-      ),
-    [ingredientsFetchStatus, toppings.length, buns.length],
+    () => classNames(styles.price, !toppings.length || !buns.length ? styles.isDisabled : ''),
+    [toppings.length, buns.length],
   )
 
   const priceValueClass = useMemo(
@@ -146,6 +152,18 @@ const BurgerConstructor = (): JSX.Element => {
     () => classNames(styles.list, canDrop ? styles.canDrop : '', isOver ? styles.isOver : ''),
     [canDrop, isOver],
   )
+
+  if (!ingredients) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.error}>
+          <p className='text text_type_main-medium'>
+            Конструктор для бургеров не может работать без ингредиентов.
+          </p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className={styles.section}>

@@ -8,15 +8,15 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import ForgotPasswordPage from '../../pages/forgot-password/forgot-password-page'
 import LoginPage from '../../pages/login/login-page'
-import NotFoundPage from '../../pages/not-found/not-found-page'
+import NotFoundPage, { RedirectToNotFound } from '../../pages/not-found/not-found-page'
 import ProfilePage from '../../pages/profile/profile-page'
 import RegisterPage from '../../pages/register/register-page'
 import ResetPasswordPage from '../../pages/reset-password/reset-password-page'
 import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
-import { getProfile } from '../../services/slices/profile.slice'
+import { getUser } from '../../services/slices/user.slice'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
-import Loader from '../loader/loader'
+import Loader from '../loader-circular/loader-circular'
 import ProtectedRoute from '../protected-route/protected-route'
 
 import AppContent from './app-content/app-content'
@@ -37,9 +37,9 @@ const App = (): JSX.Element => {
 
     const setUpUser = async () => {
       if (refreshToken && !auth.user) {
-        const resultAction = await dispatch(getProfile())
+        const resultAction = await dispatch(getUser())
 
-        if (getProfile.fulfilled.match(resultAction)) {
+        if (getUser.fulfilled.match(resultAction)) {
           dispatch(saveAuthorizedUser(resultAction.payload.user))
         }
       }
@@ -58,7 +58,7 @@ const App = (): JSX.Element => {
         <AppHeader className={styles.header} />
         <AppContent className={styles.content}>
           {!userIsReady ? (
-            <div className={styles.error}>
+            <div className={styles.loaderWrapper}>
               <Loader />
             </div>
           ) : (
@@ -81,12 +81,15 @@ const App = (): JSX.Element => {
               <Route path='/reset-password'>
                 <ResetPasswordPage />
               </Route>
+              <Route path='/not-found'>
+                <NotFoundPage />
+              </Route>
               <ProtectedRoute path='/profile'>
                 <ProfilePage />
               </ProtectedRoute>
-              {/* <Route path='/profile' component={ProfilePage} /> */}
-              {/* NOTE: WE can omit asterisk character here */}
-              <Route path='*' component={NotFoundPage} />
+              <Route path='*'>
+                <RedirectToNotFound />
+              </Route>
             </Switch>
           )}
         </AppContent>

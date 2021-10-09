@@ -11,24 +11,27 @@ import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
-import { IForgotPasswordPageState } from './forgot-password-page.model'
+interface IForgotPasswordPageState {
+  status: TFetchProcess
+  res: TPasswordForgotResponse | null
+}
 
 const initialState: IForgotPasswordPageState = {
   status: 'idle',
   res: null,
 }
 
-export const passwordForgotStatusSelector = (state: RootState): TFetchProcess =>
-  state.forgotPassword.status
+export const forgotPasswordStatusSelector = (state: RootState): TFetchProcess =>
+  state.forgotPasswordPage.status
 
-export const sendPasswordRestorationEmail = createAsyncThunk<
+export const sendPasswordRestorationCode = createAsyncThunk<
   TPasswordForgotResponse,
   IPasswordForgotRequestBody,
   {
     signal: AbortSignal
     rejectValue: IAxiosSerializedError | string
   }
->('forgotPassword/post', async (data: IPasswordForgotRequestBody, thunkApi) => {
+>('forgotPassword/restorationCode', async (data: IPasswordForgotRequestBody, thunkApi) => {
   try {
     const source = axios.CancelToken.source()
     thunkApi.signal.addEventListener('abort', () => {
@@ -59,18 +62,19 @@ export const sendPasswordRestorationEmail = createAsyncThunk<
 })
 
 const forgotPasswordPageSlice = createSlice({
-  name: 'forgotPassword',
+  name: 'forgotPasswordPage',
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(sendPasswordRestorationEmail.pending, (state, action) => {
+    builder.addCase(sendPasswordRestorationCode.pending, (state) => {
       state.status = 'loading'
+      state.res = null
     })
-    builder.addCase(sendPasswordRestorationEmail.fulfilled, (state, action) => {
+    builder.addCase(sendPasswordRestorationCode.fulfilled, (state, action) => {
       state.status = 'loaded'
       state.res = action.payload
     })
-    builder.addCase(sendPasswordRestorationEmail.rejected, (state, action) => {
+    builder.addCase(sendPasswordRestorationCode.rejected, (state) => {
       state.status = 'error'
       state.res = null
     })

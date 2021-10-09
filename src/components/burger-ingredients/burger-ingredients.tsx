@@ -3,13 +3,13 @@ import React, { useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import Loader from '../loader/loader'
+import Loader from '../loader-circular/loader-circular'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
 import {
   ingredientsSelector,
   ingredientsFetchStatusSelector,
-  fetchIngredients,
+  getIngredients,
 } from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
@@ -21,10 +21,16 @@ const BurgerIngredients = (): JSX.Element => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const promise = dispatch(fetchIngredients())
+    const promise = dispatch(getIngredients())
+
+    const fetchIngredients = async () => {
+      await promise
+    }
+
+    fetchIngredients()
 
     return () => {
-      promise.abort()
+      promise && promise?.abort()
     }
   }, [dispatch])
 

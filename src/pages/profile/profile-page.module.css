@@ -30,6 +30,7 @@
 }
 
 .listItemLink {
+  position: relative;
   width: 100%;
   height: 100%;
   line-height: 64px;
@@ -37,10 +38,22 @@
 }
 
 .listItemLink_btn {
+  display: flex;
   background: none;
   border: 0;
   text-align: left;
   outline: none;
+}
+
+.listItemLinkLoader {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.listItemLinkLoader span {
+  width: 100%;
 }
 
 .listItemLink:hover,

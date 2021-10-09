@@ -1,10 +1,15 @@
-import React, { useCallback } from 'react'
+import React, { ReactNode, RefObject, useCallback } from 'react'
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { IModalDialogProps } from './modal-dialog.model'
+import { IModalRefObject } from '../modal.model'
 
 import styles from './modal-dialog.module.css'
+
+interface IModalDialogProps {
+  children: ReactNode
+  modal: RefObject<IModalRefObject>
+}
 
 const ModalDialog = ({ children, modal }: IModalDialogProps): JSX.Element => {
   const handleClick = useCallback(() => {

@@ -9,9 +9,11 @@ import {
 import classNames from 'classnames'
 import { NavLink } from 'react-router-dom'
 
-import { IAppHeaderProps } from './app-header.model'
-
 import styles from './app-header.module.css'
+
+interface IAppHeaderProps {
+  className?: string
+}
 
 const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
   const BurgerIconMemo = useMemo(() => <BurgerIcon type='primary' />, [])

@@ -8,13 +8,13 @@ import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader/loader'
+import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector } from '../../services/slices/auth.slice'
 
 import {
-  passwordForgotStatusSelector,
-  sendPasswordRestorationEmail,
+  forgotPasswordStatusSelector,
+  sendPasswordRestorationCode,
 } from './forgot-password-page.slice'
 
 import styles from './forgot-password-page.module.css'
@@ -24,7 +24,6 @@ const ERROR_MESSAGES: Record<string | number, string> = {
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
@@ -34,15 +33,16 @@ const ForgotPasswordPage = (): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState<string>(ERROR_MESSAGES.default)
 
   const auth = useAppSelector(authSelector)
-  const passwordForgotStatus = useAppSelector(passwordForgotStatusSelector)
+  const passwordForgotStatus = useAppSelector(forgotPasswordStatusSelector)
 
   const loginFormRef = useRef<HTMLFormElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
-  const dispatch = useAppDispatch()
   const history = useHistory()
   const location = useLocation()
+
+  const dispatch = useAppDispatch()
 
   const locationTo = useMemo(
     () => ({
@@ -84,11 +84,11 @@ const ForgotPasswordPage = (): JSX.Element => {
         return
       }
 
-      promiseRef.current = dispatch(sendPasswordRestorationEmail(form))
+      promiseRef.current = dispatch(sendPasswordRestorationCode(form))
 
       const resultAction = await promiseRef.current
 
-      if (sendPasswordRestorationEmail.rejected.match(resultAction)) {
+      if (sendPasswordRestorationCode.rejected.match(resultAction)) {
         if (instanceOfAxiosSerializedError(resultAction.payload)) {
           setErrorMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setOpen(true)
@@ -99,7 +99,7 @@ const ForgotPasswordPage = (): JSX.Element => {
 
       history.push(locationTo)
     },
-    [dispatch, form, history, isFormValid],
+    [dispatch, form, history, isFormValid, locationTo],
   )
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const ForgotPasswordPage = (): JSX.Element => {
     }
 
     return () => {
-      promiseRef.current?.abort()
+      promiseRef.current && promiseRef.current?.abort()
     }
   }, [])
 

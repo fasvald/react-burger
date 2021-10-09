@@ -1,27 +1,22 @@
 import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
-import { pick } from 'lodash'
 
-import { IBurgerIngredientFoodEnergy } from '../../common/models/data.model'
+import { IBurgerIngredient } from '../../common/models/data.model'
+import { useAppSelector } from '../../hooks'
 
 import IngredientDetailsFoodEnergy from './ingredient-details-food-energy/ingredient-details-food-energy'
 import IngredientDetailsImage from './ingredient-details-image/ingredient-details-image'
-import { IIngredientDetailsProps } from './ingredient-details.model'
+import { selectIngredientFoodEnergy } from './ingredient-details.slice'
 
 import styles from './ingredient-details.module.css'
 
+interface IIngredientDetailsProps {
+  ingredient: IBurgerIngredient
+}
+
 const IngredientDetails = ({ ingredient }: IIngredientDetailsProps): JSX.Element => {
-  const foodEnergy = useMemo(
-    () =>
-      pick<IBurgerIngredientFoodEnergy>(ingredient, [
-        'calories',
-        'proteins',
-        'fat',
-        'carbohydrates',
-      ]),
-    [ingredient],
-  )
+  const foodEnergy = useAppSelector((state) => selectIngredientFoodEnergy(state)())
 
   const ingredientNameClass = useMemo(
     () => classNames('text text_type_main-medium', styles.ingredientName),

@@ -15,11 +15,11 @@ import { TSignInResponse } from '../../common/models/auth.model'
 import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader/loader'
+import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
+import { authSelector, saveAuthorizedUser, signIn } from '../../services/slices/auth.slice'
 
-import { signIn, signInStatusSelector } from './login-page.slice'
+import { signInStatusSelector } from './login-page.slice'
 
 import styles from './login-page.module.css'
 
@@ -29,7 +29,6 @@ const ERROR_MESSAGES: Record<string | number, string> = {
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
@@ -46,9 +45,10 @@ const LoginPage = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
-  const dispatch = useAppDispatch()
   const history = useHistory()
   const { state } = useLocation<{ from: string }>()
+
+  const dispatch = useAppDispatch()
 
   const isFormValid = useCallback(() => {
     return isPasswordValid(form.password) && isEmailValid(form.email)
@@ -119,7 +119,7 @@ const LoginPage = (): JSX.Element => {
     }
 
     return () => {
-      promiseRef.current?.abort()
+      promiseRef.current && promiseRef.current?.abort()
     }
   }, [])
 

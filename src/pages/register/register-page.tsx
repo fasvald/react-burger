@@ -9,15 +9,15 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { instanceOfAxiosSerializedError } from '../../common/utils/errors.utils'
 import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader/loader'
+import Loader from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import { authSelector, signUp } from '../../services/slices/auth.slice'
 
-import { signUp, signUpStatusSelector } from './register-page.slice'
+import { signUpStatusSelector } from './register-page.slice'
 
 import styles from './register-page.module.css'
 
@@ -27,7 +27,6 @@ const ERROR_MESSAGES: Record<string | number, string> = {
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
@@ -43,8 +42,9 @@ const RegisterPage = (): JSX.Element => {
   const promiseRef = useRef<any>(null)
   const loginFormRef = useRef<HTMLFormElement>(null)
 
-  const dispatch = useAppDispatch()
   const history = useHistory()
+
+  const dispatch = useAppDispatch()
 
   const isFormValid = useCallback(() => {
     return isEmailValid(form.email) && isPasswordValid(form.password) && isNameValid(form.name)
@@ -104,7 +104,7 @@ const RegisterPage = (): JSX.Element => {
     }
 
     return () => {
-      promiseRef.current?.abort()
+      promiseRef.current && promiseRef.current?.abort()
     }
   }, [])
 

@@ -1,11 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { memoize, pick } from 'lodash'
 
-import { IBurgerIngredient } from '../../common/models/data.model'
+import { IBurgerIngredient, IBurgerIngredientFoodEnergy } from '../../common/models/data.model'
 import { RootState } from '../../store'
 
-import { IIngredientDetailsState } from './ingredient-details.model'
+interface IIngredientDetailsState {
+  ingredient: IBurgerIngredient | null
+}
 
 const initialState: IIngredientDetailsState = {
   ingredient: null,
@@ -13,6 +16,19 @@ const initialState: IIngredientDetailsState = {
 
 export const ingredientDetailsSelector = (state: RootState): IBurgerIngredient | null =>
   state.ingredientDetails.ingredient
+
+export const selectIngredientFoodEnergy = createSelector(
+  [ingredientDetailsSelector],
+  (constructor) =>
+    memoize(() =>
+      pick<IBurgerIngredientFoodEnergy>(constructor, [
+        'calories',
+        'proteins',
+        'fat',
+        'carbohydrates',
+      ]),
+    ),
+)
 
 const ingredientDetailsSlice = createSlice({
   name: 'ingredientDetails',
@@ -25,7 +41,6 @@ const ingredientDetailsSlice = createSlice({
       state.ingredient = null
     },
   },
-  extraReducers: {},
 })
 
 export const { saveIngredientDetails, removeIngredientDetails } = ingredientDetailsSlice.actions

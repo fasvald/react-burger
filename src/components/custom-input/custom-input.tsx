@@ -2,7 +2,17 @@ import React, { useCallback, useRef, useState } from 'react'
 
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components'
 
-import { ICustomInputProps } from './custom-input.model'
+type TInputTypes = 'text' | 'email' | 'password' | undefined
+
+interface ICustomInputProps {
+  value: string
+  type: TInputTypes
+  name: string
+  placeholder: string
+  size?: 'default' | 'small'
+  onChange(e: React.ChangeEvent<HTMLInputElement>): void
+  validationCb?: (value: string) => boolean | null
+}
 
 // NOTE: This component is custom copy paste from those links with additional changes:
 // - https://github.com/yandex-praktikum/react-developer-burger-ui-components/blob/main/src/ui/password-input.tsx

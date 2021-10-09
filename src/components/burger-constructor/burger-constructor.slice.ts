@@ -98,7 +98,6 @@ export const burgerConstructorSlice = createSlice({
       state.toppings = []
     },
   },
-  extraReducers: {},
 })
 
 export const { addBun, addTopping, removeTopping, swapTopping, clearIngredients } =

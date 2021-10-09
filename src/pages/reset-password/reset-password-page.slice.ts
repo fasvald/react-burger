@@ -11,15 +11,18 @@ import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
-import { IResetPasswordPageState } from './reset-password-page.model'
+interface IResetPasswordPageState {
+  status: TFetchProcess
+  res: TPasswordResetResponse | null
+}
 
 const initialState: IResetPasswordPageState = {
   status: 'idle',
   res: null,
 }
 
-export const passwordResetStatusSelector = (state: RootState): TFetchProcess =>
-  state.resetPassword.status
+export const resetPasswordStatusSelector = (state: RootState): TFetchProcess =>
+  state.resetPasswordPage.status
 
 export const resetPassword = createAsyncThunk<
   TPasswordResetResponse,
@@ -28,7 +31,7 @@ export const resetPassword = createAsyncThunk<
     signal: AbortSignal
     rejectValue: IAxiosSerializedError | string
   }
->('resetPassword/post', async (data: IPasswordResetRequestBody, thunkApi) => {
+>('resetPassword/resetting', async (data: IPasswordResetRequestBody, thunkApi) => {
   try {
     const source = axios.CancelToken.source()
     thunkApi.signal.addEventListener('abort', () => {
@@ -58,13 +61,14 @@ export const resetPassword = createAsyncThunk<
   }
 })
 
-const resetPasswordSlice = createSlice({
-  name: 'resetPassword',
+const resetPasswordPageSlice = createSlice({
+  name: 'resetPasswordPage',
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder.addCase(resetPassword.pending, (state, action) => {
       state.status = 'loading'
+      state.res = null
     })
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       state.status = 'loaded'
@@ -77,4 +81,4 @@ const resetPasswordSlice = createSlice({
   },
 })
 
-export default resetPasswordSlice.reducer
+export default resetPasswordPageSlice.reducer

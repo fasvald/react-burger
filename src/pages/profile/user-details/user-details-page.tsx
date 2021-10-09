@@ -9,18 +9,13 @@ import { isEqual } from 'lodash'
 import { instanceOfAxiosSerializedError } from '../../../common/utils/errors.utils'
 import { isEmailValid, isNameValid } from '../../../common/utils/validators.utils'
 import CustomInput from '../../../components/custom-input/custom-input'
-import Loader from '../../../components/loader/loader'
+import Loader from '../../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
-import {
-  getProfile,
-  profileFetchStatusSelector,
-  profileSelector,
-  updateProfileManually,
-} from '../../../services/slices/profile.slice'
+import { getUser, userSelector, updateUser, saveUser } from '../../../services/slices/user.slice'
 
-import { updateProfile, updateProfileStatusSelector } from './personal-info-page.slice'
+import { fetchUserStatusSelector, updateUserStatusSelector } from './user-details-page.slice'
 
-import styles from './personal-info-page.module.css'
+import styles from './user-details-page.module.css'
 
 const SUCCESS_MESSAGES: Record<string | number, string> = {
   default: 'Персональные данные профиля были изменены успешно.',
@@ -32,24 +27,23 @@ const ERROR_MESSAGES: Record<string | number, string> = {
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-const PersonalInfoPage = (): JSX.Element => {
+const UserDetailsPage = (): JSX.Element => {
   const [form, setForm] = useState({ name: '', email: '' })
   const [isResetAvailable, setIsResetAvailable] = useState(false)
   const [severity, setSeverity] = useState<AlertColor>('error')
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState('')
 
-  const profile = useAppSelector(profileSelector)
-  const profileFetchStatus = useAppSelector(profileFetchStatusSelector)
-  const profileUpdateStatus = useAppSelector(updateProfileStatusSelector)
+  const user = useAppSelector(userSelector)
+  const userFetchStatus = useAppSelector(fetchUserStatusSelector)
+  const userUpdateStatus = useAppSelector(updateUserStatusSelector)
 
   const formRef = useRef<HTMLFormElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const promiseRef = useRef<any>(null)
+  const promiseUserUpdateRef = useRef<any>(null)
 
   const dispatch = useAppDispatch()
 
@@ -76,15 +70,15 @@ const PersonalInfoPage = (): JSX.Element => {
     async (e: SyntheticEvent) => {
       e.preventDefault()
 
-      if (!isFormValid() || isEqual(form, profile)) {
+      if (!isFormValid() || isEqual(form, user)) {
         return
       }
 
-      promiseRef.current = dispatch(updateProfile(form))
+      promiseUserUpdateRef.current = dispatch(updateUser(form))
 
-      const resultAction = await promiseRef.current
+      const resultAction = await promiseUserUpdateRef.current
 
-      if (updateProfile.rejected.match(resultAction)) {
+      if (updateUser.rejected.match(resultAction)) {
         if (instanceOfAxiosSerializedError(resultAction.payload)) {
           setMessage(ERROR_MESSAGES[resultAction.payload.status || 'default'])
           setSeverity('error')
@@ -92,32 +86,25 @@ const PersonalInfoPage = (): JSX.Element => {
         }
       }
 
-      if (updateProfile.fulfilled.match(resultAction)) {
+      if (updateUser.fulfilled.match(resultAction)) {
+        dispatch(saveUser(resultAction.payload.user))
         setMessage(SUCCESS_MESSAGES.default)
         setSeverity('success')
         setOpen(true)
-
-        dispatch(updateProfileManually(form))
       }
     },
-    [dispatch, form, isFormValid, profile],
+    [dispatch, form, isFormValid, user],
   )
 
   const handleFormReset = useCallback(() => {
-    if (!isEqual(form, profile) && profile) {
-      setForm(profile)
+    if (!isEqual(form, user) && user) {
+      setForm(user)
     }
-  }, [form, profile])
-
-  useEffect(() => {
-    return () => {
-      promiseRef.current?.abort()
-    }
-  }, [])
+  }, [form, user])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let promise: any
+    let promiseUserFetch: any
 
     // I don't want to add another wrappers, etc. but it's time consuming to do it properly
     // so we are doing "pro gamer moves" to set a proper type for buttons. Because unlucky for us the
@@ -134,31 +121,38 @@ const PersonalInfoPage = (): JSX.Element => {
       formCancelBtnEl.setAttribute('type', 'button')
     }
 
-    const fetchProfile = async () => {
-      promise = dispatch(getProfile())
+    const fetchUser = async () => {
+      promiseUserFetch = dispatch(getUser())
 
-      const resultAction = await promise
+      const resultAction = await promiseUserFetch
 
-      if (getProfile.fulfilled.match(resultAction)) {
+      if (getUser.fulfilled.match(resultAction)) {
         setForm(resultAction.payload.user)
+        dispatch(saveUser(resultAction.payload.user))
       }
     }
 
     // So we check if the user is logged in (with tokens and fetch the data)
-    if (profile) {
-      setForm(profile)
+    if (user) {
+      setForm(user)
     } else {
-      fetchProfile()
+      fetchUser()
     }
 
     return () => {
-      promise?.abort()
+      promiseUserFetch && promiseUserFetch?.abort()
     }
-  }, [dispatch, profile])
+  }, [dispatch, user])
 
   useEffect(() => {
-    setIsResetAvailable(!isEqual(form, profile))
-  }, [form, profile])
+    setIsResetAvailable(!isEqual(form, user))
+  }, [form, user])
+
+  useEffect(() => {
+    return () => {
+      promiseUserUpdateRef.current && promiseUserUpdateRef.current?.abort()
+    }
+  }, [])
 
   const formWrapperClass = useMemo(
     () => classNames('sb-form sb-form_default sb-form_profile', styles.wrapper),
@@ -166,11 +160,11 @@ const PersonalInfoPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () => classNames('sb-form__body', !isFormValid() || isEqual(form, profile) ? 'isDisabled' : ''),
-    [isFormValid, form, profile],
+    () => classNames('sb-form__body', !isFormValid() || isEqual(form, user) ? 'isDisabled' : ''),
+    [isFormValid, form, user],
   )
 
-  if (profileFetchStatus === 'error') {
+  if (userFetchStatus === 'error') {
     return (
       <div className={styles.error}>
         <p className='text text_type_main-medium'>{ERROR_MESSAGES.fetchProfileFailed}</p>
@@ -178,14 +172,14 @@ const PersonalInfoPage = (): JSX.Element => {
     )
   }
 
-  if (profileFetchStatus === 'loading') {
+  if (userFetchStatus === 'loading') {
     return <Loader />
   }
 
   return (
     <>
       <div className={formWrapperClass}>
-        {profile && (
+        {user && (
           <form className={formClass} ref={formRef} onSubmit={handleFormSubmit}>
             <div className='sb-form__body-input-el'>
               <CustomInput
@@ -208,8 +202,8 @@ const PersonalInfoPage = (): JSX.Element => {
               />
             </div>
             <Button type='primary' size='large'>
-              {profileUpdateStatus !== 'loading' && <span>Сохранить</span>}
-              {profileUpdateStatus === 'loading' && (
+              {userUpdateStatus !== 'loading' && <span>Сохранить</span>}
+              {userUpdateStatus === 'loading' && (
                 <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
               )}
             </Button>
@@ -235,4 +229,4 @@ const PersonalInfoPage = (): JSX.Element => {
   )
 }
 
-export default React.memo(PersonalInfoPage)
+export default React.memo(UserDetailsPage)

@@ -27,14 +27,14 @@ export const orderSelector = (state: RootState): IOrderDetails | null => state.o
 export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
   state.orderDetails.status
 
-export const createOrder = createAsyncThunk<
+export const checkoutOrder = createAsyncThunk<
   IOrderDetailsResponse,
   IOrderDetailsBody,
   {
     signal: AbortSignal
     rejectValue: IAxiosSerializedError | string
   }
->('orderDetails/post', async (data: IOrderDetailsBody, thunkApi) => {
+>('order/checkout', async (data: IOrderDetailsBody, thunkApi) => {
   try {
     const source = axios.CancelToken.source()
     thunkApi.signal.addEventListener('abort', () => {
@@ -53,7 +53,9 @@ export const createOrder = createAsyncThunk<
     // https://github.com/microsoft/TypeScript/issues/20024
     // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
     if (axios.isCancel(err)) {
-      return thunkApi.rejectWithValue('Order creation stop the work. This has been aborted!')
+      return thunkApi.rejectWithValue(
+        'Order creation (checkout) stop the work. This has been aborted!',
+      )
     }
 
     if (axios.isAxiosError(err)) {
@@ -69,14 +71,15 @@ export const orderDetailsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(createOrder.pending, (state, action) => {
+    builder.addCase(checkoutOrder.pending, (state) => {
       state.status = 'loading'
+      state.order = null
     })
-    builder.addCase(createOrder.fulfilled, (state, action) => {
+    builder.addCase(checkoutOrder.fulfilled, (state, action) => {
       state.status = 'loaded'
       state.order = action.payload
     })
-    builder.addCase(createOrder.rejected, (state, action) => {
+    builder.addCase(checkoutOrder.rejected, (state) => {
       state.status = 'error'
       state.order = null
     })

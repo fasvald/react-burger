@@ -31,7 +31,7 @@
   height: 40px;
 }
 
-.error {
+.loaderWrapper {
   display: inline-flex;
   justify-content: center;
   align-items: center;

@@ -1,16 +1,21 @@
 import React, { useCallback, useMemo } from 'react'
 
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress'
+import { styled } from '@mui/material/styles'
 import classNames from 'classnames'
 import Cookies from 'js-cookie'
 import { nanoid } from 'nanoid'
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router'
-import { NavLink } from 'react-router-dom'
+import { Route, Switch, useHistory, useRouteMatch, NavLink } from 'react-router-dom'
 
-import { useAppDispatch } from '../../hooks'
+import themeOptions from '../../common/constants/theme.constant'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { clearAuthorizedUser, signOut } from '../../services/slices/auth.slice'
+import { clearUser } from '../../services/slices/user.slice'
+import { RedirectToNotFound } from '../not-found/not-found-page'
 
 import OrderListPage from './order-list/order-list-page'
-import PersonalInfoPage from './personal-info/personal-info-page'
+import { signOutStatusSelector } from './profile-page.slice'
+import PersonalInfoPage from './user-details/user-details-page'
 
 import styles from './profile-page.module.css'
 
@@ -38,12 +43,25 @@ const getRoutes = (path: string, url: string) => [
   },
 ]
 
+const LinearProgressCustom = styled(LinearProgress)(({ theme }) => ({
+  // height: 10,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: themeOptions.palette.primary.dark,
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    backgroundColor: themeOptions.palette.primary.main,
+  },
+}))
+
 const ProfilePage = (): JSX.Element => {
+  const signOutStatus = useAppSelector(signOutStatusSelector)
+
   // The `path` lets us build <Route> paths that are
   // relative to the parent route, while the `url` lets
   // us build relative links.
   const { path, url } = useRouteMatch()
   const history = useHistory()
+
   const dispatch = useAppDispatch()
 
   const routes = useMemo(() => getRoutes(path, url), [path, url])
@@ -55,6 +73,7 @@ const ProfilePage = (): JSX.Element => {
       Cookies.remove('sb-refreshToken', { path: '/' })
       Cookies.remove('sb-authToken', { path: '/' })
 
+      dispatch(clearUser())
       dispatch(clearAuthorizedUser())
 
       history.push('/login')
@@ -95,7 +114,12 @@ const ProfilePage = (): JSX.Element => {
           <li className={styles.listItem}>
             {/* NOTE: Either button or https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md#case-i-need-the-html-to-be-interactive-dont-i-need-to-use-an-a-tag-for-that (div with role) */}
             <button type='button' className={listItemLinkBtnClass} onClick={handleClick}>
-              Выход
+              <span>Выход</span>
+              {signOutStatus === 'loading' && (
+                <div className={styles.listItemLinkLoader}>
+                  <LinearProgressCustom />
+                </div>
+              )}
             </button>
           </li>
         </ul>
@@ -125,6 +149,9 @@ const ProfilePage = (): JSX.Element => {
               <route.main />
             </Route>
           ))}
+          <Route path='*'>
+            <RedirectToNotFound />
+          </Route>
         </Switch>
       </div>
     </div>

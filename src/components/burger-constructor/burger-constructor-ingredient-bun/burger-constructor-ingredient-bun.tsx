@@ -3,9 +3,13 @@ import React, { useMemo } from 'react'
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 
-import { IBurgerConstructorIngredientBunProps } from './burger-constructor-ingredient-bun.model'
+import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
 
 import styles from './burger-constructor-ingredient-bun.module.css'
+
+interface IBurgerConstructorIngredientBunProps extends IBurgerConstructorIngredientProps {
+  direction: 'top' | 'bottom'
+}
 
 const BurgerConstructorIngredientBun = ({
   className,

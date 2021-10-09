@@ -16,7 +16,10 @@ import { getSerializedAxiosError } from '../../common/utils/errors.utils'
 import apiInstance from '../../services/interceptors/client.interceptor'
 import { RootState } from '../../store'
 
-import { IBurgerIngredientsState } from './burger-ingredients.model'
+interface IBurgerIngredientsState {
+  status: TFetchProcess
+  items: IBurgerIngredient[]
+}
 
 const initialState: IBurgerIngredientsState = {
   status: 'idle',
@@ -50,14 +53,14 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
  * Still there are plenty of advantages, but I am going to use createAsyncThunk for this project. Also because of
  * integration with Axios library for HTTP requests.
  */
-export const fetchIngredients = createAsyncThunk<
+export const getIngredients = createAsyncThunk<
   IBurgerIngredient[],
   undefined,
   {
     signal: AbortSignal
     rejectValue: IAxiosSerializedError | string
   }
->('burgerIngredients/get', async (_, thunkApi) => {
+>('ingredients/fetchAll', async (_, thunkApi) => {
   try {
     const source = axios.CancelToken.source()
     thunkApi.signal.addEventListener('abort', () => {
@@ -89,16 +92,17 @@ export const burgerIngredientsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchIngredients.pending, (state, action) => {
+    builder.addCase(getIngredients.pending, (state) => {
       state.status = 'loading'
+      state.items = []
     })
-    builder.addCase(fetchIngredients.fulfilled, (state, action) => {
+    builder.addCase(getIngredients.fulfilled, (state, action) => {
       state.status = 'loaded'
       state.items = action.payload
     })
-    builder.addCase(fetchIngredients.rejected, (state, action) => {
-      state.items = []
+    builder.addCase(getIngredients.rejected, (state) => {
       state.status = 'error'
+      state.items = []
     })
   },
 })

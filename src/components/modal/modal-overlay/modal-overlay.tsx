@@ -1,8 +1,12 @@
-import React, { useCallback } from 'react'
+import React, { RefObject, useCallback } from 'react'
 
-import { IModalOverlayProps } from './modal-overlay.model'
+import { IModalRefObject } from '../modal.model'
 
 import styles from './modal-overlay.module.css'
+
+interface IModalOverlayProps {
+  modal: RefObject<IModalRefObject>
+}
 
 const ModalOverlay = ({ modal }: IModalOverlayProps): JSX.Element => {
   const handleClick = useCallback(

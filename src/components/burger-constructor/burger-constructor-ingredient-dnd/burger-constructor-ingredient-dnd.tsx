@@ -5,18 +5,24 @@ import classNames from 'classnames'
 import { useDrag, useDrop } from 'react-dnd'
 
 import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
+import { IBurgerIngredientUnique } from '../../../common/models/data.model'
+import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
 
-import { IBurgerConstructorIngredientDraggable } from './burger-constructor-ingredient-draggable.model'
+import styles from './burger-constructor-ingredient-dnd.module.css'
 
-import styles from './burger-constructor-ingredient-draggable.module.css'
+interface IBurgerConstructorIngredientDnd extends IBurgerConstructorIngredientProps {
+  moveIngredient: (id: string, atIndex: number) => void
+  findIngredient: (id: string) => { topping: IBurgerIngredientUnique; index: number }
+  removeIngredient: (ingredient: IBurgerIngredientUnique) => void
+}
 
-const BurgerConstructorIngredientDraggable = ({
+const BurgerConstructorIngredientDnd = ({
   className,
   ingredient,
   moveIngredient,
   findIngredient,
   removeIngredient,
-}: IBurgerConstructorIngredientDraggable): JSX.Element => {
+}: IBurgerConstructorIngredientDnd): JSX.Element => {
   // Same thing as for BurgerIngredientsCard => preventing re-render, but there is an option to
   // use arrow function on ConstructorElement, because it's a last element in chain.
   const handleClose = useCallback(() => {
@@ -89,4 +95,4 @@ const BurgerConstructorIngredientDraggable = ({
   )
 }
 
-export default React.memo(BurgerConstructorIngredientDraggable)
+export default React.memo(BurgerConstructorIngredientDnd)
