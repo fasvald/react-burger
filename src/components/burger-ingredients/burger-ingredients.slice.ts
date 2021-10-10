@@ -58,35 +58,53 @@ export const getIngredients = createAsyncThunk<
   IBurgerIngredient[],
   undefined,
   {
+    state: RootState
     signal: AbortSignal
     rejectValue: IAxiosSerializedError | string
   }
->('ingredients/fetchAll', async (_, thunkApi) => {
-  try {
-    const source = axios.CancelToken.source()
-    thunkApi.signal.addEventListener('abort', () => {
-      source.cancel('Operation stop the work.')
-    })
+>(
+  'ingredients/fetchAll',
+  async (_, thunkApi) => {
+    try {
+      const source = axios.CancelToken.source()
+      thunkApi.signal.addEventListener('abort', () => {
+        source.cancel('Operation stop the work.')
+      })
 
-    const response = await apiInstance.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
-      cancelToken: source.token,
-    })
+      const response = await apiInstance.get<IBurgerIngredientFetch>(API_ENDPOINTS.ingredients, {
+        cancelToken: source.token,
+      })
 
-    return response.data.data
-  } catch (err) {
-    // https://github.com/microsoft/TypeScript/issues/20024
-    // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-    if (axios.isCancel(err)) {
-      return thunkApi.rejectWithValue('Ingredients fetching stop the work. This has been aborted!')
+      return response.data.data
+    } catch (err) {
+      // https://github.com/microsoft/TypeScript/issues/20024
+      // https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
+      if (axios.isCancel(err)) {
+        return thunkApi.rejectWithValue(
+          'Ingredients fetching stop the work. This has been aborted!',
+        )
+      }
+
+      if (axios.isAxiosError(err)) {
+        return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
+      }
+
+      return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
     }
+  },
+  {
+    // eslint-disable-next-line consistent-return
+    condition: (_, thunkApi) => {
+      const { burgerIngredients } = thunkApi.getState()
+      const fetchStatus = burgerIngredients.status
 
-    if (axios.isAxiosError(err)) {
-      return thunkApi.rejectWithValue(getSerializedAxiosError(err) as IAxiosSerializedError)
-    }
-
-    return thunkApi.rejectWithValue((err as IUnknownDefaultError).message)
-  }
-})
+      if (fetchStatus === 'loaded' || fetchStatus === 'loading') {
+        // Already fetched or in progress, don't need to re-fetch
+        return false
+      }
+    },
+  },
+)
 
 export const burgerIngredientsSlice = createSlice({
   name: 'burgerIngredients',

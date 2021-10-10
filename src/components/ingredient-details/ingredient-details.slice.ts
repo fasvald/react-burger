@@ -1,13 +1,11 @@
 /* eslint-disable no-param-reassign */
 
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { memoize, pick } from 'lodash'
+import { memoize } from 'lodash'
 
 import { RootState } from '../../store'
-import {
-  IBurgerIngredient,
-  IBurgerIngredientFoodEnergy,
-} from '../burger-ingredients/burger-ingredients.model'
+import { IBurgerIngredient } from '../burger-ingredients/burger-ingredients.model'
+import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
 
 interface IIngredientDetailsState {
   ingredient: IBurgerIngredient | null
@@ -17,19 +15,16 @@ const initialState: IIngredientDetailsState = {
   ingredient: null,
 }
 
-export const ingredientDetailsSelector = (state: RootState): IBurgerIngredient | null =>
+export const chosenIngredientDetailsSelector = (state: RootState): IBurgerIngredient | null =>
   state.ingredientDetails.ingredient
 
-export const selectIngredientFoodEnergy = createSelector(
-  [ingredientDetailsSelector],
-  (constructor) =>
-    memoize(() =>
-      pick<IBurgerIngredientFoodEnergy>(constructor, [
-        'calories',
-        'proteins',
-        'fat',
-        'carbohydrates',
-      ]),
+// It will pick either chosen ingredient if it in the store (when user clicks on ingredient card)
+// or try to find among all ingredients by ID (in case when user reload the page and chosen by click disappeared)
+export const selectChosenIngredient = createSelector(
+  [chosenIngredientDetailsSelector, ingredientsSelector],
+  (chosenIngredient, ingredients) =>
+    memoize(
+      (id?: string) => chosenIngredient || ingredients.find((ingredient) => ingredient._id === id),
     ),
 )
 
