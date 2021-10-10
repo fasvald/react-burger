@@ -54,7 +54,7 @@ const LoginPage = (): JSX.Element => {
     return isPasswordValid(form.password) && isEmailValid(form.email)
   }, [form.password, form.email])
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }

@@ -59,7 +59,7 @@ const ForgotPasswordPage = (): JSX.Element => {
     return isEmailValid(form.email)
   }, [form.email])
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }

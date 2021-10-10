@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -15,7 +15,6 @@ import {
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
 import Loader from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'
-import { IModalRefObject } from '../modal/modal.model'
 import OrderDetails from '../order-details/order-details'
 import {
   orderSelector,
@@ -40,6 +39,8 @@ import {
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
+  const [openModal, setOpenModal] = useState(false)
+
   const auth = useAppSelector(authSelector)
   const buns = useAppSelector(bunsSelector)
   const toppings = useAppSelector(toppingsSelector)
@@ -49,13 +50,16 @@ const BurgerConstructor = (): JSX.Element => {
   const orderCreationStatus = useAppSelector(orderCreationStatusSelector)
   const ingredients = useAppSelector(ingredientsSelector)
 
-  const modal = useRef<IModalRefObject>(null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
   const location = useLocation()
   const history = useHistory()
   const dispatch = useAppDispatch()
+
+  const handleModalClose = useCallback(() => {
+    setOpenModal(false)
+  }, [])
 
   const removeIngredient = useCallback(
     (ingredient: IBurgerIngredientUnique) => {
@@ -65,6 +69,11 @@ const BurgerConstructor = (): JSX.Element => {
   )
 
   const bookOrder = useCallback(async () => {
+    // Check if burger has at least 1 topping and 1 bun
+    if (!toppings.length || !buns.length) {
+      return
+    }
+
     if (!auth.user) {
       history.push({
         pathname: '/login',
@@ -72,11 +81,6 @@ const BurgerConstructor = (): JSX.Element => {
           from: location.pathname,
         },
       })
-    }
-
-    // Check if burger has at least 1 topping and 1 bun
-    if (!toppings.length || !buns.length) {
-      return
     }
 
     promiseRef.current = dispatch(checkoutOrder({ ingredients: ingredientsID }))
@@ -87,8 +91,9 @@ const BurgerConstructor = (): JSX.Element => {
       return
     }
 
+    setOpenModal(true)
+
     dispatch(clearIngredients())
-    modal.current?.open()
   }, [dispatch, ingredientsID, toppings, buns, auth.user, history, location.pathname])
 
   const findIngredient = useCallback(
@@ -212,7 +217,9 @@ const BurgerConstructor = (): JSX.Element => {
           )}
         </Button>
       </div>
-      <Modal ref={modal}>{order && <OrderDetails orderDetails={order} />}</Modal>
+      <Modal open={openModal} onClose={handleModalClose}>
+        {order && <OrderDetails orderDetails={order} />}
+      </Modal>
     </section>
   )
 }

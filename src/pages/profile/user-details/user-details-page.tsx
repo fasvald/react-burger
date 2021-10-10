@@ -51,7 +51,7 @@ const UserDetailsPage = (): JSX.Element => {
     return isEmailValid(form.email) && isNameValid(form.name)
   }, [form.email, form.name])
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }

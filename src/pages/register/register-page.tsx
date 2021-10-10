@@ -57,7 +57,7 @@ const RegisterPage = (): JSX.Element => {
     }))
   }, [])
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }

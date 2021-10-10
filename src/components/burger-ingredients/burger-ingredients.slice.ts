@@ -35,6 +35,10 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
   ),
 )
 
+export const selectIngredientById = createSelector([ingredientsSelector], (ingredients) =>
+  memoize((id: string) => ingredients.find((ingredient) => ingredient._id === id)),
+)
+
 /**
  * NOTE: Could be changed via RTK Query feature => createAPI, but it's a little bit harder and there are
  * a lot of theory and new info how to use it. I do not like that in that case all selectors should be like

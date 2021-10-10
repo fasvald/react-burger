@@ -46,7 +46,7 @@ const ResetPasswordPage = (): JSX.Element => {
     return isPasswordValid(form.password) && isTokenPasswordChangeValid(form.token)
   }, [form.password, form.token])
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }

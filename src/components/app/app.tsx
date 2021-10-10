@@ -21,6 +21,7 @@ import BurgerConstructor from '../burger-constructor/burger-constructor'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import IngredientDetails from '../ingredient-details/ingredient-details'
 import Loader from '../loader-circular/loader-circular'
+import Modal from '../modal/modal'
 import ProtectedRoute from '../routing/protected-route/protected-route'
 
 import AppContent from './app-content/app-content'
@@ -31,10 +32,9 @@ import styles from './app.module.css'
 
 const App = (): JSX.Element => {
   const [userIsReady, setUserIsReady] = useState(false)
-
   const auth = useAppSelector(authSelector)
-
   const location = useLocation<IModalRouteLocationState | Location>()
+  const dispatch = useAppDispatch()
 
   const backgroundLocation = useMemo(() => {
     if (isInstanceOfModalRouteLocationState(location.state)) {
@@ -43,8 +43,6 @@ const App = (): JSX.Element => {
 
     return undefined
   }, [location])
-
-  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const refreshToken = Cookies.get('sb-refreshToken')
@@ -75,40 +73,47 @@ const App = (): JSX.Element => {
             <Loader />
           </div>
         ) : (
-          <Switch location={backgroundLocation || location}>
-            <Route exact path='/'>
-              <DndProvider backend={HTML5Backend}>
-                {/* NOTE: Because I want to pass custom click events to modal, I need to pass that
-                location.state obj because it will override by location value from Switch component */}
-                <BurgerIngredients modalLocation={location.state} />
-                <BurgerConstructor />
-              </DndProvider>
-            </Route>
-            <Route path='/ingredients/:id'>
-              <IngredientDetails ingredient={null} />
-            </Route>
-            <Route path='/login'>
-              <LoginPage />
-            </Route>
-            <Route path='/register'>
-              <RegisterPage />
-            </Route>
-            <Route path='/forgot-password'>
-              <ForgotPasswordPage />
-            </Route>
-            <Route path='/reset-password'>
-              <ResetPasswordPage />
-            </Route>
-            <Route path='/not-found'>
-              <NotFoundPage />
-            </Route>
-            <ProtectedRoute path='/profile'>
-              <ProfilePage />
-            </ProtectedRoute>
-            <Route path='*'>
-              <RedirectToNotFound />
-            </Route>
-          </Switch>
+          <>
+            <Switch location={backgroundLocation || location}>
+              <Route exact path='/'>
+                <DndProvider backend={HTML5Backend}>
+                  <BurgerIngredients />
+                  <BurgerConstructor />
+                </DndProvider>
+              </Route>
+              <Route path='/ingredients/:id'>
+                <IngredientDetails isFullSizePage />
+              </Route>
+              <Route path='/login'>
+                <LoginPage />
+              </Route>
+              <Route path='/register'>
+                <RegisterPage />
+              </Route>
+              <Route path='/forgot-password'>
+                <ForgotPasswordPage />
+              </Route>
+              <Route path='/reset-password'>
+                <ResetPasswordPage />
+              </Route>
+              <Route path='/not-found'>
+                <NotFoundPage />
+              </Route>
+              <ProtectedRoute path='/profile'>
+                <ProfilePage />
+              </ProtectedRoute>
+              <Route path='*'>
+                <RedirectToNotFound />
+              </Route>
+            </Switch>
+            {backgroundLocation && (
+              <Route path='/ingredients/:id'>
+                <Modal open isModalRoute>
+                  <IngredientDetails />
+                </Modal>
+              </Route>
+            )}
+          </>
         )}
       </AppContent>
       <AppFooter className={styles.footer} />
