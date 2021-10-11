@@ -13,7 +13,7 @@ import {
   IBurgerIngredientUnique,
 } from '../burger-ingredients/burger-ingredients.model'
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
-import Loader from '../loader-circular/loader-circular'
+import LoaderCircular from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'
 import OrderDetails from '../order-details/order-details'
 import {
@@ -213,7 +213,7 @@ const BurgerConstructor = (): JSX.Element => {
         <Button type='primary' size='large' onClick={bookOrder}>
           {orderCreationStatus !== 'loading' && <span>Оформить заказ</span>}
           {orderCreationStatus === 'loading' && (
-            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+            <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
           )}
         </Button>
       </div>

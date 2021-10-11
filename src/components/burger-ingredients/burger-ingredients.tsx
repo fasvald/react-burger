@@ -1,16 +1,12 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import Loader from '../loader-circular/loader-circular'
+import { useAppSelector } from '../../hooks'
+import LoaderCircular from '../loader-circular/loader-circular'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
-import {
-  ingredientsSelector,
-  ingredientsFetchStatusSelector,
-  getIngredients,
-} from './burger-ingredients.slice'
+import { ingredientsSelector, ingredientsFetchStatusSelector } from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
 
@@ -18,27 +14,11 @@ const BurgerIngredients = (): JSX.Element => {
   const ingredients = useAppSelector(ingredientsSelector)
   const status = useAppSelector(ingredientsFetchStatusSelector)
 
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const promise = dispatch(getIngredients())
-
-    const fetchIngredients = async () => {
-      await promise
-    }
-
-    fetchIngredients()
-
-    return () => {
-      promise && promise?.abort()
-    }
-  }, [dispatch])
-
   const sectionTitleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])
 
   return (
     <section className={styles.section}>
-      {status === 'loading' && <Loader />}
+      {status === 'loading' && <LoaderCircular />}
       {status === 'error' && (
         <div className={styles.error}>
           <p className='text text_type_main-medium'>

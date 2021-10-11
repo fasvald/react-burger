@@ -1,32 +1,17 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { forwardRef, Ref, useCallback, useImperativeHandle, useRef, useState } from 'react'
 
 import { Input } from '@ya.praktikum/react-developer-burger-ui-components'
 
-type TInputTypes = 'text' | 'email' | 'password' | undefined
-
-interface ICustomInputProps {
-  value: string
-  type: TInputTypes
-  name: string
-  placeholder: string
-  size?: 'default' | 'small'
-  onChange(e: React.ChangeEvent<HTMLInputElement>): void
-  validationCb?: (value: string) => boolean | null
-}
+import { ICustomInputProps, ICustomInputRefProps } from './custom-input.model'
 
 // NOTE: This component is custom copy paste from those links with additional changes:
 // - https://github.com/yandex-praktikum/react-developer-burger-ui-components/blob/main/src/ui/password-input.tsx
 // - https://github.com/yandex-praktikum/react-developer-burger-ui-components/blob/main/src/ui/email-input.tsx
 
-const CustomInput = ({
-  value,
-  type,
-  name,
-  placeholder,
-  size = 'default',
-  onChange,
-  validationCb,
-}: ICustomInputProps): JSX.Element => {
+const CustomInput = (
+  { value, type, name, placeholder, size = 'default', onChange, validationCb }: ICustomInputProps,
+  ref: Ref<ICustomInputRefProps>,
+): JSX.Element => {
   const [fieldDisabled, setDisabled] = useState(true)
   const [error, setError] = useState(false)
 
@@ -66,6 +51,13 @@ const CustomInput = ({
     [validateField],
   )
 
+  // It's kind of hack to make workable "reset" form feature, because we need to make our form "clean => pristine" (Angular ref)
+  useImperativeHandle(ref, () => ({
+    setPristine: () => {
+      setError(false)
+    },
+  }))
+
   return (
     <Input
       type={type}
@@ -86,4 +78,4 @@ const CustomInput = ({
   )
 }
 
-export default React.memo(CustomInput)
+export default React.memo(forwardRef<ICustomInputRefProps, ICustomInputProps>(CustomInput))

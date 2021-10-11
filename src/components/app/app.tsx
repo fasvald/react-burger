@@ -4,7 +4,7 @@ import { Location } from 'history'
 import Cookies from 'js-cookie'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Switch, Route, useLocation } from 'react-router-dom'
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom'
 
 import { isInstanceOfModalRouteLocationState } from '../../common/guards/routing.guards'
 import { IModalRouteLocationState } from '../../common/models/routing.model'
@@ -19,8 +19,9 @@ import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.sli
 import { getUser } from '../../services/slices/user.slice'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
+import { getIngredients } from '../burger-ingredients/burger-ingredients.slice'
 import IngredientDetails from '../ingredient-details/ingredient-details'
-import Loader from '../loader-circular/loader-circular'
+import LoaderCircular from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'
 import ProtectedRoute from '../routing/protected-route/protected-route'
 
@@ -31,23 +32,31 @@ import AppHeader from './app-header/app-header'
 import styles from './app.module.css'
 
 const App = (): JSX.Element => {
-  const [userIsReady, setUserIsReady] = useState(false)
+  const [appIsReady, setAppIsReady] = useState(false)
+
   const auth = useAppSelector(authSelector)
+
+  const history = useHistory()
   const location = useLocation<IModalRouteLocationState | Location>()
+
   const dispatch = useAppDispatch()
 
   const backgroundLocation = useMemo(() => {
     if (isInstanceOfModalRouteLocationState(location.state)) {
-      return location.state && location.state.background
+      return (
+        (history.action === 'PUSH' || history.action === 'REPLACE') &&
+        location.state &&
+        location.state.background
+      )
     }
 
     return undefined
-  }, [location])
+  }, [location, history.action])
 
   useEffect(() => {
-    const refreshToken = Cookies.get('sb-refreshToken')
+    const setUpApp = async () => {
+      const refreshToken = Cookies.get('sb-refreshToken')
 
-    const setUpUser = async () => {
       if (refreshToken && !auth.user) {
         const resultAction = await dispatch(getUser())
 
@@ -56,21 +65,21 @@ const App = (): JSX.Element => {
         }
       }
 
-      setUserIsReady(true)
+      await dispatch(getIngredients())
 
-      return Promise.resolve()
+      setAppIsReady(true)
     }
 
-    setUpUser()
+    setUpApp()
   }, [auth.isLoggedIn, auth.user, dispatch])
 
   return (
     <div className={styles.wrapper}>
       <AppHeader className={styles.header} />
       <AppContent className={styles.content}>
-        {!userIsReady ? (
+        {!appIsReady ? (
           <div className={styles.loaderWrapper}>
-            <Loader />
+            <LoaderCircular />
           </div>
         ) : (
           <>

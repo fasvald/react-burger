@@ -7,9 +7,10 @@ import classNames from 'classnames'
 import { isEqual } from 'lodash'
 
 import { isInstanceOfAxiosSerializedError } from '../../../common/guards/errors.guards'
-import { isEmailValid, isNameValid } from '../../../common/utils/validators.utils'
+import { isEmailValid, isNameValid, isPasswordValid } from '../../../common/utils/validators.utils'
 import CustomInput from '../../../components/custom-input/custom-input'
-import Loader from '../../../components/loader-circular/loader-circular'
+import { ICustomInputRefProps } from '../../../components/custom-input/custom-input.model'
+import LoaderCircular from '../../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { getUser, userSelector, updateUser, saveUser } from '../../../services/slices/user.slice'
 
@@ -31,7 +32,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 })
 
 const UserDetailsPage = (): JSX.Element => {
-  const [form, setForm] = useState({ name: '', email: '' })
+  const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [isResetAvailable, setIsResetAvailable] = useState(false)
   const [severity, setSeverity] = useState<AlertColor>('error')
   const [open, setOpen] = useState(false)
@@ -42,14 +43,18 @@ const UserDetailsPage = (): JSX.Element => {
   const userUpdateStatus = useAppSelector(updateUserStatusSelector)
 
   const formRef = useRef<HTMLFormElement>(null)
+  const nameInputRef = useRef<ICustomInputRefProps>(null)
+  const emailInputRef = useRef<ICustomInputRefProps>(null)
+  const passwordInputRef = useRef<ICustomInputRefProps>(null)
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseUserUpdateRef = useRef<any>(null)
 
   const dispatch = useAppDispatch()
 
   const isFormValid = useCallback(() => {
-    return isEmailValid(form.email) && isNameValid(form.name)
-  }, [form.email, form.name])
+    return isEmailValid(form.email) && isNameValid(form.name) && isPasswordValid(form.password)
+  }, [form.email, form.name, form.password])
 
   const handleSnackbarClose = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -70,7 +75,7 @@ const UserDetailsPage = (): JSX.Element => {
     async (e: SyntheticEvent) => {
       e.preventDefault()
 
-      if (!isFormValid() || isEqual(form, user)) {
+      if (!isFormValid() || isEqual(form, { ...user, password: '' })) {
         return
       }
 
@@ -97,8 +102,13 @@ const UserDetailsPage = (): JSX.Element => {
   )
 
   const handleFormReset = useCallback(() => {
-    if (!isEqual(form, user) && user) {
-      setForm(user)
+    if (!isEqual(form, { ...user, password: '' }) && user) {
+      setForm({ ...user, password: '' })
+
+      // Make form/inputs (great) pristine again
+      nameInputRef.current?.setPristine()
+      emailInputRef.current?.setPristine()
+      passwordInputRef.current?.setPristine()
     }
   }, [form, user])
 
@@ -127,14 +137,14 @@ const UserDetailsPage = (): JSX.Element => {
       const resultAction = await promiseUserFetch
 
       if (getUser.fulfilled.match(resultAction)) {
-        setForm(resultAction.payload.user)
+        setForm({ ...resultAction.payload.user, password: '' })
         dispatch(saveUser(resultAction.payload.user))
       }
     }
 
     // So we check if the user is logged in (with tokens and fetch the data)
     if (user) {
-      setForm(user)
+      setForm({ ...user, password: '' })
     } else {
       fetchUser()
     }
@@ -145,7 +155,7 @@ const UserDetailsPage = (): JSX.Element => {
   }, [dispatch, user])
 
   useEffect(() => {
-    setIsResetAvailable(!isEqual(form, user))
+    setIsResetAvailable(!isEqual(form, { ...user, password: '' }))
   }, [form, user])
 
   useEffect(() => {
@@ -160,8 +170,13 @@ const UserDetailsPage = (): JSX.Element => {
   )
 
   const formClass = useMemo(
-    () => classNames('sb-form__body', !isFormValid() || isEqual(form, user) ? 'isDisabled' : ''),
-    [isFormValid, form, user],
+    () =>
+      classNames(
+        'sb-form__body',
+        !isFormValid() || isEqual(form, { ...user, password: '' }) ? 'isDisabled' : '',
+        isResetAvailable ? '' : 'isResetDisabled',
+      ),
+    [isFormValid, form, user, isResetAvailable],
   )
 
   if (userFetchStatus === 'error') {
@@ -173,7 +188,7 @@ const UserDetailsPage = (): JSX.Element => {
   }
 
   if (userFetchStatus === 'loading') {
-    return <Loader />
+    return <LoaderCircular />
   }
 
   return (
@@ -183,6 +198,7 @@ const UserDetailsPage = (): JSX.Element => {
           <form className={formClass} ref={formRef} onSubmit={handleFormSubmit}>
             <div className='sb-form__body-input-el'>
               <CustomInput
+                ref={nameInputRef}
                 type='text'
                 name='name'
                 placeholder='Имя'
@@ -193,6 +209,7 @@ const UserDetailsPage = (): JSX.Element => {
             </div>
             <div className='sb-form__body-input-el'>
               <CustomInput
+                ref={emailInputRef}
                 type='email'
                 name='email'
                 placeholder='Email'
@@ -201,17 +218,26 @@ const UserDetailsPage = (): JSX.Element => {
                 validationCb={isEmailValid}
               />
             </div>
+            <div className='sb-form__body-input-el'>
+              <CustomInput
+                ref={passwordInputRef}
+                type='password'
+                name='password'
+                placeholder='Введите новый пароль'
+                value={form.password}
+                onChange={handleFormChange}
+                validationCb={isPasswordValid}
+              />
+            </div>
             <Button type='primary' size='large'>
               {userUpdateStatus !== 'loading' && <span>Сохранить</span>}
               {userUpdateStatus === 'loading' && (
-                <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+                <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
               )}
             </Button>
-            {isResetAvailable && (
-              <Button type='secondary' size='large' onClick={handleFormReset}>
-                Отменить
-              </Button>
-            )}
+            <Button type='secondary' size='large' onClick={handleFormReset}>
+              Отменить
+            </Button>
           </form>
         )}
       </div>

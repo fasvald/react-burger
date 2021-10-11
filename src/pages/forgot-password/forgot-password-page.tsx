@@ -8,7 +8,7 @@ import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 
 import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isEmailValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader-circular/loader-circular'
+import LoaderCircular from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector } from '../../services/slices/auth.slice'
 
@@ -143,7 +143,7 @@ const ForgotPasswordPage = (): JSX.Element => {
           <Button type='primary' size='large'>
             {passwordForgotStatus !== 'loading' && <span>Восстановить</span>}
             {passwordForgotStatus === 'loading' && (
-              <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+              <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
             )}
           </Button>
         </form>

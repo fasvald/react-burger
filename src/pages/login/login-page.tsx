@@ -15,7 +15,7 @@ import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.gua
 import { TSignInResponse } from '../../common/models/auth.model'
 import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
 import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader-circular/loader-circular'
+import LoaderCircular from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector, saveAuthorizedUser, signIn } from '../../services/slices/auth.slice'
 
@@ -151,7 +151,7 @@ const LoginPage = (): JSX.Element => {
           <Button type='primary' size='large'>
             {signInStatus !== 'loading' && <span>Войти</span>}
             {signInStatus === 'loading' && (
-              <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+              <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
             )}
           </Button>
         </form>

@@ -13,7 +13,7 @@ import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
-import Loader from '../../components/loader-circular/loader-circular'
+import LoaderCircular from '../../components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { authSelector, signUp } from '../../services/slices/auth.slice'
 
@@ -146,7 +146,7 @@ const RegisterPage = (): JSX.Element => {
           <Button type='primary' size='large'>
             {signUpStatus !== 'loading' && <span>Зарегистрироваться</span>}
             {signUpStatus === 'loading' && (
-              <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+              <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
             )}
           </Button>
         </form>
