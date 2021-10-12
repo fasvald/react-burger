@@ -22,88 +22,109 @@
  * 4. Also, I like how modals are working in Angular Material UI lib in a way of exposing API to
  * outside of the component, so I've found a very neat API in React => useImperativeHandle and
  * I've used it :).
+ *
+ * UPD #1. Fully refactored and simplified this component based on various component libraries (React MUI).
  * */
 
-import React, {
-  forwardRef,
-  Ref,
-  RefObject,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import React, { ReactNode, SyntheticEvent, useCallback, useEffect, useMemo } from 'react'
 
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import ReactDOM from 'react-dom'
+import { useHistory } from 'react-router-dom'
 
-import ModalDialog from './modal-dialog/modal-dialog'
-import ModalOverlay from './modal-overlay/modal-overlay'
-import { IModalProps, IModalRefObject } from './modal.model'
-import { blockBrowserScroll, createInjectionElement, unblockBrowserScroll } from './modal.utils'
+import {
+  createInjectionElement,
+  disableBrowserBodyScroll,
+  enableBrowserBodyScroll,
+} from './modal.utils'
 
 import styles from './modal.module.css'
 
+interface IModalProps {
+  children: ReactNode
+  open: boolean
+  isModalRoute?: boolean
+  onClose?: () => void
+}
+
 const modalRootEl = document.getElementById('modal-root')
 
-const Modal = (
-  { children, onClose }: IModalProps,
-  ref: Ref<IModalRefObject>,
-): JSX.Element | null => {
+const Modal = ({ children, open, isModalRoute, onClose }: IModalProps): JSX.Element | null => {
   // We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
-  const [isShown, setIsShown] = useState<boolean>(false)
+  const history = useHistory()
 
-  const open = useCallback(() => {
-    setIsShown(true)
-    blockBrowserScroll()
-  }, [])
-
-  const close = useCallback(() => {
-    setIsShown(false)
-    unblockBrowserScroll()
-
-    if (onClose) {
-      onClose()
-    }
-  }, [onClose])
-
-  const handleEscape = useCallback(
-    (event) => {
-      if (event.keyCode === 27) {
-        close()
-      }
+  const handleClose = useCallback(
+    (e: SyntheticEvent) => {
+      e.stopPropagation()
+      enableBrowserBodyScroll()
+      onClose && onClose()
+      isModalRoute && history.goBack()
     },
-    [close],
+    [onClose, history, isModalRoute],
   )
 
-  useImperativeHandle(ref, () => ({ open, close }), [open, close])
+  const handleOverlayClick = useCallback(
+    (e: SyntheticEvent) => {
+      if (e.target === e.currentTarget) {
+        handleClose(e)
+      }
+    },
+    [handleClose],
+  )
+
+  const handleEscape = useCallback(
+    (e) => {
+      if (e.keyCode === 27) {
+        handleClose(e)
+      }
+    },
+    [handleClose],
+  )
+
+  const CloseIconMemo = useMemo(() => <CloseIcon type='primary' />, [])
 
   useEffect(() => {
+    /* NOTE: This code break React Virtual DOM checking and break the modal route render after page reloading */
     // This check is to prevent of creation multiple div's inside of modal
     // root if the page have multiple modal instances (same for creation and removal wrapper)
-    if (!modalRootEl?.childElementCount) {
+    // if (!modalRootEl?.childElementCount) {
+    //   modalRootEl?.appendChild(wrapperEl)
+    // }
+
+    if (open) {
       modalRootEl?.appendChild(wrapperEl)
+      disableBrowserBodyScroll()
     }
 
     document.addEventListener('keydown', handleEscape, false)
 
     return () => {
       modalRootEl?.replaceChildren()
-
       document.removeEventListener('keydown', handleEscape, false)
+
+      enableBrowserBodyScroll()
     }
-  }, [wrapperEl, handleEscape])
+  }, [handleEscape, wrapperEl, open])
 
   return ReactDOM.createPortal(
-    isShown ? (
+    open ? (
       <div className={styles.wrapper} role='dialog'>
-        <ModalOverlay modal={ref as RefObject<IModalRefObject>} />
-        <ModalDialog modal={ref as RefObject<IModalRefObject>}>{children}</ModalDialog>
+        <div className={styles.backdrop} onClick={handleOverlayClick} aria-hidden='true'>
+          <div className={styles.container}>
+            <div className={styles.dialog}>
+              <button type='button' onClick={handleClose} className={styles.closeBtn}>
+                {CloseIconMemo}
+              </button>
+              {children}
+            </div>
+          </div>
+        </div>
       </div>
     ) : null,
     wrapperEl,
   )
 }
 
-export default React.memo(forwardRef<IModalRefObject, IModalProps>(Modal))
+export default React.memo(Modal)

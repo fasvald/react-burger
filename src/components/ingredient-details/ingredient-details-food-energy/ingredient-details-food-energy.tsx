@@ -2,9 +2,14 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { IIngredientDetailsFoodEnergyProps } from './ingredient-details-food-energy.model'
+import { IBurgerIngredientFoodEnergy } from '../../burger-ingredients/burger-ingredients.model'
 
 import styles from './ingredient-details-food-energy.module.css'
+
+interface IIngredientDetailsFoodEnergyProps {
+  className?: string
+  foodEnergy: Partial<IBurgerIngredientFoodEnergy>
+}
 
 const IngredientDetailsFoodEnergy = ({
   className,

@@ -1,21 +1,15 @@
 import React, { useCallback, useRef } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
+import { useHistory, useLocation } from 'react-router-dom'
 
-import { IBurgerIngredient } from '../../../common/models/data.model'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
-import {
-  removeIngredientDetails,
-  saveIngredientDetails,
-} from '../../../services/actions/ingredient-details.actions'
-import { selectIngredientsByType } from '../../../services/selectors/burger-ingredients.selector'
-import ingredientDetailsSelector from '../../../services/selectors/ingredient-details.selector'
-import IngredientDetails from '../../ingredient-details/ingredient-details'
-import Modal from '../../modal/modal'
-import { IModalRefObject } from '../../modal/modal.model'
+import { saveIngredientDetails } from '../../ingredient-details/ingredient-details.slice'
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
+import { IBurgerIngredient } from '../burger-ingredients.model'
+import { selectIngredientsByType } from '../burger-ingredients.slice'
 
-import useDynamicTabsWithIntersection from './burger-ingredients-list.utils'
+import { useDynamicTabsWithIntersection } from './burger-ingredients-list.utils'
 
 import styles from './burger-ingredients-list.module.css'
 
@@ -23,11 +17,12 @@ const BurgerIngredientsList = (): JSX.Element => {
   const buns = useAppSelector((state) => selectIngredientsByType(state)('bun'))
   const sauces = useAppSelector((state) => selectIngredientsByType(state)('sauce'))
   const mains = useAppSelector((state) => selectIngredientsByType(state)('main'))
-  const chosenIngredient = useAppSelector(ingredientDetailsSelector)
+
+  const history = useHistory()
+  const location = useLocation()
 
   const dispatch = useAppDispatch()
 
-  const modal = useRef<IModalRefObject>(null)
   const rootDynamicTabsRef = useRef(null)
 
   const [currentListSection, setCurrentListSection] = useDynamicTabsWithIntersection(
@@ -37,18 +32,18 @@ const BurgerIngredientsList = (): JSX.Element => {
 
   const handleClick = useCallback(
     (ingredient: IBurgerIngredient) => {
-      if (modal.current) {
-        modal.current.open()
+      dispatch(saveIngredientDetails(ingredient))
 
-        dispatch(saveIngredientDetails(ingredient))
-      }
+      history.push({
+        pathname: `/ingredients/${ingredient._id}`,
+        state: {
+          isModal: true,
+          background: location,
+        },
+      })
     },
-    [dispatch],
+    [dispatch, history, location],
   )
-
-  const handleClose = useCallback(() => {
-    dispatch(removeIngredientDetails())
-  }, [dispatch])
 
   /**
    * NOTE: We can use either useMemo or React.memo, but I've decided to use React.memo().
@@ -124,9 +119,6 @@ const BurgerIngredientsList = (): JSX.Element => {
           ))}
         </div>
       </div>
-      <Modal ref={modal} onClose={handleClose}>
-        {chosenIngredient && <IngredientDetails ingredient={chosenIngredient} />}
-      </Modal>
     </div>
   )
 }

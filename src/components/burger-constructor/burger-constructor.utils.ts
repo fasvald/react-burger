@@ -1,4 +1,4 @@
-import { IBurgerIngredientUnique } from '../../common/models/data.model'
+import { IBurgerIngredientUnique } from '../burger-ingredients/burger-ingredients.model'
 
 /**
  * Calculation of total price for all ingredients in burger constructor (can be used outside of component)
@@ -6,7 +6,7 @@ import { IBurgerIngredientUnique } from '../../common/models/data.model'
  * @param ingredients Passed ingredients to calculate the total price
  * @returns Total price of all ingredients
  */
-export default function calculateTotalPrice(ingredients: IBurgerIngredientUnique[]): number {
+const calculateTotalPrice = (ingredients: IBurgerIngredientUnique[]): number => {
   if (!ingredients || !ingredients.length) {
     return 0
   }
@@ -18,3 +18,5 @@ export default function calculateTotalPrice(ingredients: IBurgerIngredientUnique
     0,
   )
 }
+
+export default calculateTotalPrice

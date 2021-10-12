@@ -1,0 +1,36 @@
+@import '../../common/styles/variables.css';
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  margin: auto;
+}
+
+.content {
+  text-align: center;
+}
+
+.content p:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+
+.link {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:active {
+  color: var(--primary-light);
+}
+
+.imgWrapper {
+  width: 318px;
+  height: 517px;
+  background: url('../../assets/images/bob-belcher.png') no-repeat center center;
+}

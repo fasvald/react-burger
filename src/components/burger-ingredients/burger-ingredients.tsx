@@ -1,16 +1,12 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { fetchIngredients } from '../../services/actions/burger-ingredients.actions'
-import {
-  ingredientsFetchStatusSelector,
-  ingredientsSelector,
-} from '../../services/selectors/burger-ingredients.selector'
-import Loader from '../loader/loader'
+import { useAppSelector } from '../../hooks'
+import LoaderCircular from '../loader-circular/loader-circular'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
+import { ingredientsSelector, ingredientsFetchStatusSelector } from './burger-ingredients.slice'
 
 import styles from './burger-ingredients.module.css'
 
@@ -18,17 +14,11 @@ const BurgerIngredients = (): JSX.Element => {
   const ingredients = useAppSelector(ingredientsSelector)
   const status = useAppSelector(ingredientsFetchStatusSelector)
 
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchIngredients())
-  }, [dispatch])
-
   const sectionTitleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])
 
   return (
     <section className={styles.section}>
-      {status === 'loading' && <Loader />}
+      {status === 'loading' && <LoaderCircular />}
       {status === 'error' && (
         <div className={styles.error}>
           <p className='text text_type_main-medium'>

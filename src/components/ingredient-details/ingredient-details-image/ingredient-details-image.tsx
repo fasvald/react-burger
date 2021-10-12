@@ -2,9 +2,13 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { IIngredientDetailsImageProps } from './ingredient-details-image.model'
-
 import styles from './ingredient-details-image.module.css'
+
+interface IIngredientDetailsImageProps {
+  className?: string
+  image: string
+  height: string
+}
 
 const IngredientDetailsImage = ({
   className,

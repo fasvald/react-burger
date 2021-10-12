@@ -1,0 +1,6 @@
+@import '../../common/styles/variables.css';
+
+.wrapper {
+  max-width: 480px;
+  margin: 180px auto auto;
+}

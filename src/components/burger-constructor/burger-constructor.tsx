@@ -1,53 +1,65 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
+import { useHistory, useLocation } from 'react-router-dom'
 
-import DnDItemTypes from '../../common/constants/data-dnd-item-types.constant'
-import { IBurgerIngredient, IBurgerIngredientUnique } from '../../common/models/data.model'
+import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
 import { useAppDispatch, useAppSelector } from '../../hooks'
+import { authSelector } from '../../services/slices/auth.slice'
 import {
-  addBunWithReplacement,
+  IBurgerIngredient,
+  IBurgerIngredientUnique,
+} from '../burger-ingredients/burger-ingredients.model'
+import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
+import LoaderCircular from '../loader-circular/loader-circular'
+import Modal from '../modal/modal'
+import OrderDetails from '../order-details/order-details'
+import {
+  orderSelector,
+  orderCreationStatusSelector,
+  checkoutOrder,
+} from '../order-details/order-details.slice'
+
+import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
+import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-dnd/burger-constructor-ingredient-dnd'
+import {
+  bunsSelector,
+  toppingsSelector,
+  selectIngredientsID,
+  selectIngredientsTotalPrice,
   addTopping,
   clearIngredients,
   removeTopping,
   swapTopping,
-} from '../../services/actions/burger-constructor.actions'
-import { createOrder } from '../../services/actions/order-details.actions'
-import {
-  bunsSelector,
-  selectIngredientsID,
-  selectIngredientsTotalPrice,
-  toppingsSelector,
-} from '../../services/selectors/burger-constructor.selector'
-import { ingredientsFetchStatusSelector } from '../../services/selectors/burger-ingredients.selector'
-import {
-  orderCreationStatusSelector,
-  orderSelector,
-} from '../../services/selectors/order-details.selector'
-import Loader from '../loader/loader'
-import Modal from '../modal/modal'
-import { IModalRefObject } from '../modal/modal.model'
-import OrderDetails from '../order-details/order-details'
-
-import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
-import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-draggable/burger-constructor-ingredient-draggable'
+  addBun,
+} from './burger-constructor.slice'
 
 import styles from './burger-constructor.module.css'
 
 const BurgerConstructor = (): JSX.Element => {
+  const [openModal, setOpenModal] = useState(false)
+
+  const auth = useAppSelector(authSelector)
   const buns = useAppSelector(bunsSelector)
   const toppings = useAppSelector(toppingsSelector)
   const ingredientsID = useAppSelector((state) => selectIngredientsID(state)())
   const totalPrice = useAppSelector((state) => selectIngredientsTotalPrice(state)())
   const order = useAppSelector(orderSelector)
   const orderCreationStatus = useAppSelector(orderCreationStatusSelector)
-  const ingredientsFetchStatus = useAppSelector(ingredientsFetchStatusSelector)
+  const ingredients = useAppSelector(ingredientsSelector)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const promiseRef = useRef<any>(null)
+
+  const location = useLocation()
+  const history = useHistory()
   const dispatch = useAppDispatch()
 
-  const modal = useRef<IModalRefObject>(null)
+  const handleModalClose = useCallback(() => {
+    setOpenModal(false)
+  }, [])
 
   const removeIngredient = useCallback(
     (ingredient: IBurgerIngredientUnique) => {
@@ -56,17 +68,33 @@ const BurgerConstructor = (): JSX.Element => {
     [dispatch],
   )
 
-  const bookOrder = useCallback(() => {
-    // Check if burger has at least 1 topping and if there is no error from ingredients fetching
-    if (ingredientsFetchStatus === 'error' || !toppings.length || !buns.length) {
+  const bookOrder = useCallback(async () => {
+    // Check if burger has at least 1 topping and 1 bun
+    if (!toppings.length || !buns.length) {
       return
     }
 
-    dispatch(createOrder({ ingredients: ingredientsID })).then(() => {
-      dispatch(clearIngredients())
-      modal.current?.open()
-    })
-  }, [dispatch, ingredientsID, ingredientsFetchStatus, toppings, buns])
+    if (!auth.user) {
+      history.push({
+        pathname: '/login',
+        state: {
+          from: location.pathname,
+        },
+      })
+    }
+
+    promiseRef.current = dispatch(checkoutOrder({ ingredients: ingredientsID }))
+
+    const resultAction = await promiseRef.current
+
+    if (checkoutOrder.rejected.match(resultAction)) {
+      return
+    }
+
+    setOpenModal(true)
+
+    dispatch(clearIngredients())
+  }, [dispatch, ingredientsID, toppings, buns, auth.user, history, location.pathname])
 
   const findIngredient = useCallback(
     (id: string) => {
@@ -84,7 +112,7 @@ const BurgerConstructor = (): JSX.Element => {
     (id: string, atIndex: number) => {
       const { index } = findIngredient(id)
 
-      dispatch(swapTopping(index, atIndex))
+      dispatch(swapTopping({ toIndex: index, fromIndex: atIndex }))
     },
     [dispatch, findIngredient],
   )
@@ -97,7 +125,7 @@ const BurgerConstructor = (): JSX.Element => {
     }),
     drop(item: { ingredient: IBurgerIngredient }, monitor) {
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_BUN_CARD) {
-        dispatch(addBunWithReplacement(item.ingredient))
+        dispatch(addBun(item.ingredient))
       }
 
       if (monitor.getItemType() === DnDItemTypes.INGREDIENT_TOPPING_CARD) {
@@ -110,17 +138,17 @@ const BurgerConstructor = (): JSX.Element => {
     accept: DnDItemTypes.INGREDIENT_TOPPING_CONSTRUCTOR_ITEM,
   }))
 
+  useEffect(() => {
+    return () => {
+      promiseRef.current && promiseRef.current?.abort()
+    }
+  }, [])
+
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
-  const priceSectionClassName = useMemo(
-    () =>
-      classNames(
-        styles.price,
-        ingredientsFetchStatus === 'error' || !toppings.length || !buns.length
-          ? styles.isDisabled
-          : '',
-      ),
-    [ingredientsFetchStatus, toppings.length, buns.length],
+  const priceSectionClass = useMemo(
+    () => classNames(styles.price, !toppings.length || !buns.length ? styles.isDisabled : ''),
+    [toppings.length, buns.length],
   )
 
   const priceValueClass = useMemo(
@@ -132,6 +160,18 @@ const BurgerConstructor = (): JSX.Element => {
     () => classNames(styles.list, canDrop ? styles.canDrop : '', isOver ? styles.isOver : ''),
     [canDrop, isOver],
   )
+
+  if (!ingredients) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.error}>
+          <p className='text text_type_main-medium'>
+            Конструктор для бургеров не может работать без ингредиентов.
+          </p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className={styles.section}>
@@ -165,21 +205,21 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
       </div>
-      <div className={priceSectionClassName}>
+      <div className={priceSectionClass}>
         <span className={priceValueClass}>
           {totalPrice}
           {CurrencyIconMemo}
         </span>
         <Button type='primary' size='large' onClick={bookOrder}>
-          {(orderCreationStatus === 'idle' || orderCreationStatus === 'loaded') && (
-            <span>Оформить заказ</span>
-          )}
+          {orderCreationStatus !== 'loading' && <span>Оформить заказ</span>}
           {orderCreationStatus === 'loading' && (
-            <Loader circularProgressProps={{ size: 26, color: 'secondary' }} />
+            <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />
           )}
         </Button>
       </div>
-      <Modal ref={modal}>{order && <OrderDetails orderDetails={order} />}</Modal>
+      <Modal open={openModal} onClose={handleModalClose}>
+        {order && <OrderDetails orderDetails={order} />}
+      </Modal>
     </section>
   )
 }

@@ -58,10 +58,6 @@
   list-style-type: none;
 }
 
-.menuItem {
-  padding: 16px 20px;
-}
-
 .menuItem:not(:last-of-type) {
   margin-right: 8px;
 }
@@ -70,17 +66,18 @@
   cursor: pointer;
 }
 
-.menuItem:hover .menuItemLink {
+.menuItemLink:hover {
   color: var(--primary-light);
 }
 
-.menuItem:hover .menuItemLink svg {
+.menuItemLink:hover svg {
   fill: var(--primary-light);
 }
 
 .menuItemLink {
   display: flex;
   align-items: center;
+  padding: 16px 20px;
   color: var(--dark-grey);
   outline-offset: 5px;
   outline-color: var(--primary-light);
@@ -91,6 +88,14 @@
   flex-shrink: 0;
   padding-right: 8px;
   fill: var(--dark-grey);
+}
+
+.menuItemLinkActive svg {
+  fill: var(--primary-light);
+}
+
+.menuItemLinkActive span {
+  color: var(--primary-light);
 }
 
 /* Nav Right */

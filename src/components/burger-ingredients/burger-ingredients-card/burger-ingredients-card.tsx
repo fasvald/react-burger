@@ -4,17 +4,22 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import classNames from 'classnames'
 import { useDrag } from 'react-dnd'
 
-import DnDItemTypes from '../../../common/constants/data-dnd-item-types.constant'
+import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
 import { useAppSelector } from '../../../hooks'
-import { selectIngredientIterationByID } from '../../../services/selectors/burger-constructor.selector'
-
-import { IBurgerIngredientsCardProps } from './burger-ingredients-card.model'
+import { selectIngredientIterationByID } from '../../burger-constructor/burger-constructor.slice'
+import { IBurgerIngredient } from '../burger-ingredients.model'
 
 import styles from './burger-ingredients-card.module.css'
 
+interface IBurgerIngredientsCardProps {
+  className?: string
+  ingredient: IBurgerIngredient
+  onClick: (ingredient: IBurgerIngredient) => void
+}
+
 const BurgerIngredientsCard = ({
+  className = '',
   ingredient,
-  className,
   onClick,
 }: IBurgerIngredientsCardProps): JSX.Element => {
   // The most easiest way how to use Redux + Reselect :) and calculate how many times it has duplication :)

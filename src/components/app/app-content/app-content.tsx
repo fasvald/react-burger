@@ -2,7 +2,10 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { IAppContentProps } from './app.content.model'
+interface IAppContentProps {
+  children?: React.ReactNode
+  className?: string
+}
 
 const AppContent = ({ children, className = '' }: IAppContentProps): JSX.Element => {
   const mainClass = useMemo(() => classNames(className), [className])

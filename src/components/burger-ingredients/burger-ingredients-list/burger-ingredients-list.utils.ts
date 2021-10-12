@@ -7,11 +7,31 @@ import React, {
   useState,
 } from 'react'
 
-import { TBurgerIngredientType } from '../../../common/models/data.model'
+import { Location } from 'history'
+
+import { isInstanceOfModalRouteLocationState } from '../../../common/guards/routing.guards'
+import { TBurgerIngredientType } from '../../../common/models/fetch-process.model'
+import { IModalRouteLocationState } from '../../../common/models/routing.model'
+
+/**
+ * Check if passing history location is pointing to modal window
+ *
+ * @param location Passing location (roo history location)
+ * @returns Result if the passing location is a "modal" location
+ */
+export const isModalRouteLocation = (
+  location: IModalRouteLocationState | Location<unknown>,
+): boolean => {
+  if (isInstanceOfModalRouteLocationState(location)) {
+    return location.isModal
+  }
+
+  return false
+}
 
 // NOTE: Based on this article (with improvements) => https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/
 
-const useDynamicTabsWithIntersection = (
+export const useDynamicTabsWithIntersection = (
   ref: React.MutableRefObject<HTMLDivElement | null>,
   defaultTabSection: TBurgerIngredientType,
 ): [
@@ -83,11 +103,13 @@ const useDynamicTabsWithIntersection = (
           return true
         }
 
-        if (direction === 'up' && entry.isIntersecting) {
+        /* if (direction === 'up' && entry.isIntersecting) {
           return true
         }
 
-        return false
+        return false */
+
+        return direction === 'up' && entry.isIntersecting
       }
 
       const onIntersect = (entries: IntersectionObserverEntry[]) => {
@@ -138,5 +160,3 @@ const useDynamicTabsWithIntersection = (
 
   return [currentTabSection, setCurrentTabSection, observerRef]
 }
-
-export default useDynamicTabsWithIntersection

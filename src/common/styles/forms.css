@@ -1,0 +1,156 @@
+@import './variables.css';
+
+/* Global styles for all forms (because modules are encapsulated it's easier to make it as global styles) */
+
+/* NOTE: "sb" prefix stands for "Stellar Burger" to prevent overlapping with other components libraries selectors, etc. */
+
+/* Common styles */
+
+.sb-form,
+.sb-form__body,
+.sb-form__body-input-el {
+  display: flex;
+  justify-content: center;
+}
+
+.sb-form {
+  flex-wrap: wrap;
+}
+
+/* Themes, customized personally per each form/page (P.S. Yes it's not a good quality but it works for this course) */
+
+/* Default theme */
+
+.sb-form_default .sb-form__body-input-el:not(:last-of-type) {
+  margin-bottom: var(--form-element-gap-default);
+}
+
+/* Form on Forgot Password page */
+
+.sb-form_forgot-password .sb-form__body button {
+  min-width: 196px;
+  min-height: var(--submit-btn-height-default);
+}
+
+/* Form on Reset Password page */
+
+.sb-form_reset-password .sb-form__body button {
+  min-width: 167px;
+  min-height: var(--submit-btn-height-default);
+}
+
+/* Form on Login page */
+
+.sb-form_login .sb-form__body button {
+  min-width: 128px;
+  min-height: var(--submit-btn-height-default);
+}
+
+/* Form on Register page */
+
+.sb-form_register .sb-form__body button {
+  min-width: 253px;
+  min-height: var(--submit-btn-height-default);
+}
+
+/* Form on Profile => Personal info page */
+
+.sb-form_profile .sb-form__body-input-el {
+  justify-content: flex-start;
+}
+
+.sb-form_profile.sb-form,
+.sb-form_profile .sb-form__body {
+  justify-content: flex-start;
+}
+
+.sb-form_profile .sb-form__body button {
+  min-width: 167px;
+  min-height: var(--submit-btn-height-default);
+}
+
+/* Common styles for all forms on variety of pages */
+
+/* Form title */
+
+.sb-form__title {
+  width: 100%;
+  margin-bottom: var(--form-element-gap-default);
+  text-align: center;
+}
+
+/* Form itself */
+
+.sb-form__body {
+  flex-wrap: wrap;
+}
+
+/* Disabled styles for a button (because we can't set disabled state so it will at least visually understandable) */
+
+.sb-form__body.isDisabled button:first-of-type {
+  background: var(--dark-grey-dim);
+  cursor: not-allowed;
+}
+
+.sb-form__body.isDisabled button:first-of-type:hover {
+  box-shadow: none;
+  filter: none;
+}
+
+/* Form submit button */
+
+.sb-form__body button {
+  display: inline-flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.sb-form__body > button {
+  margin-top: var(--form-element-gap-default);
+}
+
+/* Form input element (wrappers) */
+
+.sb-form__body-input-el {
+  width: 100%;
+}
+
+/* Side content of form (basically some links to other pages, etc.) */
+
+.sb-form__content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+/* Side content link wrappers */
+
+.sb-form__content-link {
+  text-align: center;
+}
+
+.sb-form__content-link:not(:last-of-type) {
+  margin-bottom: 16px;
+}
+
+/* Global link style inside of forms */
+
+.sb-form__link {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+.sb-form__link:hover {
+  text-decoration: underline;
+}
+
+.sb-form__link:active {
+  color: var(--primary-light);
+}
+
+
+
+
+

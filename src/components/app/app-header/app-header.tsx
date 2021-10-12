@@ -7,17 +7,19 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-
-import { IAppHeaderProps } from './app-header.model'
+import { NavLink } from 'react-router-dom'
 
 import styles from './app-header.module.css'
+
+interface IAppHeaderProps {
+  className?: string
+}
 
 const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
   const BurgerIconMemo = useMemo(() => <BurgerIcon type='primary' />, [])
   const ListIconMemo = useMemo(() => <ListIcon type='primary' />, [])
   const ProfileIconMemo = useMemo(() => <ProfileIcon type='primary' />, [])
   const LogoMemo = useMemo(() => <Logo />, [])
-
   const headerClass = useMemo(() => classNames(styles.header, className), [className])
   const navLeftClass = useMemo(() => classNames(styles.nav, styles.navLeft), [])
   const navRightClass = useMemo(() => classNames(styles.nav, styles.navRight), [])
@@ -36,33 +38,44 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
         <nav className={navLeftClass}>
           <ul className={styles.menu}>
             <li className={styles.menuItem}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href='#' className={styles.menuItemLink}>
+              <NavLink
+                exact
+                to='/'
+                className={styles.menuItemLink}
+                activeClassName={styles.menuItemLinkActive}
+              >
                 {BurgerIconMemo}
                 <span className='text text_type_main-default'>Конструктор</span>
-              </a>
+              </NavLink>
             </li>
             <li className={styles.menuItem}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href='#' className={styles.menuItemLink}>
+              <NavLink
+                exact
+                to='/not-yet-implemented'
+                className={styles.menuItemLink}
+                activeClassName={styles.menuItemLinkActive}
+              >
                 {ListIconMemo}
                 <span className='text text_type_main-default'>Лента заказов</span>
-              </a>
+              </NavLink>
             </li>
           </ul>
         </nav>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a href='#' className={styles.logo}>
+        <NavLink exact to='/' className={styles.logo}>
           {LogoMemo}
-        </a>
+        </NavLink>
         <nav className={navRightClass}>
           <ul className={styles.menu}>
             <li className={styles.menuItem}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a href='#' className={styles.menuItemLink}>
+              <NavLink
+                strict
+                to='/profile'
+                className={styles.menuItemLink}
+                activeClassName={styles.menuItemLinkActive}
+              >
                 {ProfileIconMemo}
                 <span className='text text_type_main-default'>Личный кабинет</span>
-              </a>
+              </NavLink>
             </li>
           </ul>
         </nav>
