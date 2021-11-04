@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -54,7 +54,7 @@ const BurgerConstructor = (): JSX.Element => {
   const promiseRef = useRef<any>(null)
 
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const handleModalClose = useCallback(() => {
@@ -75,8 +75,7 @@ const BurgerConstructor = (): JSX.Element => {
     }
 
     if (!auth.user) {
-      history.push({
-        pathname: '/login',
+      navigate('/login', {
         state: {
           from: location.pathname,
         },
@@ -94,7 +93,7 @@ const BurgerConstructor = (): JSX.Element => {
     setOpenModal(true)
 
     dispatch(clearIngredients())
-  }, [dispatch, ingredientsID, toppings, buns, auth.user, history, location.pathname])
+  }, [dispatch, ingredientsID, toppings, buns, auth.user, navigate, location.pathname])
 
   const findIngredient = useCallback(
     (id: string) => {

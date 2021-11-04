@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { Location } from 'history'
 import Cookies from 'js-cookie'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigationType, Navigate } from 'react-router-dom'
 
 import { isInstanceOfModalRouteLocationState } from '../../common/guards/routing.guards'
 import { IModalRouteLocationState } from '../../common/models/routing.model'
@@ -12,7 +11,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import ForgotPasswordPage from '../../pages/forgot-password/forgot-password-page'
 import LoginPage from '../../pages/login/login-page'
 import NotFoundPage, { RedirectToNotFound } from '../../pages/not-found/not-found-page'
+import OrderListPage from '../../pages/profile/order-list/order-list-page'
 import ProfilePage from '../../pages/profile/profile-page'
+import UserDetailsPage from '../../pages/profile/user-details/user-details-page'
 import RegisterPage from '../../pages/register/register-page'
 import ResetPasswordPage from '../../pages/reset-password/reset-password-page'
 import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
@@ -23,7 +24,6 @@ import { getIngredients } from '../burger-ingredients/burger-ingredients.slice'
 import IngredientDetails from '../ingredient-details/ingredient-details'
 import LoaderCircular from '../loader-circular/loader-circular'
 import Modal from '../modal/modal'
-import ProtectedRoute from '../routing/protected-route/protected-route'
 
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
@@ -31,27 +31,40 @@ import AppHeader from './app-header/app-header'
 
 import styles from './app.module.css'
 
+const RequireAuth = ({ children }: { children: JSX.Element }) => {
+  const auth = useAppSelector(authSelector)
+
+  const location = useLocation()
+
+  if (!auth.user) {
+    return <Navigate to='/login' state={{ from: location }} />
+  }
+
+  return children
+}
+
 const App = (): JSX.Element => {
   const [appIsReady, setAppIsReady] = useState(false)
 
   const auth = useAppSelector(authSelector)
 
-  const history = useHistory()
-  const location = useLocation<IModalRouteLocationState | Location>()
+  const navigationType = useNavigationType()
+
+  const location: Location | { state: IModalRouteLocationState } = useLocation()
 
   const dispatch = useAppDispatch()
 
   const backgroundLocation = useMemo(() => {
     if (isInstanceOfModalRouteLocationState(location.state)) {
       return (
-        (history.action === 'PUSH' || history.action === 'REPLACE') &&
+        (navigationType === 'PUSH' || navigationType === 'REPLACE') &&
         location.state &&
-        location.state.background
+        location.state?.background
       )
     }
 
     return undefined
-  }, [location, history.action])
+  }, [location, navigationType])
 
   useEffect(() => {
     const setUpApp = async () => {
@@ -83,44 +96,47 @@ const App = (): JSX.Element => {
           </div>
         ) : (
           <>
-            <Switch location={backgroundLocation || location}>
-              <Route exact path='/'>
-                <DndProvider backend={HTML5Backend}>
-                  <BurgerIngredients />
-                  <BurgerConstructor />
-                </DndProvider>
+            <Routes location={backgroundLocation || location}>
+              <Route
+                path='/'
+                element={
+                  <DndProvider backend={HTML5Backend}>
+                    <BurgerIngredients />
+                    <BurgerConstructor />
+                  </DndProvider>
+                }
+              />
+              <Route path='ingredients/:id' element={<IngredientDetails isFullSizePage />} />
+              <Route path='login' element={<LoginPage />} />
+              <Route path='register' element={<RegisterPage />} />
+              <Route path='forgot-password' element={<ForgotPasswordPage />} />
+              <Route path='reset-password' element={<ResetPasswordPage />} />
+              <Route path='not-found' element={<NotFoundPage />} />
+              <Route
+                path='profile'
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
+                  </RequireAuth>
+                }
+              >
+                {/* NOTE: We can make path for root route like this "profile/*" and move those routes into + removing Outlet */}
+                <Route path='' element={<UserDetailsPage />} />
+                <Route path='orders' element={<OrderListPage />} />
               </Route>
-              <Route path='/ingredients/:id'>
-                <IngredientDetails isFullSizePage />
-              </Route>
-              <Route path='/login'>
-                <LoginPage />
-              </Route>
-              <Route path='/register'>
-                <RegisterPage />
-              </Route>
-              <Route path='/forgot-password'>
-                <ForgotPasswordPage />
-              </Route>
-              <Route path='/reset-password'>
-                <ResetPasswordPage />
-              </Route>
-              <Route path='/not-found'>
-                <NotFoundPage />
-              </Route>
-              <ProtectedRoute path='/profile'>
-                <ProfilePage />
-              </ProtectedRoute>
-              <Route path='*'>
-                <RedirectToNotFound />
-              </Route>
-            </Switch>
+              <Route path='*' element={<RedirectToNotFound />} />
+            </Routes>
             {backgroundLocation && (
-              <Route path='/ingredients/:id'>
-                <Modal open isModalRoute>
-                  <IngredientDetails />
-                </Modal>
-              </Route>
+              <Routes>
+                <Route
+                  path='ingredients/:id'
+                  element={
+                    <Modal open isModalRoute>
+                      <IngredientDetails />
+                    </Modal>
+                  }
+                />
+              </Routes>
             )}
           </>
         )}

@@ -32,7 +32,7 @@
 }
 
 .list.canDrop {
-  background-color: rgba(133, 133, 173, .1);
+  background-color: rgb(133 133 173 / 10%);
   border: 2px dashed var(--dark-grey);
 }
 
@@ -42,7 +42,7 @@
 
 .list.canDrop .listItem,
 .list.canDrop .listDnD .listDnDItem {
-  opacity: .3;
+  opacity: 30%;
 }
 
 .list.canDrop .listDnD::-webkit-scrollbar-track,
@@ -52,7 +52,7 @@
 
 .list.isOver .listItem,
 .list.isOver .listDnD .listDnDItem {
-  opacity: 1;
+  opacity: 100%;
 }
 
 /* DnD list */

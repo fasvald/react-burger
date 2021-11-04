@@ -19,7 +19,7 @@
 
 /* Just hardcode (but it's better to write a good component first, also there is a possibility to write a mega selector via "~" and "+") */
 .wrapper.isDragging > div:not(.wrapperDndIcon) {
-  opacity: .3;
+  opacity: 30%;
   background-image:
   linear-gradient(
     45deg,

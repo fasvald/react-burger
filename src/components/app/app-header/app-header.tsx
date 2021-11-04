@@ -39,10 +39,12 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
           <ul className={styles.menu}>
             <li className={styles.menuItem}>
               <NavLink
-                exact
                 to='/'
-                className={styles.menuItemLink}
-                activeClassName={styles.menuItemLinkActive}
+                className={({ isActive }) =>
+                  [styles.menuItemLink, isActive ? styles.menuItemLinkActive : undefined]
+                    .filter(Boolean)
+                    .join(' ')
+                }
               >
                 {BurgerIconMemo}
                 <span className='text text_type_main-default'>Конструктор</span>
@@ -50,10 +52,12 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
             </li>
             <li className={styles.menuItem}>
               <NavLink
-                exact
                 to='/not-yet-implemented'
-                className={styles.menuItemLink}
-                activeClassName={styles.menuItemLinkActive}
+                className={({ isActive }) =>
+                  [styles.menuItemLink, isActive ? styles.menuItemLinkActive : undefined]
+                    .filter(Boolean)
+                    .join(' ')
+                }
               >
                 {ListIconMemo}
                 <span className='text text_type_main-default'>Лента заказов</span>
@@ -61,17 +65,19 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
             </li>
           </ul>
         </nav>
-        <NavLink exact to='/' className={styles.logo}>
+        <NavLink to='/' className={styles.logo}>
           {LogoMemo}
         </NavLink>
         <nav className={navRightClass}>
           <ul className={styles.menu}>
             <li className={styles.menuItem}>
               <NavLink
-                strict
                 to='/profile'
-                className={styles.menuItemLink}
-                activeClassName={styles.menuItemLinkActive}
+                className={({ isActive }) =>
+                  [styles.menuItemLink, isActive ? styles.menuItemLinkActive : undefined]
+                    .filter(Boolean)
+                    .join(' ')
+                }
               >
                 {ProfileIconMemo}
                 <span className='text text_type_main-default'>Личный кабинет</span>

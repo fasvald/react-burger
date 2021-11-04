@@ -2,6 +2,7 @@
   "extends": ["stylelint-config-standard", "stylelint-config-prettier"],
   "plugins": ["stylelint-order"],
   "rules": {
+    "selector-class-pattern": null,
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
     "font-family-no-missing-generic-family-keyword": null,
@@ -35,7 +36,7 @@
         "ignorePseudoElements": ["ng-deep"]
       }
     ],
-    "property-blacklist": ["word-wrap"],
+    "property-disallowed-list": ["word-wrap"],
     "property-no-unknown": [
       true,
       {

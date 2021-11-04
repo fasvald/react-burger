@@ -9,7 +9,7 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, Redirect, useHistory } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
@@ -42,7 +42,7 @@ const RegisterPage = (): JSX.Element => {
   const promiseRef = useRef<any>(null)
   const loginFormRef = useRef<HTMLFormElement>(null)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const dispatch = useAppDispatch()
 
@@ -87,9 +87,9 @@ const RegisterPage = (): JSX.Element => {
         return
       }
 
-      history.push('/login')
+      navigate('/login')
     },
-    [dispatch, form, history, isFormValid],
+    [dispatch, form, navigate, isFormValid],
   )
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const RegisterPage = (): JSX.Element => {
   )
 
   if (auth.user) {
-    return <Redirect to='/' />
+    return <Navigate to='/' />
   }
 
   return (

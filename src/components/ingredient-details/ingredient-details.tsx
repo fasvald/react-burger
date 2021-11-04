@@ -23,7 +23,7 @@ interface IIngredientDetailsProps {
 const FOOD_ENERGY_PROPS = ['calories', 'proteins', 'fat', 'carbohydrates']
 
 const IngredientDetails = ({ isFullSizePage = false }: IIngredientDetailsProps): JSX.Element => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams()
 
   const ingredient = useAppSelector((state) => selectChosenIngredient(state)(id))
   const ingredientFetchStatus = useAppSelector(ingredientsFetchStatusSelector)

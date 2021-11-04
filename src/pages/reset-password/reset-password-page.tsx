@@ -4,7 +4,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
 import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
 import { isPasswordValid, isTokenPasswordChangeValid } from '../../common/utils/validators.utils'
@@ -37,8 +37,10 @@ const ResetPasswordPage = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
-  const history = useHistory()
-  const { state } = useLocation<{ fromForgotPasswordPage?: boolean; from: string }>()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const state = location.state as { fromForgotPasswordPage?: boolean; from: string }
 
   const dispatch = useAppDispatch()
 
@@ -84,9 +86,9 @@ const ResetPasswordPage = (): JSX.Element => {
         return
       }
 
-      history.push('/login')
+      navigate('/login')
     },
-    [dispatch, form, history, isFormValid],
+    [dispatch, form, navigate, isFormValid],
   )
 
   useEffect(() => {
@@ -116,7 +118,7 @@ const ResetPasswordPage = (): JSX.Element => {
   )
 
   if (auth.user || !state?.fromForgotPasswordPage) {
-    return <Redirect to={state?.from || ''} />
+    return <Navigate to={state?.from || '/'} />
   }
 
   return (

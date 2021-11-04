@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 import styles from './not-found-page.module.css'
 
 export const RedirectToNotFound = (): JSX.Element => {
-  return <Redirect to='/not-found' />
+  return <Navigate to='/not-found' />
 }
 
 const NotFoundPage = (): JSX.Element => {

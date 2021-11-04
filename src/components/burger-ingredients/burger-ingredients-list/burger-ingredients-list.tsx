@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react'
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { saveIngredientDetails } from '../../ingredient-details/ingredient-details.slice'
@@ -18,7 +18,7 @@ const BurgerIngredientsList = (): JSX.Element => {
   const sauces = useAppSelector((state) => selectIngredientsByType(state)('sauce'))
   const mains = useAppSelector((state) => selectIngredientsByType(state)('main'))
 
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   const dispatch = useAppDispatch()
@@ -34,15 +34,14 @@ const BurgerIngredientsList = (): JSX.Element => {
     (ingredient: IBurgerIngredient) => {
       dispatch(saveIngredientDetails(ingredient))
 
-      history.push({
-        pathname: `/ingredients/${ingredient._id}`,
+      navigate(`/ingredients/${ingredient._id}`, {
         state: {
           isModal: true,
           background: location,
         },
       })
     },
-    [dispatch, history, location],
+    [dispatch, navigate, location],
   )
 
   /**

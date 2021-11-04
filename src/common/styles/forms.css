@@ -97,6 +97,16 @@
   filter: none;
 }
 
+.sb-form__body.isResetDisabled button:last-of-type {
+  color: var(--dark-grey-dim);
+  cursor: not-allowed;
+}
+
+.sb-form__body.isResetDisabled button:last-of-type:hover {
+  color: var(--dark-grey-dim);
+  cursor: not-allowed;
+}
+
 /* Form submit button */
 
 .sb-form__body button {
