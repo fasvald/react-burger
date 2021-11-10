@@ -4,7 +4,7 @@
 
 .lists {
   display: flex;
-  max-height: 650px;
+  max-height: 300px;
   flex-wrap: wrap;
   overflow-y: scroll;
 }

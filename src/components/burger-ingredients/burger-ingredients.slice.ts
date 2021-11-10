@@ -35,8 +35,23 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
   ),
 )
 
-export const selectIngredientById = createSelector([ingredientsSelector], (ingredients) =>
+export const selectIngredientByID = createSelector([ingredientsSelector], (ingredients) =>
   memoize((id: string) => ingredients.find((ingredient) => ingredient._id === id)),
+)
+
+export const selectIngredientsByIDs = createSelector([ingredientsSelector], (ingredients) =>
+  memoize((ids: string[]) =>
+    // We could use this `filter(ingredients, (ingredient) => ids.includes(ingredient._id))`, but we need to preserve duplications
+    ids.reduce((acc: IBurgerIngredient[], curr: string) => {
+      const ingredient = ingredients.find((item) => item._id === curr)
+
+      if (ingredient) {
+        acc.push(ingredient)
+      }
+
+      return acc
+    }, []),
+  ),
 )
 
 /**

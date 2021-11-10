@@ -27,7 +27,7 @@ const OrdersFeedInfo = (): JSX.Element => {
     [ordersWithDoneStatus],
   )
   const ordersWithDoneStatusChunksIDs = useMemo(
-    () => [...new Array(ordersWithDoneStatusChunks.length).map(() => nanoid())],
+    () => [...new Array(ordersWithDoneStatusChunks.length)].map(() => nanoid()),
     [ordersWithDoneStatusChunks.length],
   )
 
@@ -36,7 +36,7 @@ const OrdersFeedInfo = (): JSX.Element => {
     [ordersWithPendingStatus],
   )
   const ordersWithPendingStatusChunksIDs = useMemo(
-    () => [...new Array(ordersWithPendingStatusChunks.length).map(() => nanoid())],
+    () => [...new Array(ordersWithPendingStatusChunks.length)].map(() => nanoid()),
     [ordersWithPendingStatusChunks.length],
   )
 
@@ -48,6 +48,7 @@ const OrdersFeedInfo = (): JSX.Element => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.lists}>
+        {/* NOTE: Could be improved by https://github.com/bvaughn/react-window */}
         <div className={styles.list}>
           {ordersWithDoneStatusChunks.map((orderChunk, i) => (
             <OrdersFeedInfoList

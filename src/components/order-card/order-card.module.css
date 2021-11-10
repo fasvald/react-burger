@@ -1,0 +1,41 @@
+@import '../../common/styles/variables.css';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 24px;
+  background: var(--dark-bg);
+  border: 2px solid transparent;
+  border-radius: 40px;
+}
+
+.card:hover {
+  cursor: pointer;
+  border: 2px solid var(--dark-grey);
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  margin-bottom: 24px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
+
+.priceValue {
+  margin-right: 8px;
+}

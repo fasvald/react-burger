@@ -7,6 +7,7 @@ export interface IOrder {
   _id: string
   status: TOrderStatuses
   number: number
+  name: string
   createdAt: string
   updatedAt: string
 }
