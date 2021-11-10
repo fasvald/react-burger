@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { IAxiosSerializedError } from '../models/errors.model'
+import { IAxiosSerializedError } from '@common/models/errors.model'
 
 /**
  * Check if passing object is instance of 'AxiosSerializedError' interface

@@ -4,6 +4,7 @@ import ingredientDetailsReducer from './components/ingredient-details/ingredient
 import orderDetailsReducer from './components/order-details/order-details.slice'
 import forgotPasswordPageReducer from './pages/forgot-password/forgot-password-page.slice'
 import loginPageReducer from './pages/login/login-page.slice'
+import ordersFeedPageReducer from './pages/orders-feed/orders-feed-page.slice'
 import profilePageReducer from './pages/profile/profile-page.slice'
 import userDetailsPageReducer from './pages/profile/user-details/user-details-page.slice'
 import registerPageReducer from './pages/register/register-page.slice'
@@ -22,6 +23,7 @@ const rootReducer = {
   resetPasswordPage: resetPasswordPageReducer,
   profilePage: profilePageReducer,
   userDetailsPage: userDetailsPageReducer,
+  ordersFeedPage: ordersFeedPageReducer,
   // Components related reducers
   burgerIngredients: burgerIngredientsReducer,
   burgerConstructor: burgerConstructorReducer,

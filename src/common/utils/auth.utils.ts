@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios'
 import Cookies from 'js-cookie'
 
-import apiInstance from '../../services/interceptors/client.interceptor'
-import { API_ENDPOINTS } from '../constants/api.constant'
-import { IAuthRefreshTokenRequestBody, IAuthRefreshTokenResponse } from '../models/auth.model'
+import { API_ENDPOINTS } from '@common/constants/api.constant'
+import { IAuthRefreshTokenRequestBody, IAuthRefreshTokenResponse } from '@common/models/auth.model'
+import apiInstance from '@services/interceptors/client.interceptor'
 
 /**
  * Set token for further injection in header

@@ -3,8 +3,9 @@ import React, { useCallback, useRef } from 'react'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../../../hooks'
-import { saveIngredientDetails } from '../../ingredient-details/ingredient-details.slice'
+import { saveIngredientDetails } from '@components/ingredient-details/ingredient-details.slice'
+import { useAppDispatch, useAppSelector } from '@hooks'
+
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'
 import { IBurgerIngredient } from '../burger-ingredients.model'
 import { selectIngredientsByType } from '../burger-ingredients.slice'

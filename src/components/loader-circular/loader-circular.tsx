@@ -4,7 +4,7 @@ import { CircularProgress, CircularProgressProps } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import classNames from 'classnames'
 
-import themeOptions from '../../common/constants/theme.constant'
+import themeOptions from '@common/constants/theme.constant'
 
 import styles from './loader-circular.module.css'
 

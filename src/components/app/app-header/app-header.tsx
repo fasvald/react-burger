@@ -52,7 +52,7 @@ const AppHeader = ({ className = '' }: IAppHeaderProps): JSX.Element => {
             </li>
             <li className={styles.menuItem}>
               <NavLink
-                to='/not-yet-implemented'
+                to='/feed'
                 className={({ isActive }) =>
                   [styles.menuItemLink, isActive ? styles.menuItemLinkActive : undefined]
                     .filter(Boolean)

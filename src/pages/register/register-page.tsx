@@ -11,11 +11,11 @@ import {
 import classNames from 'classnames'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
-import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
-import { isEmailValid, isNameValid, isPasswordValid } from '../../common/utils/validators.utils'
-import LoaderCircular from '../../components/loader-circular/loader-circular'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector, signUp } from '../../services/slices/auth.slice'
+import { isInstanceOfAxiosSerializedError } from '@common/guards/errors.guards'
+import { isEmailValid, isNameValid, isPasswordValid } from '@common/utils/validators.utils'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector, signUp } from '@services/slices/auth.slice'
 
 import { signUpStatusSelector } from './register-page.slice'
 

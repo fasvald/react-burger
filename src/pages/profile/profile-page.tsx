@@ -6,10 +6,10 @@ import classNames from 'classnames'
 import Cookies from 'js-cookie'
 import { Route, Routes, useNavigate, NavLink, Outlet } from 'react-router-dom'
 
-import themeOptions from '../../common/constants/theme.constant'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { clearAuthorizedUser, signOut } from '../../services/slices/auth.slice'
-import { clearUser } from '../../services/slices/user.slice'
+import themeOptions from '@common/constants/theme.constant'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { clearAuthorizedUser, signOut } from '@services/slices/auth.slice'
+import { clearUser } from '@services/slices/user.slice'
 
 import { signOutStatusSelector } from './profile-page.slice'
 

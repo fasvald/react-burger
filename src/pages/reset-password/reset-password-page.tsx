@@ -6,11 +6,11 @@ import { Button, Input, PasswordInput } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
-import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
-import { isPasswordValid, isTokenPasswordChangeValid } from '../../common/utils/validators.utils'
-import LoaderCircular from '../../components/loader-circular/loader-circular'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import { isInstanceOfAxiosSerializedError } from '@common/guards/errors.guards'
+import { isPasswordValid, isTokenPasswordChangeValid } from '@common/utils/validators.utils'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector } from '@services/slices/auth.slice'
 
 import { resetPasswordStatusSelector, resetPassword } from './reset-password-page.slice'
 

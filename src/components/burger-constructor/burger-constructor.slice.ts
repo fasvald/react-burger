@@ -4,7 +4,8 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { memoize } from 'lodash'
 import { nanoid } from 'nanoid'
 
-import { RootState } from '../../store'
+import { RootState } from '@store'
+
 import {
   IBurgerIngredient,
   IBurgerIngredientUnique,

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import orderAcceptedGif from '../../assets/images/order-accepted.gif'
+import orderAcceptedGif from '@assets/images/order-accepted.gif'
 
 import { IOrderDetailsProps } from './order-details.model'
 

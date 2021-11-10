@@ -6,11 +6,11 @@ import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-comp
 import classNames from 'classnames'
 import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
-import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
-import { isEmailValid } from '../../common/utils/validators.utils'
-import LoaderCircular from '../../components/loader-circular/loader-circular'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import { isInstanceOfAxiosSerializedError } from '@common/guards/errors.guards'
+import { isEmailValid } from '@common/utils/validators.utils'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector } from '@services/slices/auth.slice'
 
 import {
   forgotPasswordStatusSelector,

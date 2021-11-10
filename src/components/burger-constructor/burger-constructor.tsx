@@ -5,22 +5,22 @@ import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import DnDItemTypes from '@common/constants/dnd-item-types.constant'
 import {
   IBurgerIngredient,
   IBurgerIngredientUnique,
-} from '../burger-ingredients/burger-ingredients.model'
-import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
-import LoaderCircular from '../loader-circular/loader-circular'
-import Modal from '../modal/modal'
-import OrderDetails from '../order-details/order-details'
+} from '@components/burger-ingredients/burger-ingredients.model'
+import { ingredientsSelector } from '@components/burger-ingredients/burger-ingredients.slice'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import Modal from '@components/modal/modal'
+import OrderDetails from '@components/order-details/order-details'
 import {
   orderSelector,
   orderCreationStatusSelector,
   checkoutOrder,
-} from '../order-details/order-details.slice'
+} from '@components/order-details/order-details.slice'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector } from '@services/slices/auth.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-dnd/burger-constructor-ingredient-dnd'

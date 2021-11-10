@@ -4,12 +4,12 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { memoize } from 'lodash'
 
-import { API_ENDPOINTS } from '../../common/constants/api.constant'
-import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
-import { TBurgerIngredientType, TFetchProcess } from '../../common/models/fetch-process.model'
-import { getSerializedAxiosError } from '../../common/utils/errors.utils'
-import apiInstance from '../../services/interceptors/client.interceptor'
-import { RootState } from '../../store'
+import { API_ENDPOINTS } from '@common/constants/api.constant'
+import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
+import { TBurgerIngredientType, TFetchProcess } from '@common/models/fetch-process.model'
+import { getSerializedAxiosError } from '@common/utils/errors.utils'
+import apiInstance from '@services/interceptors/client.interceptor'
+import { RootState } from '@store'
 
 import { IBurgerIngredient, IBurgerIngredientFetch } from './burger-ingredients.model'
 

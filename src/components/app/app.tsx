@@ -5,25 +5,26 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Routes, Route, useLocation, useNavigationType, Navigate } from 'react-router-dom'
 
-import { isInstanceOfModalRouteLocationState } from '../../common/guards/routing.guards'
-import { IModalRouteLocationState } from '../../common/models/routing.model'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import ForgotPasswordPage from '../../pages/forgot-password/forgot-password-page'
-import LoginPage from '../../pages/login/login-page'
-import NotFoundPage, { RedirectToNotFound } from '../../pages/not-found/not-found-page'
-import OrderListPage from '../../pages/profile/order-list/order-list-page'
-import ProfilePage from '../../pages/profile/profile-page'
-import UserDetailsPage from '../../pages/profile/user-details/user-details-page'
-import RegisterPage from '../../pages/register/register-page'
-import ResetPasswordPage from '../../pages/reset-password/reset-password-page'
-import { authSelector, saveAuthorizedUser } from '../../services/slices/auth.slice'
-import { getUser } from '../../services/slices/user.slice'
-import BurgerConstructor from '../burger-constructor/burger-constructor'
-import BurgerIngredients from '../burger-ingredients/burger-ingredients'
-import { getIngredients } from '../burger-ingredients/burger-ingredients.slice'
-import IngredientDetails from '../ingredient-details/ingredient-details'
-import LoaderCircular from '../loader-circular/loader-circular'
-import Modal from '../modal/modal'
+import { isInstanceOfModalRouteLocationState } from '@common/guards/routing.guards'
+import { IModalRouteLocationState } from '@common/models/routing.model'
+import BurgerConstructor from '@components/burger-constructor/burger-constructor'
+import BurgerIngredients from '@components/burger-ingredients/burger-ingredients'
+import { getIngredients } from '@components/burger-ingredients/burger-ingredients.slice'
+import IngredientDetails from '@components/ingredient-details/ingredient-details'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import Modal from '@components/modal/modal'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import ForgotPasswordPage from '@pages/forgot-password/forgot-password-page'
+import LoginPage from '@pages/login/login-page'
+import NotFoundPage, { RedirectToNotFound } from '@pages/not-found/not-found-page'
+import OrdersFeedPage from '@pages/orders-feed/orders-feed-page'
+import OrderListPage from '@pages/profile/order-list/order-list-page'
+import ProfilePage from '@pages/profile/profile-page'
+import UserDetailsPage from '@pages/profile/user-details/user-details-page'
+import RegisterPage from '@pages/register/register-page'
+import ResetPasswordPage from '@pages/reset-password/reset-password-page'
+import { authSelector, saveAuthorizedUser } from '@services/slices/auth.slice'
+import { getUser } from '@services/slices/user.slice'
 
 import AppContent from './app-content/app-content'
 import AppFooter from './app-footer/app-footer'
@@ -106,6 +107,7 @@ const App = (): JSX.Element => {
                   </DndProvider>
                 }
               />
+              <Route path='feed' element={<OrdersFeedPage />} />
               <Route path='ingredients/:id' element={<IngredientDetails isFullSizePage />} />
               <Route path='login' element={<LoginPage />} />
               <Route path='register' element={<RegisterPage />} />

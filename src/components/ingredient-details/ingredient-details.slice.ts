@@ -3,7 +3,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { memoize } from 'lodash'
 
-import { RootState } from '../../store'
+import { RootState } from '@store'
+
 import { IBurgerIngredient } from '../burger-ingredients/burger-ingredients.model'
 import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
 

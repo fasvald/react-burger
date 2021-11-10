@@ -6,7 +6,8 @@ import { pick } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { useAppSelector } from '../../hooks'
+import { useAppSelector } from '@hooks'
+
 import { IBurgerIngredientFoodEnergy } from '../burger-ingredients/burger-ingredients.model'
 import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
 

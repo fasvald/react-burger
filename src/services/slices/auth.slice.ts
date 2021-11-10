@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios, { AxiosResponse } from 'axios'
 import Cookies from 'js-cookie'
 
-import { API_ENDPOINTS } from '../../common/constants/api.constant'
+import { API_ENDPOINTS } from '@common/constants/api.constant'
 import {
   IAuthUser,
   ISignInRequestBody,
@@ -12,10 +12,11 @@ import {
   ISignUpRequestBody,
   TSignInResponse,
   TSignUpResponse,
-} from '../../common/models/auth.model'
-import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
-import { getSerializedAxiosError } from '../../common/utils/errors.utils'
-import { RootState } from '../../store'
+} from '@common/models/auth.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
+import { getSerializedAxiosError } from '@common/utils/errors.utils'
+import { RootState } from '@store'
+
 import apiInstance from '../interceptors/client.interceptor'
 
 interface IAuthState {
