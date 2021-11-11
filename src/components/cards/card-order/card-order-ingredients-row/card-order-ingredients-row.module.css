@@ -1,4 +1,4 @@
-@import '../../../common/styles/variables.css';
+@import '../../../../common/styles/variables.css';
 
 .wrapper {
   display: flex;
@@ -6,7 +6,7 @@
 
 /* Based on a hack => https://codyhouse.co/nuggets/css-gradient-borders */
 
-.ingredientAvatar {
+.ingredientImg {
   position: relative;
   overflow: hidden;
   width: 64px;
@@ -21,41 +21,41 @@
 
 /* NOTE: there is a nice implementation via flex-direction: reverse, but it will not follow the design, so... shame :( */
 
-.ingredientAvatar:nth-child(1) {
+.ingredientImg:nth-child(1) {
   z-index: 6;
 }
 
-.ingredientAvatar:nth-child(2) {
+.ingredientImg:nth-child(2) {
   z-index: 5;
 }
 
-.ingredientAvatar:nth-child(3) {
+.ingredientImg:nth-child(3) {
   z-index: 4;
 }
 
-.ingredientAvatar:nth-child(4) {
+.ingredientImg:nth-child(4) {
   z-index: 3;
 }
 
-.ingredientAvatar:nth-child(5) {
+.ingredientImg:nth-child(5) {
   z-index: 2;
 }
 
-.ingredientAvatar:nth-child(6) {
+.ingredientImg:nth-child(6) {
   z-index: 1;
 }
 
-.ingredientAvatar:not(:first-of-type) {
+.ingredientImg:not(:first-of-type) {
   margin-left: -20px;
 }
 
-.ingredientAvatar img {
+.ingredientImg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.ingredientAvatarRest {
+.ingredientImgRest {
   position: absolute;
   top: 0;
   right: 0;
@@ -64,6 +64,6 @@
   display: flex;
 }
 
-.ingredientAvatarRest p {
+.ingredientImgRest p {
   margin: auto;
 }

@@ -14,11 +14,11 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(advancedFormat)
 
-interface IDateFormatterProps {
+interface IDateFormattedLabelProps {
   date: string
 }
 
-const DateFormatter = ({ date }: IDateFormatterProps): JSX.Element => {
+const DateFormattedLabel = ({ date }: IDateFormattedLabelProps): JSX.Element => {
   const relativeDate = dayjs(date).fromNow()
   const dayTime = dayjs(date).format('HH:MM')
   const timezoneAbbreviate = dayjs(date).tz(dayjs.tz.guess()).format('z')
@@ -30,4 +30,4 @@ const DateFormatter = ({ date }: IDateFormatterProps): JSX.Element => {
   )
 }
 
-export default DateFormatter
+export default React.memo(DateFormattedLabel)

@@ -1,20 +1,24 @@
 @import '../../common/styles/variables.css';
 
-.section {
-  width: 600px;
-  padding: 0 20px;
-}
-
-.sectionFeedOrders,
-.sectionFeedInfo {
+.sectionFeed,
+.sectionInfo {
   width: 600px;
 }
 
-.sectionFeedOrders {
+.sectionFeed {
   padding: 0 20px;
 }
 
-.sectionFeedOrdersList {
+.sectionInfo {
+  padding: 100px 20px 0;
+}
+
+.title {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.feed {
   display: flex;
   max-height: 650px;
   flex-wrap: wrap;
@@ -23,35 +27,26 @@
 
 /* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
 
-.sectionFeedOrdersList::-webkit-scrollbar {
+.feed::-webkit-scrollbar {
   width: 8px;
 }
 
-.sectionFeedOrdersList::-webkit-scrollbar-track {
+.feed::-webkit-scrollbar-track {
   background-color: var(--dark-grey);
   border-radius: 0;
 }
 
-.sectionFeedOrdersList::-webkit-scrollbar-thumb {
+.feed::-webkit-scrollbar-thumb {
   background-color: var(--dark-grey-dim);
   border-radius: 0;
 }
 
-.sectionFeedOrdersListItem {
+.feedItemCard {
   max-width: var(--card-width-order-default);
 }
 
-.sectionFeedOrdersListItem:not(:last-of-type) {
+.feedItemCard:not(:last-of-type) {
   margin-bottom: 16px;
-}
-
-.sectionFeedInfo {
-  padding: 100px 20px 0;
-}
-
-.title {
-  margin-top: 40px;
-  margin-bottom: 20px;
 }
 
 .error {
@@ -64,7 +59,7 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .sectionFeedOrdersList {
+  .feed {
     scroll-behavior: smooth;
   }
 }

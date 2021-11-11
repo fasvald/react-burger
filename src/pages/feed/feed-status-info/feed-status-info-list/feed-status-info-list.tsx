@@ -2,21 +2,21 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { IOrder } from '@pages/orders-feed/orders-feed-page.model'
+import { IOrder } from '@common/models/orders.model'
 
-import styles from './orders-feed-info-list.module.css'
+import styles from './feed-status-info-list.module.css'
 
-interface IOrdersFeedInfoListProps {
+interface IFeedStatusInfoListProps {
   className?: string
   title: string
   orders: IOrder[]
 }
 
-const OrdersFeedInfoList = ({
+const FeedStatusInfoList = ({
   className,
   title,
   orders,
-}: IOrdersFeedInfoListProps): JSX.Element => {
+}: IFeedStatusInfoListProps): JSX.Element => {
   const wrapperClass = useMemo(() => classNames(className), [className])
   const titleClass = useMemo(() => classNames('text text_type_main-medium', styles.title), [])
   const listItemClass = useMemo(() => classNames('text text_type_digits-default', styles.title), [])
@@ -35,4 +35,4 @@ const OrdersFeedInfoList = ({
   )
 }
 
-export default React.memo(OrdersFeedInfoList)
+export default React.memo(FeedStatusInfoList)

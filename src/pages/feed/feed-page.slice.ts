@@ -7,29 +7,40 @@ import { memoize } from 'lodash'
 import { API_ENDPOINTS } from '@common/constants/api.constant'
 import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
 import { TFetchProcess } from '@common/models/fetch-process.model'
+import { IOrder, TOrderStatuses, IOrdersAllResponse } from '@common/models/orders.model'
 import { getSerializedAxiosError } from '@common/utils/errors.utils'
 import apiInstance from '@services/interceptors/client.interceptor'
 import { RootState } from '@store'
 
-import { IOrder, TOrderStatuses, IOrdersFeedResponse, initialState } from './orders-feed-page.model'
+interface IFeedPageState {
+  status: TFetchProcess
+  orders: IOrder[]
+  total: number | null
+  totalToday: number | null
+}
 
-export const ordersFeedStatusSelector = (state: RootState): TFetchProcess =>
-  state.ordersFeedPage.status
+const initialState: IFeedPageState = {
+  status: 'idle',
+  orders: [],
+  total: null,
+  totalToday: null,
+}
 
-export const ordersFeedSelector = (state: RootState): IOrder[] => state.ordersFeedPage.orders
+export const ordersFetchStatusSelector = (state: RootState): TFetchProcess => state.feedPage.status
 
-export const ordersTotalCountSelector = (state: RootState): number | null =>
-  state.ordersFeedPage.total
+export const ordersSelector = (state: RootState): IOrder[] => state.feedPage.orders
+
+export const ordersTotalCountSelector = (state: RootState): number | null => state.feedPage.total
 
 export const ordersTotalTodayCountSelector = (state: RootState): number | null =>
-  state.ordersFeedPage.totalToday
+  state.feedPage.totalToday
 
-export const selectOrdersByStatus = createSelector([ordersFeedSelector], (orders) =>
+export const selectOrdersByStatus = createSelector([ordersSelector], (orders) =>
   memoize((status: TOrderStatuses) => orders.filter((order) => order.status === status)),
 )
 
 export const getOrders = createAsyncThunk<
-  IOrdersFeedResponse,
+  IOrdersAllResponse,
   undefined,
   {
     state: RootState
@@ -37,7 +48,7 @@ export const getOrders = createAsyncThunk<
     rejectValue: IAxiosSerializedError | string
   }
 >(
-  'ordersFeed/fetchAll',
+  'ordersAll/fetch',
   async (_, thunkApi) => {
     try {
       const source = axios.CancelToken.source()
@@ -45,7 +56,7 @@ export const getOrders = createAsyncThunk<
         source.cancel('Operation stop the work.')
       })
 
-      const response = await apiInstance.get<IOrdersFeedResponse>(API_ENDPOINTS.ordersFeed, {
+      const response = await apiInstance.get<IOrdersAllResponse>(API_ENDPOINTS.ordersAll, {
         cancelToken: source.token,
       })
 
@@ -69,8 +80,8 @@ export const getOrders = createAsyncThunk<
   {
     // eslint-disable-next-line consistent-return
     condition: (_, thunkApi) => {
-      const { ordersFeedPage } = thunkApi.getState()
-      const fetchStatus = ordersFeedPage.status
+      const { feedPage } = thunkApi.getState()
+      const fetchStatus = feedPage.status
 
       if (fetchStatus === 'loaded' || fetchStatus === 'loading') {
         // Already fetched or in progress, don't need to re-fetch
@@ -80,8 +91,8 @@ export const getOrders = createAsyncThunk<
   },
 )
 
-const ordersFeedPageSlice = createSlice({
-  name: 'ordersFeedPage',
+const feedPageSlice = createSlice({
+  name: 'feedPage',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -106,4 +117,4 @@ const ordersFeedPageSlice = createSlice({
   },
 })
 
-export default ordersFeedPageSlice.reducer
+export default feedPageSlice.reducer

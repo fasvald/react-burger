@@ -4,22 +4,22 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import classNames from 'classnames'
 import { nanoid } from 'nanoid'
 
+import { IOrder } from '@common/models/orders.model'
 import calculateTotalPrice from '@components/burger-constructor/burger-constructor.utils'
 import { selectIngredientsByIDs } from '@components/burger-ingredients/burger-ingredients.slice'
-import DateFormatter from '@components/date-formatter/date-formatter'
+import DateFormattedLabel from '@components/date-formatted-label/date-formatted-label'
 import { useAppSelector } from '@hooks'
-import { IOrder } from '@pages/orders-feed/orders-feed-page.model'
 
-import OrderCardImgRow from './order-card-img-row/order-card-img-row'
+import CardOrderIngredientsRow from './card-order-ingredients-row/card-order-ingredients-row'
 
-import styles from './order-card.module.css'
+import styles from './card-order.module.css'
 
-interface IOrderCardProps {
+interface ICardOrderProps {
   className?: string
   order: IOrder
 }
 
-const OrderCard = ({ className, order }: IOrderCardProps): JSX.Element => {
+const CardOrder = ({ className, order }: ICardOrderProps): JSX.Element => {
   const ingredients = useAppSelector((state) => selectIngredientsByIDs(state)(order.ingredients))
 
   const normalizedIngredients = useMemo(
@@ -32,12 +32,12 @@ const OrderCard = ({ className, order }: IOrderCardProps): JSX.Element => {
     [normalizedIngredients],
   )
 
+  const cardClass = useMemo(() => classNames(className, styles.card), [className])
+
   const priceValueClass = useMemo(
     () => classNames('text text_type_digits-default', styles.priceValue),
     [],
   )
-
-  const cardClass = useMemo(() => classNames(className, styles.card), [className])
 
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
@@ -45,13 +45,13 @@ const OrderCard = ({ className, order }: IOrderCardProps): JSX.Element => {
     <div className={cardClass}>
       <div className={styles.info}>
         <span className='text text_type_digits-default'>#{order.number}</span>
-        <DateFormatter date={order.createdAt} />
+        <DateFormattedLabel date={order.createdAt} />
       </div>
       <div className={styles.title}>
         <p className='text text_type_main-medium'>{order.name}</p>
       </div>
       <div className={styles.content}>
-        <OrderCardImgRow ingredients={normalizedIngredients} />
+        <CardOrderIngredientsRow ingredients={normalizedIngredients} />
         <div className={styles.price}>
           <span className={priceValueClass}>{totalPrice}</span>
           {CurrencyIconMemo}
@@ -61,4 +61,4 @@ const OrderCard = ({ className, order }: IOrderCardProps): JSX.Element => {
   )
 }
 
-export default React.memo(OrderCard)
+export default React.memo(CardOrder)

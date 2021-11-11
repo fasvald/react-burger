@@ -10,5 +10,5 @@ export const API_ENDPOINTS = {
   singOut: `/auth/logout`,
   profile: `/auth/user`,
   token: `/auth/token`,
-  ordersFeed: '/orders/all',
+  ordersAll: '/orders/all',
 }

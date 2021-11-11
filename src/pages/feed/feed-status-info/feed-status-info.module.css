@@ -38,6 +38,11 @@
   color: var(--coral);
 }
 
+.infoSection {
+  display: flex;
+  flex-direction: column;
+}
+
 .orderNumber {
   text-shadow: var(--glow-shadow);
 }

@@ -14,10 +14,10 @@ import IngredientDetails from '@components/ingredient-details/ingredient-details
 import LoaderCircular from '@components/loader-circular/loader-circular'
 import Modal from '@components/modal/modal'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import FeedPage from '@pages/feed/feed-page'
 import ForgotPasswordPage from '@pages/forgot-password/forgot-password-page'
 import LoginPage from '@pages/login/login-page'
 import NotFoundPage, { RedirectToNotFound } from '@pages/not-found/not-found-page'
-import OrdersFeedPage from '@pages/orders-feed/orders-feed-page'
 import OrderListPage from '@pages/profile/order-list/order-list-page'
 import ProfilePage from '@pages/profile/profile-page'
 import UserDetailsPage from '@pages/profile/user-details/user-details-page'
@@ -107,7 +107,7 @@ const App = (): JSX.Element => {
                   </DndProvider>
                 }
               />
-              <Route path='feed' element={<OrdersFeedPage />} />
+              <Route path='feed' element={<FeedPage />} />
               <Route path='ingredients/:id' element={<IngredientDetails isFullSizePage />} />
               <Route path='login' element={<LoginPage />} />
               <Route path='register' element={<RegisterPage />} />
