@@ -3,13 +3,13 @@ import React, { useMemo } from 'react'
 import classNames from 'classnames'
 import { useParams } from 'react-router-dom'
 
-import styles from './order-details-status.module.css'
+import styles from './modal-order-details.module.css'
 
 interface IOrderDetailsStatusProps {
   isFullSizePage?: boolean
 }
 
-const OrderDetailsStatus = ({ isFullSizePage }: IOrderDetailsStatusProps): JSX.Element => {
+const ModalOrderDetails = ({ isFullSizePage }: IOrderDetailsStatusProps): JSX.Element => {
   const { id } = useParams()
 
   const dialogWrapperClass = useMemo(
@@ -25,4 +25,4 @@ const OrderDetailsStatus = ({ isFullSizePage }: IOrderDetailsStatusProps): JSX.E
   )
 }
 
-export default React.memo(OrderDetailsStatus)
+export default React.memo(ModalOrderDetails)

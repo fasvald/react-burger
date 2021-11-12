@@ -4,11 +4,11 @@ import classNames from 'classnames'
 
 import orderAcceptedGif from '@assets/images/order-accepted.gif'
 
-import { IOrderDetailsProps } from './order-details.model'
+import { IOrderDetailsProps } from './modal-order-creation-details.model'
 
-import styles from './order-details.module.css'
+import styles from './modal-order-creation-details.module.css'
 
-const OrderDetails = ({ orderDetails }: IOrderDetailsProps): JSX.Element => {
+const ModalOrderCreationDetails = ({ orderDetails }: IOrderDetailsProps): JSX.Element => {
   const { order } = orderDetails
 
   const orderNumberClass = useMemo(
@@ -46,4 +46,4 @@ const OrderDetails = ({ orderDetails }: IOrderDetailsProps): JSX.Element => {
   )
 }
 
-export default React.memo(OrderDetails)
+export default React.memo(ModalOrderCreationDetails)

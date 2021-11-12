@@ -5,8 +5,8 @@ import { memoize } from 'lodash'
 
 import { RootState } from '@store'
 
-import { IBurgerIngredient } from '../burger-ingredients/burger-ingredients.model'
-import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
+import { IBurgerIngredient } from '../../burger-ingredients/burger-ingredients.model'
+import { ingredientsSelector } from '../../burger-ingredients/burger-ingredients.slice'
 
 interface IIngredientDetailsState {
   ingredient: IBurgerIngredient | null
@@ -29,7 +29,7 @@ export const selectChosenIngredient = createSelector(
     ),
 )
 
-const ingredientDetailsSlice = createSlice({
+const modalIngredientDetailsSlice = createSlice({
   name: 'ingredientDetails',
   initialState,
   reducers: {
@@ -42,6 +42,6 @@ const ingredientDetailsSlice = createSlice({
   },
 })
 
-export const { saveIngredientDetails, removeIngredientDetails } = ingredientDetailsSlice.actions
+export const { saveIngredientDetails, removeIngredientDetails } = modalIngredientDetailsSlice.actions
 
-export default ingredientDetailsSlice.reducer
+export default modalIngredientDetailsSlice.reducer

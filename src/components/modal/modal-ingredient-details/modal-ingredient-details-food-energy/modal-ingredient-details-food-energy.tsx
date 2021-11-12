@@ -4,14 +4,14 @@ import classNames from 'classnames'
 
 import { IBurgerIngredientFoodEnergy } from '@components/burger-ingredients/burger-ingredients.model'
 
-import styles from './ingredient-details-food-energy.module.css'
+import styles from './modal-ingredient-details-food-energy.module.css'
 
 interface IIngredientDetailsFoodEnergyProps {
   className?: string
   foodEnergy: Partial<IBurgerIngredientFoodEnergy>
 }
 
-const IngredientDetailsFoodEnergy = ({
+const ModalIngredientDetailsFoodEnergy = ({
   className,
   foodEnergy,
 }: IIngredientDetailsFoodEnergyProps): JSX.Element => {
@@ -49,4 +49,4 @@ const IngredientDetailsFoodEnergy = ({
   )
 }
 
-export default React.memo(IngredientDetailsFoodEnergy)
+export default React.memo(ModalIngredientDetailsFoodEnergy)

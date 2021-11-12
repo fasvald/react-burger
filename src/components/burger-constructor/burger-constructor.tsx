@@ -13,12 +13,12 @@ import {
 import { ingredientsSelector } from '@components/burger-ingredients/burger-ingredients.slice'
 import LoaderCircular from '@components/loader-circular/loader-circular'
 import Modal from '@components/modal/modal'
-import OrderDetails from '@components/order-details/order-details'
+import ModalOrderCreationDetails from '@components/modal/modal-order-creation-details/modal-order-creation-details'
 import {
   orderSelector,
   orderCreationStatusSelector,
   checkoutOrder,
-} from '@components/order-details/order-details.slice'
+} from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { authSelector } from '@services/slices/auth.slice'
 
@@ -217,7 +217,7 @@ const BurgerConstructor = (): JSX.Element => {
         </Button>
       </div>
       <Modal open={openModal} onClose={handleModalClose}>
-        {order && <OrderDetails orderDetails={order} />}
+        {order && <ModalOrderCreationDetails orderDetails={order} />}
       </Modal>
     </section>
   )

@@ -8,14 +8,14 @@ import { useParams } from 'react-router-dom'
 
 import { useAppSelector } from '@hooks'
 
-import { IBurgerIngredientFoodEnergy } from '../burger-ingredients/burger-ingredients.model'
-import { ingredientsFetchStatusSelector } from '../burger-ingredients/burger-ingredients.slice'
+import { IBurgerIngredientFoodEnergy } from '../../burger-ingredients/burger-ingredients.model'
+import { ingredientsFetchStatusSelector } from '../../burger-ingredients/burger-ingredients.slice'
 
-import IngredientDetailsFoodEnergy from './ingredient-details-food-energy/ingredient-details-food-energy'
-import IngredientDetailsImage from './ingredient-details-image/ingredient-details-image'
-import { removeIngredientDetails, selectChosenIngredient } from './ingredient-details.slice'
+import IngredientDetailsFoodEnergy from './modal-ingredient-details-food-energy/modal-ingredient-details-food-energy'
+import IngredientDetailsImage from './modal-ingredient-details-image/modal-ingredient-details-image'
+import { removeIngredientDetails, selectChosenIngredient } from './modal-ingredient-details.slice'
 
-import styles from './ingredient-details.module.css'
+import styles from './modal-ingredient-details.module.css'
 
 interface IIngredientDetailsProps {
   isFullSizePage?: boolean
@@ -23,7 +23,7 @@ interface IIngredientDetailsProps {
 
 const FOOD_ENERGY_PROPS = ['calories', 'proteins', 'fat', 'carbohydrates']
 
-const IngredientDetails = ({ isFullSizePage = false }: IIngredientDetailsProps): JSX.Element => {
+const ModalIngredientDetails = ({ isFullSizePage = false }: IIngredientDetailsProps): JSX.Element => {
   const { id } = useParams()
 
   const ingredient = useAppSelector((state) => selectChosenIngredient(state)(id))
@@ -97,4 +97,4 @@ const IngredientDetails = ({ isFullSizePage = false }: IIngredientDetailsProps):
   )
 }
 
-export default React.memo(IngredientDetails)
+export default React.memo(ModalIngredientDetails)

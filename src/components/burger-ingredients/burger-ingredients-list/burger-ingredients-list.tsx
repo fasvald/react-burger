@@ -3,7 +3,7 @@ import React, { useCallback, useRef } from 'react'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import { saveIngredientDetails } from '@components/ingredient-details/ingredient-details.slice'
+import { saveIngredientDetails } from '@components/modal/modal-ingredient-details/modal-ingredient-details.slice'
 import { useAppDispatch, useAppSelector } from '@hooks'
 
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card'

@@ -10,10 +10,10 @@ import { IModalRouteLocationState } from '@common/models/routing.model'
 import BurgerConstructor from '@components/burger-constructor/burger-constructor'
 import BurgerIngredients from '@components/burger-ingredients/burger-ingredients'
 import { getIngredients } from '@components/burger-ingredients/burger-ingredients.slice'
-import IngredientDetails from '@components/ingredient-details/ingredient-details'
 import LoaderCircular from '@components/loader-circular/loader-circular'
 import Modal from '@components/modal/modal'
-import OrderDetailsStatus from '@components/order-details-status/order-details-status'
+import ModalIngredientDetails from '@components/modal/modal-ingredient-details/modal-ingredient-details'
+import ModalOrderDetails from '@components/modal/modal-order-details/modal-order-details'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import FeedPage from '@pages/feed/feed-page'
 import ForgotPasswordPage from '@pages/forgot-password/forgot-password-page'
@@ -109,8 +109,8 @@ const App = (): JSX.Element => {
                 }
               />
               <Route path='feed' element={<FeedPage />} />
-              <Route path='feed/:id' element={<OrderDetailsStatus isFullSizePage />} />
-              <Route path='ingredients/:id' element={<IngredientDetails isFullSizePage />} />
+              <Route path='feed/:id' element={<ModalOrderDetails isFullSizePage />} />
+              <Route path='ingredients/:id' element={<ModalIngredientDetails isFullSizePage />} />
               <Route path='login' element={<LoginPage />} />
               <Route path='register' element={<RegisterPage />} />
               <Route path='forgot-password' element={<ForgotPasswordPage />} />
@@ -136,7 +136,7 @@ const App = (): JSX.Element => {
                   path='ingredients/:id'
                   element={
                     <Modal open isModalRoute>
-                      <IngredientDetails />
+                      <ModalIngredientDetails />
                     </Modal>
                   }
                 />
@@ -144,7 +144,7 @@ const App = (): JSX.Element => {
                   path='feed/:id'
                   element={
                     <Modal open isModalRoute>
-                      <OrderDetailsStatus />
+                      <ModalOrderDetails />
                     </Modal>
                   }
                 />

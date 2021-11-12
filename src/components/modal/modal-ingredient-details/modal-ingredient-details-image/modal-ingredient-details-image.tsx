@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import styles from './ingredient-details-image.module.css'
+import styles from './modal-ingredient-details-image.module.css'
 
 interface IIngredientDetailsImageProps {
   className?: string
@@ -10,7 +10,7 @@ interface IIngredientDetailsImageProps {
   height: string
 }
 
-const IngredientDetailsImage = ({
+const ModalIngredientDetailsImage = ({
   className,
   image,
   height,
@@ -28,4 +28,4 @@ const IngredientDetailsImage = ({
   return <div className={imgContainerClass} style={imgStyle} />
 }
 
-export default React.memo(IngredientDetailsImage)
+export default React.memo(ModalIngredientDetailsImage)

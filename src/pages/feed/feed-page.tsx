@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { WS_ENDPOINTS } from '@common/constants/api.constant'
 import { IOrder } from '@common/models/orders.model'
-import CardOrder from '@components/cards/card-order/card-order'
+import CardOrder from '@components/card/card-order/card-order'
 import LoaderCircular from '@components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { wsConnect, wsDisconnect } from '@services/slices/web-sockets.slice'

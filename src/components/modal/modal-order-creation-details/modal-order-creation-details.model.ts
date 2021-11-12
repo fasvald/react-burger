@@ -1,4 +1,4 @@
-import { TFetchProcess } from '../../common/models/fetch-process.model'
+import { TFetchProcess } from '@common/models/fetch-process.model'
 
 export interface IOrderDetails {
   name: string

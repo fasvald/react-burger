@@ -16,7 +16,7 @@ import {
   IOrderDetailsBody,
   IOrderDetailsResponse,
   IOrderDetailsState,
-} from './order-details.model'
+} from './modal-order-creation-details.model'
 
 const initialState: IOrderDetailsState = {
   status: 'idle',
@@ -70,7 +70,7 @@ export const checkoutOrder = createAsyncThunk<
   }
 })
 
-export const orderDetailsSlice = createSlice({
+export const modalOrderCreationDetailsSlice = createSlice({
   name: 'orderDetails',
   initialState,
   reducers: {},
@@ -90,4 +90,4 @@ export const orderDetailsSlice = createSlice({
   },
 })
 
-export default orderDetailsSlice.reducer
+export default modalOrderCreationDetailsSlice.reducer
