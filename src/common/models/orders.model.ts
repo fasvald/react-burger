@@ -10,9 +10,18 @@ export interface IOrder {
   updatedAt: string
 }
 
+export interface IOrderByNumberBody {
+  orderNumber: number
+  isPrivate: boolean
+}
+
 export interface IOrdersResponse {
   success: boolean
   orders: IOrder[]
   total: number
   totalToday: number
+}
+
+export interface IOrderByIDResponse {
+  orders: IOrder[]
 }

@@ -7,15 +7,12 @@ import { WS_ENDPOINTS } from '@common/constants/api.constant'
 import { IOrder } from '@common/models/orders.model'
 import CardOrder from '@components/card/card-order/card-order'
 import LoaderCircular from '@components/loader-circular/loader-circular'
+import { saveOrderDetails } from '@components/modal/modal-order-details/modal-order-details.slice'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { getAllOrders } from '@services/slices/orders.slice'
 import { wsConnect, wsDisconnect } from '@services/slices/web-sockets.slice'
 
-import {
-  getAllOrders,
-  ordersSelector,
-  ordersFetchStatusSelector,
-  updateOrders,
-} from './feed-page.slice'
+import { ordersSelector, ordersFetchStatusSelector, updateOrders } from './feed-page.slice'
 import FeedStatusInfo from './feed-status-info/feed-status-info'
 
 import styles from './feed-page.module.css'
@@ -31,14 +28,16 @@ const FeedPage = (): JSX.Element => {
 
   const handleClick = useCallback(
     (order: IOrder) => {
-      navigate(`/feed/${order._id}`, {
+      dispatch(saveOrderDetails(order))
+
+      navigate(`/feed/${order.number}`, {
         state: {
           isModal: true,
           background: location,
         },
       })
     },
-    [location, navigate],
+    [location, navigate, dispatch],
   )
 
   const titleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])

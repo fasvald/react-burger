@@ -23,10 +23,11 @@ const initialState: IOrderDetailsState = {
   order: null,
 }
 
-export const orderSelector = (state: RootState): IOrderDetails | null => state.orderDetails.order
+export const orderSelector = (state: RootState): IOrderDetails | null =>
+  state.orderCreationDetails.order
 
 export const orderCreationStatusSelector = (state: RootState): TFetchProcess =>
-  state.orderDetails.status
+  state.orderCreationDetails.status
 
 export const checkoutOrder = createAsyncThunk<
   IOrderDetailsResponse,
@@ -70,8 +71,8 @@ export const checkoutOrder = createAsyncThunk<
   }
 })
 
-export const modalOrderCreationDetailsSlice = createSlice({
-  name: 'orderDetails',
+const modalOrderCreationDetailsSlice = createSlice({
+  name: 'orderCreationDetails',
   initialState,
   reducers: {},
   extraReducers(builder) {

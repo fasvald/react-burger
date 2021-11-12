@@ -1,7 +1,8 @@
 import burgerConstructorReducer from '@components/burger-constructor/burger-constructor.slice'
 import burgerIngredientsReducer from '@components/burger-ingredients/burger-ingredients.slice'
 import modalIngredientDetailsReducer from '@components/modal/modal-ingredient-details/modal-ingredient-details.slice'
-import modalOrderDetailsReducer from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
+import modalOrderCreationDetailsSlice from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
+import modalOrderDetailsReducer from '@components/modal/modal-order-details/modal-order-details.slice'
 import feedPageReducer from '@pages/feed/feed-page.slice'
 import forgotPasswordPageReducer from '@pages/forgot-password/forgot-password-page.slice'
 import loginPageReducer from '@pages/login/login-page.slice'
@@ -31,6 +32,7 @@ const rootReducer = {
   burgerConstructor: burgerConstructorReducer,
   // Modals related reducers
   ingredientDetails: modalIngredientDetailsReducer,
+  orderCreationDetails: modalOrderCreationDetailsSlice,
   orderDetails: modalOrderDetailsReducer,
 }
 

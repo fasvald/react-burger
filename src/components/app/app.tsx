@@ -109,7 +109,7 @@ const App = (): JSX.Element => {
                 }
               />
               <Route path='feed' element={<FeedPage />} />
-              <Route path='feed/:id' element={<ModalOrderDetails isFullSizePage />} />
+              <Route path='feed/:orderNumber' element={<ModalOrderDetails isFullSizePage />} />
               <Route path='ingredients/:id' element={<ModalIngredientDetails isFullSizePage />} />
               <Route path='login' element={<LoginPage />} />
               <Route path='register' element={<RegisterPage />} />
@@ -141,7 +141,7 @@ const App = (): JSX.Element => {
                   }
                 />
                 <Route
-                  path='feed/:id'
+                  path='feed/:orderNumber'
                   element={
                     <Modal open isModalRoute>
                       <ModalOrderDetails />
