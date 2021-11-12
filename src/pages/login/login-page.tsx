@@ -49,7 +49,7 @@ const LoginPage = (): JSX.Element => {
   const location = useLocation()
 
   const state = location.state as { from: Location }
-  const from = state ? state.from.pathname : '/'
+  const from = state?.from?.pathname || '/'
 
   const dispatch = useAppDispatch()
 

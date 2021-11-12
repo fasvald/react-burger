@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
@@ -17,9 +17,10 @@ import styles from './card-order.module.css'
 interface ICardOrderProps {
   className?: string
   order: IOrder
+  onClick: (order: IOrder) => void
 }
 
-const CardOrder = ({ className, order }: ICardOrderProps): JSX.Element => {
+const CardOrder = ({ className, order, onClick }: ICardOrderProps): JSX.Element => {
   const ingredients = useAppSelector((state) => selectIngredientsByIDs(state)(order.ingredients))
 
   const normalizedIngredients = useMemo(
@@ -32,6 +33,15 @@ const CardOrder = ({ className, order }: ICardOrderProps): JSX.Element => {
     [normalizedIngredients],
   )
 
+  /**
+   * Because of passing it like arrow function it will cause the re-render of the card.
+   * So we can do it like this down below, to prevent re-render, or make it like this:
+   * <div className={cardClass} onClick={() => onClick(order)} aria-hidden='true'>
+   */
+  const handleClick = useCallback(() => {
+    onClick(order)
+  }, [order, onClick])
+
   const cardClass = useMemo(() => classNames(className, styles.card), [className])
 
   const priceValueClass = useMemo(
@@ -42,7 +52,7 @@ const CardOrder = ({ className, order }: ICardOrderProps): JSX.Element => {
   const CurrencyIconMemo = useMemo(() => <CurrencyIcon type='primary' />, [])
 
   return (
-    <div className={cardClass}>
+    <div className={cardClass} onClick={handleClick} aria-hidden='true'>
       <div className={styles.info}>
         <span className='text text_type_digits-default'>#{order.number}</span>
         <DateFormattedLabel date={order.createdAt} />

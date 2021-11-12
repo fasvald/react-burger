@@ -37,8 +37,10 @@ const OrderDetails = ({ orderDetails }: IOrderDetailsProps): JSX.Element => {
         <p className={orderNumberClass}>{order.number}</p>
         <p className={orderTitleClass}>идентификатор заказа</p>
         <img src={orderAcceptedGif} alt='Order Accepted' className={styles.orderAcceptedImg} />
-        <p className={orderDescriptionTitleClass}>Ваш заказ начали готовить</p>
-        <p className={orderDescriptionSubTitleClass}>Дождитесь готовности на орбитальной станции</p>
+        <p className={orderDescriptionTitleClass}>Ваш заказ готов</p>
+        <p className={orderDescriptionSubTitleClass}>
+          Можете забрать заказ на орбитальной станции или посмотреть список заказов
+        </p>
       </div>
     </div>
   )

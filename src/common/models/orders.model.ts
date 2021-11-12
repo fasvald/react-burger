@@ -10,7 +10,7 @@ export interface IOrder {
   updatedAt: string
 }
 
-export interface IOrdersAllResponse {
+export interface IOrdersResponse {
   success: boolean
   orders: IOrder[]
   total: number

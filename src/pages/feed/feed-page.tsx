@@ -1,12 +1,21 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import classNames from 'classnames'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { WS_ENDPOINTS } from '@common/constants/api.constant'
+import { IOrder } from '@common/models/orders.model'
 import CardOrder from '@components/cards/card-order/card-order'
 import LoaderCircular from '@components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '@hooks'
+import { wsConnect, wsDisconnect } from '@services/slices/web-sockets.slice'
 
-import { getOrders, ordersSelector, ordersFetchStatusSelector } from './feed-page.slice'
+import {
+  getAllOrders,
+  ordersSelector,
+  ordersFetchStatusSelector,
+  updateOrders,
+} from './feed-page.slice'
 import FeedStatusInfo from './feed-status-info/feed-status-info'
 
 import styles from './feed-page.module.css'
@@ -17,10 +26,36 @@ const FeedPage = (): JSX.Element => {
 
   const dispatch = useAppDispatch()
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleClick = useCallback(
+    (order: IOrder) => {
+      navigate(`/feed/${order._id}`, {
+        state: {
+          isModal: true,
+          background: location,
+        },
+      })
+    },
+    [location, navigate],
+  )
+
   const titleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])
 
   useEffect(() => {
-    dispatch(getOrders())
+    const fetchData = async () => {
+      await dispatch(getAllOrders())
+      await dispatch(
+        wsConnect({ url: WS_ENDPOINTS.ordersAll, onMessageActionType: updateOrders.type }),
+      )
+    }
+
+    fetchData()
+
+    return () => {
+      dispatch(wsDisconnect())
+    }
   }, [dispatch])
 
   if (ordersFetchStatus === 'loading') {
@@ -44,7 +79,12 @@ const FeedPage = (): JSX.Element => {
         <div className={styles.feed}>
           {/* NOTE: Could be improved with mixing https://github.com/bvaughn/react-window and img lazy loading */}
           {orders.map((order) => (
-            <CardOrder className={styles.feedItemCard} key={order._id} order={order} />
+            <CardOrder
+              className={styles.feedItemCard}
+              key={order._id}
+              order={order}
+              onClick={handleClick}
+            />
           ))}
         </div>
       </section>

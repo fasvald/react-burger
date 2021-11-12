@@ -1,3 +1,5 @@
+export const BASE_WS_URL = 'wss://norma.nomoreparties.space'
+
 export const BASE_URL = 'https://norma.nomoreparties.space/api'
 
 export const API_ENDPOINTS = {
@@ -11,4 +13,9 @@ export const API_ENDPOINTS = {
   profile: `/auth/user`,
   token: `/auth/token`,
   ordersAll: '/orders/all',
+}
+
+export const WS_ENDPOINTS = {
+  orders: `${BASE_WS_URL}/orders`,
+  ordersAll: `${BASE_WS_URL}/orders/all`,
 }

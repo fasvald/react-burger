@@ -6,6 +6,7 @@ import axios, { AxiosResponse } from 'axios'
 import { API_ENDPOINTS } from '@common/constants/api.constant'
 import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
 import { TFetchProcess } from '@common/models/fetch-process.model'
+import { getAuthorizedHeader } from '@common/utils/auth.utils'
 import { getSerializedAxiosError } from '@common/utils/errors.utils'
 import apiInstance from '@services/interceptors/client.interceptor'
 import { RootState } from '@store'
@@ -46,6 +47,9 @@ export const checkoutOrder = createAsyncThunk<
       AxiosResponse<IOrderDetailsResponse>
     >(API_ENDPOINTS.orders, data, {
       cancelToken: source.token,
+      headers: {
+        ...getAuthorizedHeader(),
+      },
     })
 
     return response.data

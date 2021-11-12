@@ -11,11 +11,13 @@ import registerPageReducer from '@pages/register/register-page.slice'
 import resetPasswordPageReducer from '@pages/reset-password/reset-password-page.slice'
 import authReducer from '@services/slices/auth.slice'
 import userReducer from '@services/slices/user.slice'
+import wsReducer from '@services/slices/web-sockets.slice'
 
 const rootReducer = {
   // Global reducers (auth, etc.)
   auth: authReducer,
   user: userReducer,
+  ws: wsReducer,
   // Page related reducers
   loginPage: loginPageReducer,
   registerPage: registerPageReducer,

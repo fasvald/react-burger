@@ -1,13 +1,13 @@
 /* eslint-disable no-param-reassign */
 
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { memoize } from 'lodash'
 
 import { API_ENDPOINTS } from '@common/constants/api.constant'
 import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
 import { TFetchProcess } from '@common/models/fetch-process.model'
-import { IOrder, TOrderStatuses, IOrdersAllResponse } from '@common/models/orders.model'
+import { IOrder, TOrderStatuses, IOrdersResponse } from '@common/models/orders.model'
 import { getSerializedAxiosError } from '@common/utils/errors.utils'
 import apiInstance from '@services/interceptors/client.interceptor'
 import { RootState } from '@store'
@@ -39,8 +39,8 @@ export const selectOrdersByStatus = createSelector([ordersSelector], (orders) =>
   memoize((status: TOrderStatuses) => orders.filter((order) => order.status === status)),
 )
 
-export const getOrders = createAsyncThunk<
-  IOrdersAllResponse,
+export const getAllOrders = createAsyncThunk<
+  IOrdersResponse,
   undefined,
   {
     state: RootState
@@ -56,7 +56,7 @@ export const getOrders = createAsyncThunk<
         source.cancel('Operation stop the work.')
       })
 
-      const response = await apiInstance.get<IOrdersAllResponse>(API_ENDPOINTS.ordersAll, {
+      const response = await apiInstance.get<IOrdersResponse>(API_ENDPOINTS.ordersAll, {
         cancelToken: source.token,
       })
 
@@ -94,21 +94,28 @@ export const getOrders = createAsyncThunk<
 const feedPageSlice = createSlice({
   name: 'feedPage',
   initialState,
-  reducers: {},
+  reducers: {
+    // Manual update orders in the store (usually as callback for web socket update event)
+    updateOrders(state, action: PayloadAction<{ data: IOrdersResponse }>) {
+      state.orders = action.payload.data.orders
+      state.total = action.payload.data.total
+      state.totalToday = action.payload.data.totalToday
+    },
+  },
   extraReducers(builder) {
-    builder.addCase(getOrders.pending, (state) => {
+    builder.addCase(getAllOrders.pending, (state) => {
       state.status = 'loading'
       state.orders = []
       state.total = null
       state.totalToday = null
     })
-    builder.addCase(getOrders.fulfilled, (state, action) => {
+    builder.addCase(getAllOrders.fulfilled, (state, action) => {
       state.status = 'loaded'
       state.orders = action.payload.orders
       state.total = action.payload.total
       state.totalToday = action.payload.totalToday
     })
-    builder.addCase(getOrders.rejected, (state) => {
+    builder.addCase(getAllOrders.rejected, (state) => {
       state.status = 'error'
       state.orders = []
       state.total = null
@@ -116,5 +123,7 @@ const feedPageSlice = createSlice({
     })
   },
 })
+
+export const { updateOrders } = feedPageSlice.actions
 
 export default feedPageSlice.reducer
