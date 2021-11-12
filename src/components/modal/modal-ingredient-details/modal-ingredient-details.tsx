@@ -23,7 +23,9 @@ interface IIngredientDetailsProps {
 
 const FOOD_ENERGY_PROPS = ['calories', 'proteins', 'fat', 'carbohydrates']
 
-const ModalIngredientDetails = ({ isFullSizePage = false }: IIngredientDetailsProps): JSX.Element => {
+const ModalIngredientDetails = ({
+  isFullSizePage = false,
+}: IIngredientDetailsProps): JSX.Element => {
   const { id } = useParams()
 
   const ingredient = useAppSelector((state) => selectChosenIngredient(state)(id))

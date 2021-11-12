@@ -42,6 +42,7 @@ const modalIngredientDetailsSlice = createSlice({
   },
 })
 
-export const { saveIngredientDetails, removeIngredientDetails } = modalIngredientDetailsSlice.actions
+export const { saveIngredientDetails, removeIngredientDetails } =
+  modalIngredientDetailsSlice.actions
 
 export default modalIngredientDetailsSlice.reducer

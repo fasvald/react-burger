@@ -1,7 +1,7 @@
 import burgerConstructorReducer from '@components/burger-constructor/burger-constructor.slice'
 import burgerIngredientsReducer from '@components/burger-ingredients/burger-ingredients.slice'
-import ingredientDetailsReducer from '@components/modal/modal-ingredient-details/modal-ingredient-details.slice'
-import orderDetailsReducer from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
+import modalIngredientDetailsReducer from '@components/modal/modal-ingredient-details/modal-ingredient-details.slice'
+import modalOrderDetailsReducer from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
 import feedPageReducer from '@pages/feed/feed-page.slice'
 import forgotPasswordPageReducer from '@pages/forgot-password/forgot-password-page.slice'
 import loginPageReducer from '@pages/login/login-page.slice'
@@ -29,8 +29,9 @@ const rootReducer = {
   // Components related reducers
   burgerIngredients: burgerIngredientsReducer,
   burgerConstructor: burgerConstructorReducer,
-  ingredientDetails: ingredientDetailsReducer,
-  orderDetails: orderDetailsReducer,
+  // Modals related reducers
+  ingredientDetails: modalIngredientDetailsReducer,
+  orderDetails: modalOrderDetailsReducer,
 }
 
 export default rootReducer
