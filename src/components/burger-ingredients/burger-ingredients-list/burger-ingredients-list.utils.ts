@@ -19,9 +19,7 @@ import { IModalRouteLocationState } from '../../../common/models/routing.model'
  * @param location Passing location (roo history location)
  * @returns Result if the passing location is a "modal" location
  */
-export const isModalRouteLocation = (
-  location: IModalRouteLocationState | Location<unknown>,
-): boolean => {
+export const isModalRouteLocation = (location: IModalRouteLocationState | Location): boolean => {
   if (isInstanceOfModalRouteLocationState(location)) {
     return location.isModal
   }

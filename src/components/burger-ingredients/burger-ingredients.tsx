@@ -2,8 +2,8 @@ import React, { useMemo } from 'react'
 
 import classNames from 'classnames'
 
-import { useAppSelector } from '../../hooks'
-import LoaderCircular from '../loader-circular/loader-circular'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppSelector } from '@hooks'
 
 import BurgerIngredientsList from './burger-ingredients-list/burger-ingredients-list'
 import { ingredientsSelector, ingredientsFetchStatusSelector } from './burger-ingredients.slice'

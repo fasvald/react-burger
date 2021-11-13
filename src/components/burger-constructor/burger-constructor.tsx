@@ -3,24 +3,24 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import { useDrop } from 'react-dnd'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
-import DnDItemTypes from '../../common/constants/dnd-item-types.constant'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import DnDItemTypes from '@common/constants/dnd-item-types.constant'
 import {
   IBurgerIngredient,
   IBurgerIngredientUnique,
-} from '../burger-ingredients/burger-ingredients.model'
-import { ingredientsSelector } from '../burger-ingredients/burger-ingredients.slice'
-import LoaderCircular from '../loader-circular/loader-circular'
-import Modal from '../modal/modal'
-import OrderDetails from '../order-details/order-details'
+} from '@components/burger-ingredients/burger-ingredients.model'
+import { ingredientsSelector } from '@components/burger-ingredients/burger-ingredients.slice'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import Modal from '@components/modal/modal'
+import ModalOrderCreationDetails from '@components/modal/modal-order-creation-details/modal-order-creation-details'
 import {
   orderSelector,
   orderCreationStatusSelector,
   checkoutOrder,
-} from '../order-details/order-details.slice'
+} from '@components/modal/modal-order-creation-details/modal-order-creation-details.slice'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector } from '@services/slices/auth.slice'
 
 import BurgerConstructorIngredientBun from './burger-constructor-ingredient-bun/burger-constructor-ingredient-bun'
 import BurgerConstructorIngredientDraggable from './burger-constructor-ingredient-dnd/burger-constructor-ingredient-dnd'
@@ -54,7 +54,7 @@ const BurgerConstructor = (): JSX.Element => {
   const promiseRef = useRef<any>(null)
 
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const handleModalClose = useCallback(() => {
@@ -75,8 +75,7 @@ const BurgerConstructor = (): JSX.Element => {
     }
 
     if (!auth.user) {
-      history.push({
-        pathname: '/login',
+      navigate('/login', {
         state: {
           from: location.pathname,
         },
@@ -94,7 +93,7 @@ const BurgerConstructor = (): JSX.Element => {
     setOpenModal(true)
 
     dispatch(clearIngredients())
-  }, [dispatch, ingredientsID, toppings, buns, auth.user, history, location.pathname])
+  }, [dispatch, ingredientsID, toppings, buns, auth.user, navigate, location.pathname])
 
   const findIngredient = useCallback(
     (id: string) => {
@@ -218,7 +217,7 @@ const BurgerConstructor = (): JSX.Element => {
         </Button>
       </div>
       <Modal open={openModal} onClose={handleModalClose}>
-        {order && <OrderDetails orderDetails={order} />}
+        {order && <ModalOrderCreationDetails orderDetails={order} />}
       </Modal>
     </section>
   )

@@ -4,8 +4,9 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import classNames from 'classnames'
 import { useDrag, useDrop } from 'react-dnd'
 
-import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
-import { IBurgerIngredientUnique } from '../../burger-ingredients/burger-ingredients.model'
+import DnDItemTypes from '@common/constants/dnd-item-types.constant'
+import { IBurgerIngredientUnique } from '@components/burger-ingredients/burger-ingredients.model'
+
 import { IBurgerConstructorIngredientProps } from '../burger-constructor.model'
 
 import styles from './burger-constructor-ingredient-dnd.module.css'

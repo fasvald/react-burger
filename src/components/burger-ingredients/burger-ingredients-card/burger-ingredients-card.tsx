@@ -4,9 +4,10 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import classNames from 'classnames'
 import { useDrag } from 'react-dnd'
 
-import DnDItemTypes from '../../../common/constants/dnd-item-types.constant'
-import { useAppSelector } from '../../../hooks'
-import { selectIngredientIterationByID } from '../../burger-constructor/burger-constructor.slice'
+import DnDItemTypes from '@common/constants/dnd-item-types.constant'
+import { selectIngredientIterationByID } from '@components/burger-constructor/burger-constructor.slice'
+import { useAppSelector } from '@hooks'
+
 import { IBurgerIngredient } from '../burger-ingredients.model'
 
 import styles from './burger-ingredients-card.module.css'

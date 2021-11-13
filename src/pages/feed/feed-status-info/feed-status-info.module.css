@@ -1,0 +1,54 @@
+@import '../../../common/styles/variables.css';
+
+/* .wrapper {} */
+
+.lists {
+  display: flex;
+  max-height: 300px;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
+
+/* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.lists::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lists::-webkit-scrollbar-track {
+  background-color: var(--dark-grey);
+  border-radius: 0;
+}
+
+.lists::-webkit-scrollbar-thumb {
+  background-color: var(--dark-grey-dim);
+  border-radius: 0;
+}
+
+.lists,
+.infoSection:not(:last-of-type) {
+  margin-bottom: 60px;
+}
+
+.list {
+  flex: 1;
+}
+
+.list:first-of-type li {
+  color: var(--coral);
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.orderNumber {
+  text-shadow: var(--glow-shadow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lists {
+    scroll-behavior: smooth;
+  }
+}

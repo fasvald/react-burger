@@ -1,0 +1,41 @@
+@import '../../../common/styles/variables.css';
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  width: 100%;
+  max-width: var(--modal-dialog-default-body-max-width);
+  padding: 80px 0;
+}
+
+.orderNumber {
+  text-shadow: var(--glow-shadow);
+}
+
+.orderNumberTitle {
+  margin-top: 32px;
+}
+
+.orderAcceptedImg {
+  display: block;
+  width: 190px;
+  height: 144px;
+  margin-top: 60px;
+}
+
+.orderTitle {
+  margin-top: 60px;
+}
+
+.orderSubTitle {
+  margin-top: 8px;
+  text-align: center;
+}

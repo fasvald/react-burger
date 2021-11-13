@@ -9,15 +9,15 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
 import Cookies from 'js-cookie'
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
-import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
-import { TSignInResponse } from '../../common/models/auth.model'
-import { getBearerToken, getTokenExpirationDate } from '../../common/utils/auth.utils'
-import { isEmailValid, isPasswordValid } from '../../common/utils/validators.utils'
-import LoaderCircular from '../../components/loader-circular/loader-circular'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector, saveAuthorizedUser, signIn } from '../../services/slices/auth.slice'
+import { isInstanceOfAxiosSerializedError } from '@common/guards/errors.guards'
+import { TSignInResponse } from '@common/models/auth.model'
+import { getBearerToken, getTokenExpirationDate } from '@common/utils/auth.utils'
+import { isEmailValid, isPasswordValid } from '@common/utils/validators.utils'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector, saveAuthorizedUser, signIn } from '@services/slices/auth.slice'
 
 import { signInStatusSelector } from './login-page.slice'
 
@@ -45,8 +45,11 @@ const LoginPage = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
-  const history = useHistory()
-  const { state } = useLocation<{ from: string }>()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const state = location.state as { from: Location }
+  const from = state?.from?.pathname || '/'
 
   const dispatch = useAppDispatch()
 
@@ -102,9 +105,9 @@ const LoginPage = (): JSX.Element => {
 
       dispatch(saveAuthorizedUser(payload.user))
 
-      history.push(state?.from || '/')
+      navigate(from, { replace: true })
     },
-    [dispatch, form, history, isFormValid, state],
+    [dispatch, form, navigate, isFormValid, from],
   )
 
   useEffect(() => {
@@ -134,7 +137,7 @@ const LoginPage = (): JSX.Element => {
   )
 
   if (auth.user) {
-    return <Redirect to={state?.from || '/'} />
+    return <Navigate to={from} />
   }
 
   return (

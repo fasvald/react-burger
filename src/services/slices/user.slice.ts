@@ -3,12 +3,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios, { AxiosResponse } from 'axios'
 
-import { API_ENDPOINTS } from '../../common/constants/api.constant'
-import { IAuthUser, IProfileResponse } from '../../common/models/auth.model'
-import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
-import { getAuthorizedHeader } from '../../common/utils/auth.utils'
-import { getSerializedAxiosError } from '../../common/utils/errors.utils'
-import { RootState } from '../../store'
+import { API_ENDPOINTS } from '@common/constants/api.constant'
+import { IAuthUser, IProfileResponse } from '@common/models/auth.model'
+import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
+import { getAuthorizedHeader } from '@common/utils/auth.utils'
+import { getSerializedAxiosError } from '@common/utils/errors.utils'
+import { RootState } from '@store'
+
 import apiInstance from '../interceptors/client.interceptor'
 
 interface IUserState {

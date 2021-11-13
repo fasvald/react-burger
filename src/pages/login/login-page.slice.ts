@@ -2,10 +2,10 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 
-import { TSignInResponse } from '../../common/models/auth.model'
-import { TFetchProcess } from '../../common/models/fetch-process.model'
-import { signIn } from '../../services/slices/auth.slice'
-import { RootState } from '../../store'
+import { TSignInResponse } from '@common/models/auth.model'
+import { TFetchProcess } from '@common/models/fetch-process.model'
+import { signIn } from '@services/slices/auth.slice'
+import { RootState } from '@store'
 
 interface ILoginPageState {
   status: TFetchProcess

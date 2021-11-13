@@ -1,0 +1,51 @@
+@import '../../../common/styles/variables.css';
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog_fullSize {
+  width: 100%;
+  margin: 120px auto auto;
+}
+
+.dialog_fullSize .dialogHeader {
+  justify-content: center;
+  padding: 0;
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 64px;
+
+  /* To prevent overflow dialog internal close button */
+  padding-right: 40px;
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  width: 100%;
+  max-width: var(--modal-dialog-default-body-max-width);
+}
+
+.dialogBody_skeleton {
+  justify-content: flex-start;
+}
+
+.ingredientName {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.dialogBodySkeletonFoodEnergy,
+.foodEnergyInfo {
+  margin-top: 32px;
+  margin-bottom: 20px;
+}

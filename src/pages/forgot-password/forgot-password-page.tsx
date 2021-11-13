@@ -4,13 +4,13 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components'
 import classNames from 'classnames'
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 
-import { isInstanceOfAxiosSerializedError } from '../../common/guards/errors.guards'
-import { isEmailValid } from '../../common/utils/validators.utils'
-import LoaderCircular from '../../components/loader-circular/loader-circular'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { authSelector } from '../../services/slices/auth.slice'
+import { isInstanceOfAxiosSerializedError } from '@common/guards/errors.guards'
+import { isEmailValid } from '@common/utils/validators.utils'
+import LoaderCircular from '@components/loader-circular/loader-circular'
+import { useAppDispatch, useAppSelector } from '@hooks'
+import { authSelector } from '@services/slices/auth.slice'
 
 import {
   forgotPasswordStatusSelector,
@@ -39,21 +39,10 @@ const ForgotPasswordPage = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const promiseRef = useRef<any>(null)
 
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   const dispatch = useAppDispatch()
-
-  const locationTo = useMemo(
-    () => ({
-      pathname: '/reset-password',
-      state: {
-        fromForgotPasswordPage: true,
-        from: location.pathname,
-      },
-    }),
-    [location.pathname],
-  )
 
   const isFormValid = useCallback(() => {
     return isEmailValid(form.email)
@@ -97,9 +86,14 @@ const ForgotPasswordPage = (): JSX.Element => {
         return
       }
 
-      history.push(locationTo)
+      navigate('/reset-password', {
+        state: {
+          fromForgotPasswordPage: true,
+          from: location.pathname,
+        },
+      })
     },
-    [dispatch, form, history, isFormValid, locationTo],
+    [dispatch, form, navigate, isFormValid, location.pathname],
   )
 
   useEffect(() => {
@@ -129,7 +123,7 @@ const ForgotPasswordPage = (): JSX.Element => {
   )
 
   if (auth.user) {
-    return <Redirect to='/' />
+    return <Navigate to='/' />
   }
 
   return (

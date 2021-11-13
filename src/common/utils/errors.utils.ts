@@ -2,7 +2,7 @@
 
 import { AxiosError } from 'axios'
 
-import { IAxiosSerializedError } from '../models/errors.model'
+import { IAxiosSerializedError } from '@common/models/errors.model'
 
 /**
  * Create a "simplify" error object from Axios Error

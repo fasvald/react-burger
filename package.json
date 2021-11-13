@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^6.4.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.3",
@@ -23,6 +24,9 @@
     "axios": "^0.22.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "classnames": "^2.3.1",
+    "craco-alias": "^3.0.1",
+    "dayjs": "^1.10.7",
+    "history": "^5.1.0",
     "immer": "^9.0.6",
     "install": "^0.13.0",
     "js-cookie": "^3.0.1",
@@ -35,7 +39,7 @@
     "react-dnd-html5-backend": "^14.0.1",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "^6.0.0",
     "react-scripts": "4.0.3",
     "redux": "^4.1.1",
     "redux-logger": "^3.0.6",
@@ -44,9 +48,9 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start --no-cache",
-    "build": "react-scripts build",
-    "test": "react-scripts test --no-cache",
+    "start": "craco start --no-cache",
+    "build": "craco build",
+    "test": "craco test --no-cache",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -85,9 +89,9 @@
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^2.4.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-standard": "^22.0.0",
-    "stylelint-order": "^4.1.0"
+    "stylelint": "^14.0.1",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^23.0.0",
+    "stylelint-order": "^5.0.0"
   }
 }

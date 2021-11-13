@@ -1,0 +1,115 @@
+@import '../../../common/styles/variables.css';
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog_fullSize {
+  width: 100%;
+  margin: 120px auto auto;
+}
+
+.dialog_fullSize .dialogHeader {
+  justify-content: center;
+  padding: 0;
+}
+
+.dialogHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  height: 64px;
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: var(--modal-dialog-large-body-max-width);
+}
+
+.orderName {
+  margin-bottom: 12px;
+}
+
+.orderStatus {
+  margin-bottom: 60px;
+}
+
+.orderIngredients {
+  width: 100%;
+}
+
+.orderIngredientsList {
+  display: flex;
+  flex-direction: column;
+  max-height: 312px;
+  padding: 0;
+  padding-right: 24px;
+  margin: 0;
+  margin-top: 24px;
+  list-style: none;
+  overflow-y: scroll;
+}
+
+/* Custom scrollbar is based on this article => https://ishadeed.com/article/custom-scrollbars-css/ */
+
+.orderIngredientsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.orderIngredientsList::-webkit-scrollbar-track {
+  background-color: var(--dark-grey);
+  border-radius: 0;
+}
+
+.orderIngredientsList::-webkit-scrollbar-thumb {
+  background-color: var(--dark-grey-dim);
+  border-radius: 0;
+}
+
+.orderIngredientsListItem {
+  display: flex;
+  align-items: center;
+}
+
+.orderIngredientsListItem:not(:last-of-type) {
+  margin-bottom: 16px;
+}
+
+.orderIngredientsListItem p {
+  flex: 1;
+  padding-right: 16px;
+  padding-left: 16px;
+}
+
+.orderIngredientPrice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orderIngredientPriceValue {
+  margin-right: 8px;
+}
+
+.dialogFooter {
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  align-items: center;
+  width: 100%;
+  max-width: var(--modal-dialog-large-body-max-width);
+  margin-top: 40px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orderIngredientsList {
+    scroll-behavior: smooth;
+  }
+}

@@ -4,12 +4,12 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { memoize } from 'lodash'
 
-import { API_ENDPOINTS } from '../../common/constants/api.constant'
-import { IAxiosSerializedError, IUnknownDefaultError } from '../../common/models/errors.model'
-import { TBurgerIngredientType, TFetchProcess } from '../../common/models/fetch-process.model'
-import { getSerializedAxiosError } from '../../common/utils/errors.utils'
-import apiInstance from '../../services/interceptors/client.interceptor'
-import { RootState } from '../../store'
+import { API_ENDPOINTS } from '@common/constants/api.constant'
+import { IAxiosSerializedError, IUnknownDefaultError } from '@common/models/errors.model'
+import { TBurgerIngredientType, TFetchProcess } from '@common/models/fetch-process.model'
+import { getSerializedAxiosError } from '@common/utils/errors.utils'
+import apiInstance from '@services/interceptors/client.interceptor'
+import { RootState } from '@store'
 
 import { IBurgerIngredient, IBurgerIngredientFetch } from './burger-ingredients.model'
 
@@ -35,8 +35,23 @@ export const selectIngredientsByType = createSelector([ingredientsSelector], (in
   ),
 )
 
-export const selectIngredientById = createSelector([ingredientsSelector], (ingredients) =>
+export const selectIngredientByID = createSelector([ingredientsSelector], (ingredients) =>
   memoize((id: string) => ingredients.find((ingredient) => ingredient._id === id)),
+)
+
+export const selectIngredientsByIDs = createSelector([ingredientsSelector], (ingredients) =>
+  memoize((ids: string[]) =>
+    // We could use this `filter(ingredients, (ingredient) => ids.includes(ingredient._id))`, but we need to preserve duplications
+    ids.reduce((acc: IBurgerIngredient[], curr: string) => {
+      const ingredient = ingredients.find((item) => item._id === curr)
+
+      if (ingredient) {
+        acc.push(ingredient)
+      }
+
+      return acc
+    }, []),
+  ),
 )
 
 /**

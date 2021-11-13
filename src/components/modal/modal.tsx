@@ -30,7 +30,7 @@ import React, { ReactNode, SyntheticEvent, useCallback, useEffect, useMemo } fro
 
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import ReactDOM from 'react-dom'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import {
   createInjectionElement,
@@ -53,16 +53,16 @@ const Modal = ({ children, open, isModalRoute, onClose }: IModalProps): JSX.Elem
   // We shouldn't memo this calculation because it's related to DOM, so it's unnecessary for memo
   const wrapperEl = createInjectionElement(modalRootEl)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleClose = useCallback(
     (e: SyntheticEvent) => {
       e.stopPropagation()
       enableBrowserBodyScroll()
       onClose && onClose()
-      isModalRoute && history.goBack()
+      isModalRoute && navigate(-1)
     },
-    [onClose, history, isModalRoute],
+    [onClose, navigate, isModalRoute],
   )
 
   const handleOverlayClick = useCallback(

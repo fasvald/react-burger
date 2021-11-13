@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { IModalRouteLocationState } from '../models/routing.model'
+import { IModalRouteLocationState } from '@common/models/routing.model'
 
 /**
  * Check if passing object is instance of 'ModalRouteLocationState' interface
