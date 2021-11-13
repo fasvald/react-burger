@@ -19,6 +19,10 @@ export interface IBurgerIngredientUnique extends IBurgerIngredient {
   nanoid: string
 }
 
+export interface IBurgerIngredientCount extends IBurgerIngredient {
+  count: number
+}
+
 export interface IBurgerIngredientFetch {
   data: IBurgerIngredient[]
   success: boolean

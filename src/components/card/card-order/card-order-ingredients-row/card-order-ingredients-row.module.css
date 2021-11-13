@@ -4,66 +4,32 @@
   display: flex;
 }
 
-/* Based on a hack => https://codyhouse.co/nuggets/css-gradient-borders */
-
-.ingredientImg {
-  position: relative;
-  overflow: hidden;
-  width: 64px;
-  height: 64px;
-  background:
-    linear-gradient(var(--dark-black-bg), var(--dark-black-bg)) padding-box,
-    linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%) border-box;
-  border: 2px solid transparent;
-  border-radius: 50%;
-  background-size: cover;
-}
-
 /* NOTE: there is a nice implementation via flex-direction: reverse, but it will not follow the design, so... shame :( */
 
-.ingredientImg:nth-child(1) {
+.ingredientAvatar:nth-child(1) {
   z-index: 6;
 }
 
-.ingredientImg:nth-child(2) {
+.ingredientAvatar:nth-child(2) {
   z-index: 5;
 }
 
-.ingredientImg:nth-child(3) {
+.ingredientAvatar:nth-child(3) {
   z-index: 4;
 }
 
-.ingredientImg:nth-child(4) {
+.ingredientAvatar:nth-child(4) {
   z-index: 3;
 }
 
-.ingredientImg:nth-child(5) {
+.ingredientAvatar:nth-child(5) {
   z-index: 2;
 }
 
-.ingredientImg:nth-child(6) {
+.ingredientAvatar:nth-child(6) {
   z-index: 1;
 }
 
-.ingredientImg:not(:first-of-type) {
+.ingredientAvatar:not(:first-of-type) {
   margin-left: -20px;
-}
-
-.ingredientImg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.ingredientImgRest {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-}
-
-.ingredientImgRest p {
-  margin: auto;
 }

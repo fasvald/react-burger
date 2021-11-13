@@ -57,7 +57,7 @@ const ModalIngredientDetails = ({
     return () => {
       dispatch(removeIngredientDetails())
     }
-  }, [dispatch, ingredientFetchStatus, isFullSizePage])
+  }, [dispatch])
 
   return (
     <div className={dialogWrapperClass}>

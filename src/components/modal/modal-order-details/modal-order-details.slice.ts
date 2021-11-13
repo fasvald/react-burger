@@ -22,6 +22,9 @@ const initialState: IModalOrderDetailsState = {
 export const chosenOrderDetailsSelector = (state: RootState): IOrder | null =>
   state.orderDetails.order
 
+export const orderByNumberFetchingSelector = (state: RootState): TFetchProcess =>
+  state.orderDetails.status
+
 export const ordersAllOrUsersSelector = createSelector(
   // SHOULD BE ordersUsersSelector
   [ordersSelector, ordersSelector],

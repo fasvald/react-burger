@@ -36,6 +36,7 @@
   /* Modal Windows (Dialogs) */
   --modal-dialog-default-width: 720px;
   --modal-dialog-default-body-max-width: 520px;
+  --modal-dialog-large-body-max-width: 640px;
   --modal-dialog-border-bg: rgb(76 76 255 / 20%);
   --modal-dialog-shadow-bg: rgb(0 0 0 / 4%);
   --modal-dialog-btn-close-width: 24px;

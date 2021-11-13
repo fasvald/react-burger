@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 
 import { IBurgerIngredientUnique } from '@components/burger-ingredients/burger-ingredients.model'
+import IngredientAvatar from '@components/ingredient-avatar/ingredient-avatar'
+import IngredientAvatarOverlay from '@components/ingredient-avatar/ingredient-avatar-overlay/ingredient-avatar-overlay'
 
 import styles from './card-order-ingredients-row.module.css'
 
@@ -16,23 +18,22 @@ const CardOrderIngredientsRow = ({ ingredients }: ICardOrderIngredientsRowProps)
   return (
     <div className={styles.wrapper}>
       {ingredientsChunk.map((ingredient, i) => (
-        <div className={styles.ingredientImg}>
-          <img
-            src={ingredient.image}
-            style={{
-              opacity:
-                ingredients.length > MAX_ITEMS_IN_ROW && i === MAX_ITEMS_IN_ROW - 1 ? 0.6 : 1,
-            }}
-            alt='Ingredient Avatar'
-          />
-          {ingredients.length > 6 && i === MAX_ITEMS_IN_ROW - 1 && (
-            <div className={styles.ingredientImgRest}>
-              <p className='text text_type_digits-default'>
-                +{ingredients.length - MAX_ITEMS_IN_ROW}
-              </p>
-            </div>
-          )}
-        </div>
+        <IngredientAvatar
+          key={ingredient.nanoid}
+          className={styles.ingredientAvatar}
+          style={{
+            width: 64,
+            height: 64,
+            opacity: ingredients.length > MAX_ITEMS_IN_ROW && i === MAX_ITEMS_IN_ROW - 1 ? 0.6 : 1,
+          }}
+          imageSrc={ingredient.image}
+          overlay={
+            ingredients.length > 6 &&
+            i === MAX_ITEMS_IN_ROW - 1 && (
+              <IngredientAvatarOverlay content={`+${ingredients.length - MAX_ITEMS_IN_ROW}`} />
+            )
+          }
+        />
       ))}
     </div>
   )
