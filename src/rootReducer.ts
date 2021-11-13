@@ -6,8 +6,9 @@ import modalOrderDetailsReducer from '@components/modal/modal-order-details/moda
 import feedPageReducer from '@pages/feed/feed-page.slice'
 import forgotPasswordPageReducer from '@pages/forgot-password/forgot-password-page.slice'
 import loginPageReducer from '@pages/login/login-page.slice'
+import profileOrdersListPageReducer from '@pages/profile/profile-orders-list/profile-orders-list-page.slice'
 import profilePageReducer from '@pages/profile/profile-page.slice'
-import userDetailsPageReducer from '@pages/profile/user-details/user-details-page.slice'
+import profileUserDetailsPageReducer from '@pages/profile/profile-user-details/profile-user-details-page.slice'
 import registerPageReducer from '@pages/register/register-page.slice'
 import resetPasswordPageReducer from '@pages/reset-password/reset-password-page.slice'
 import authReducer from '@services/slices/auth.slice'
@@ -19,14 +20,16 @@ const rootReducer = {
   auth: authReducer,
   user: userReducer,
   ws: wsReducer,
-  // Page related reducers
+  // Public pages related reducers
   loginPage: loginPageReducer,
   registerPage: registerPageReducer,
   forgotPasswordPage: forgotPasswordPageReducer,
   resetPasswordPage: resetPasswordPageReducer,
-  profilePage: profilePageReducer,
-  userDetailsPage: userDetailsPageReducer,
   feedPage: feedPageReducer,
+  // Private pages related reducers
+  profilePage: profilePageReducer,
+  profileUserDetailsPage: profileUserDetailsPageReducer,
+  profileOrdersListPage: profileOrdersListPageReducer,
   // Components related reducers
   burgerIngredients: burgerIngredientsReducer,
   burgerConstructor: burgerConstructorReducer,

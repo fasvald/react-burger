@@ -14,6 +14,7 @@
   /* Cards Sizes */
   --card-width-default: 272px;
   --card-width-order-default: 584px;
+  --card-width-order-wide: 780px;
 
   /* Colors */
   --primary-light: #f2f2f3;

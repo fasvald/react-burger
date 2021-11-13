@@ -26,6 +26,11 @@
   margin-bottom: 24px;
 }
 
+.status {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
 .content {
   display: flex;
   justify-content: space-between;

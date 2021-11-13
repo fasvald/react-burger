@@ -113,7 +113,7 @@ const ProfilePage = (): JSX.Element => {
               }
             />
             <Route
-              path='orders'
+              path='orders/*'
               element={
                 <p className='text text_type_main-default text_color_inactive'>
                   В этом разделе вы можете посмотреть свои заказы

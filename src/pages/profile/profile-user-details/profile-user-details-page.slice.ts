@@ -30,12 +30,12 @@ const initialState: IUserDetailsPageState = {
 }
 
 export const fetchUserStatusSelector = (state: RootState): TFetchProcess =>
-  state.userDetailsPage.fetch.status
+  state.profileUserDetailsPage.fetch.status
 
 export const updateUserStatusSelector = (state: RootState): TFetchProcess =>
-  state.userDetailsPage.update.status
+  state.profileUserDetailsPage.update.status
 
-export const userDetailsPageSlice = createSlice({
+const profileUserDetailsPageSlice = createSlice({
   name: 'userDetailsPage',
   initialState,
   reducers: {},
@@ -67,4 +67,4 @@ export const userDetailsPageSlice = createSlice({
   },
 })
 
-export default userDetailsPageSlice.reducer
+export default profileUserDetailsPageSlice.reducer

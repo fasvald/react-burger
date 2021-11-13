@@ -19,9 +19,9 @@ import FeedPage from '@pages/feed/feed-page'
 import ForgotPasswordPage from '@pages/forgot-password/forgot-password-page'
 import LoginPage from '@pages/login/login-page'
 import NotFoundPage, { RedirectToNotFound } from '@pages/not-found/not-found-page'
-import OrderListPage from '@pages/profile/order-list/order-list-page'
+import ProfileOrdersListPage from '@pages/profile/profile-orders-list/profile-orders-list-page'
 import ProfilePage from '@pages/profile/profile-page'
-import UserDetailsPage from '@pages/profile/user-details/user-details-page'
+import ProfileUserDetailsPage from '@pages/profile/profile-user-details/profile-user-details-page'
 import RegisterPage from '@pages/register/register-page'
 import ResetPasswordPage from '@pages/reset-password/reset-password-page'
 import { authSelector, saveAuthorizedUser } from '@services/slices/auth.slice'
@@ -125,9 +125,18 @@ const App = (): JSX.Element => {
                 }
               >
                 {/* NOTE: We can make path for root route like this "profile/*" and move those routes into + removing Outlet */}
-                <Route path='' element={<UserDetailsPage />} />
-                <Route path='orders' element={<OrderListPage />} />
+                <Route path='' element={<ProfileUserDetailsPage />} />
+                <Route path='orders' element={<ProfileOrdersListPage />} />
               </Route>
+              {/* After migration to react router v6 it's kinda hard to use nested API due to lack of documentation sources */}
+              <Route
+                path='profile/orders/:orderNumber'
+                element={
+                  <RequireAuth>
+                    <ModalOrderDetails isFullSizePage />
+                  </RequireAuth>
+                }
+              />
               <Route path='*' element={<RedirectToNotFound />} />
             </Routes>
             {backgroundLocation && (
@@ -146,6 +155,16 @@ const App = (): JSX.Element => {
                     <Modal open isModalRoute>
                       <ModalOrderDetails />
                     </Modal>
+                  }
+                />
+                <Route
+                  path='profile/orders/:orderNumber'
+                  element={
+                    <RequireAuth>
+                      <Modal open isModalRoute>
+                        <ModalOrderDetails />
+                      </Modal>
+                    </RequireAuth>
                   }
                 />
               </Routes>

@@ -6,6 +6,7 @@ import { memoize } from 'lodash'
 import { TFetchProcess } from '@common/models/fetch-process.model'
 import { IOrder } from '@common/models/orders.model'
 import { ordersSelector } from '@pages/feed/feed-page.slice'
+import { ordersSelector as ordersUserSelector } from '@pages/profile/profile-orders-list/profile-orders-list-page.slice'
 import { getOrderByNumber } from '@services/slices/orders.slice'
 import { RootState } from '@store'
 
@@ -26,8 +27,7 @@ export const orderByNumberFetchingSelector = (state: RootState): TFetchProcess =
   state.orderDetails.status
 
 export const ordersAllOrUsersSelector = createSelector(
-  // SHOULD BE ordersUsersSelector
-  [ordersSelector, ordersSelector],
+  [ordersSelector, ordersUserSelector],
   (ordersAll, ordersUser) => memoize((isPrivate = false) => (isPrivate ? ordersUser : ordersAll)),
 )
 

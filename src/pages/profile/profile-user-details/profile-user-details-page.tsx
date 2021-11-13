@@ -14,9 +14,12 @@ import LoaderCircular from '@components/loader-circular/loader-circular'
 import { useAppDispatch, useAppSelector } from '@hooks'
 import { getUser, userSelector, updateUser, saveUser } from '@services/slices/user.slice'
 
-import { fetchUserStatusSelector, updateUserStatusSelector } from './user-details-page.slice'
+import {
+  fetchUserStatusSelector,
+  updateUserStatusSelector,
+} from './profile-user-details-page.slice'
 
-import styles from './user-details-page.module.css'
+import styles from './profile-user-details-page.module.css'
 
 const SUCCESS_MESSAGES: Record<string | number, string> = {
   default: 'Персональные данные профиля были изменены успешно.',
@@ -31,7 +34,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-const UserDetailsPage = (): JSX.Element => {
+const ProfileUserDetailsPage = (): JSX.Element => {
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [isResetAvailable, setIsResetAvailable] = useState(false)
   const [severity, setSeverity] = useState<AlertColor>('error')
@@ -255,4 +258,4 @@ const UserDetailsPage = (): JSX.Element => {
   )
 }
 
-export default React.memo(UserDetailsPage)
+export default React.memo(ProfileUserDetailsPage)
