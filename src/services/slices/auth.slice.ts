@@ -19,7 +19,7 @@ import { RootState } from '@store'
 
 import apiInstance from '../interceptors/client.interceptor'
 
-interface IAuthState {
+export interface IAuthState {
   isLoggedIn: boolean
   user: IAuthUser | null
 }
