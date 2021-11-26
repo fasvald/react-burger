@@ -8,8 +8,13 @@ import {
   TSignInResponse,
   TSignUpResponse,
 } from '@common/models/auth.model'
+import {
+  IOrderByIDResponse,
+  IOrderByNumberBody,
+  IOrdersResponse,
+} from '@common/models/orders.model'
 
-import { mocks } from './mocks.constant'
+import { mocks } from './mocks'
 
 const errorTriggerCb = (req: RestRequest, res: ResponseComposition, ctx: RestContext) =>
   res(ctx.status(401), ctx.json({ error: '' }), ctx.delay(300))
@@ -32,6 +37,24 @@ export const signOutErrorHandler = rest.post<undefined, ISignOutResponse>(
   errorTriggerCb,
 )
 
+// Handles a GET /orders/all request and triggering error
+export const ordersAllErrorHandler = rest.get<undefined, IOrdersResponse>(
+  `${BASE_URL}${API_ENDPOINTS.ordersAll}`,
+  errorTriggerCb,
+)
+
+// Handles a GET /orders request and triggering error
+export const ordersUsersErrorHandler = rest.get<undefined, IOrdersResponse>(
+  `${BASE_URL}${API_ENDPOINTS.orders}`,
+  errorTriggerCb,
+)
+
+// Handles a GET /orders/:orderNumber request and triggering error
+export const orderByNumberErrorHandler = rest.get<IOrderByNumberBody, IOrderByIDResponse>(
+  `${BASE_URL}${API_ENDPOINTS.orders}/:orderNumber`,
+  errorTriggerCb,
+)
+
 export const handlers = [
   // Handles a POST /auth/login request
   rest.post<ISignInRequestBody, TSignInResponse>(
@@ -46,5 +69,18 @@ export const handlers = [
   // Handles a POST /auth/logout request
   rest.post<undefined, ISignOutResponse>(`${BASE_URL}${API_ENDPOINTS.signOut}`, (req, res, ctx) =>
     res(ctx.json(mocks.signOut.response), ctx.delay(300)),
+  ),
+  // Handles a GET /orders/all request
+  rest.get<undefined, IOrdersResponse>(`${BASE_URL}${API_ENDPOINTS.ordersAll}`, (req, res, ctx) =>
+    res(ctx.json(mocks.ordersAll.response), ctx.delay(300)),
+  ),
+  // Handles a GET /orders request
+  rest.get<undefined, IOrdersResponse>(`${BASE_URL}${API_ENDPOINTS.orders}`, (req, res, ctx) =>
+    res(ctx.json(mocks.ordersAll.response), ctx.delay(300)),
+  ),
+  // Handles a GET /orders/:orderNumber request
+  rest.get<IOrderByNumberBody, IOrderByIDResponse>(
+    `${BASE_URL}${API_ENDPOINTS.orders}/:orderNumber`,
+    (req, res, ctx) => res(ctx.json(mocks.orderByNumber.response), ctx.delay(300)),
   ),
 ]

@@ -6,7 +6,7 @@ import thunk from 'redux-thunk'
 import { IAuthUser } from '@common/models/auth.model'
 import { IAxiosSerializedError } from '@common/models/errors.model'
 import { signInErrorHandler, signOutErrorHandler, signUpErrorHandler } from '@mocks/handlers'
-import { mocks } from '@mocks/mocks.constant'
+import { mocks } from '@mocks/mocks'
 import { server } from '@mocks/server'
 import { AppDispatch, RootState } from '@store'
 
@@ -40,7 +40,7 @@ describe('Auth Slice', () => {
   })
 
   describe('Actions', () => {
-    test(`should create '${saveAuthorizedUser.type}' when receive & save user`, () => {
+    test(`should create '${saveAuthorizedUser.type}' when save user`, () => {
       const expectedAction: PayloadAction<IAuthUser> = {
         type: saveAuthorizedUser.type,
         payload: mocks.user,
@@ -68,121 +68,127 @@ describe('Auth Slice', () => {
     // Disable API mocking after the tests are done
     afterAll(() => server.close())
 
-    test(`should create '${signIn.fulfilled.type}' when fetch & receive a user after sign in request`, async () => {
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
+    describe(`${signIn.typePrefix} action`, () => {
+      test(`should create '${signIn.fulfilled.type}' when fetch & receive a user after sign in`, async () => {
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
 
-      // NOTE: Reason to do it like this => https://github.com/reduxjs/redux-toolkit/issues/494
-      const {
-        meta: { requestId },
-      } = await dispatch(signIn(mocks.signIn.requestBody))
+        // NOTE: Reason to do it like this => https://github.com/reduxjs/redux-toolkit/issues/494
+        const {
+          meta: { requestId },
+        } = await dispatch(signIn(mocks.signIn.requestBody))
 
-      const expectedActions = [
-        signIn.pending(requestId, mocks.signIn.requestBody),
-        signIn.fulfilled(mocks.signIn.response, requestId, mocks.signIn.requestBody),
-      ]
+        const expectedActions = [
+          signIn.pending(requestId, mocks.signIn.requestBody),
+          signIn.fulfilled(mocks.signIn.response, requestId, mocks.signIn.requestBody),
+        ]
 
-      expect(store.getActions()).toEqual(expectedActions)
-    }, 30000)
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
 
-    test(`should create '${signIn.rejected.type}' when fetch & failed to receive a user after sign in request`, async () => {
-      server.use(signInErrorHandler)
+      test(`should create '${signIn.rejected.type}' when fetch & failed to receive a user after sign in`, async () => {
+        server.use(signInErrorHandler)
 
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
 
-      const {
-        meta: { requestId },
-        payload,
-      } = await dispatch(signIn(mocks.signIn.requestBody))
+        const {
+          meta: { requestId },
+          payload,
+        } = await dispatch(signIn(mocks.signIn.requestBody))
 
-      const expectedActions = [
-        signIn.pending(requestId, mocks.signIn.requestBody),
-        signIn.rejected(
-          null,
-          requestId,
-          mocks.signIn.requestBody,
-          payload as IAxiosSerializedError,
-        ),
-      ]
+        const expectedActions = [
+          signIn.pending(requestId, mocks.signIn.requestBody),
+          signIn.rejected(
+            null,
+            requestId,
+            mocks.signIn.requestBody,
+            payload as IAxiosSerializedError,
+          ),
+        ]
 
-      expect(store.getActions()).toEqual(expectedActions)
-    }, 30000)
-
-    test(`should create '${signUp.fulfilled.type}' when fetch & create a user after sign up request`, async () => {
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
-
-      const {
-        meta: { requestId },
-      } = await dispatch(signUp(mocks.signUp.requestBody))
-
-      const expectedActions = [
-        signUp.pending(requestId, mocks.signUp.requestBody),
-        signUp.fulfilled(mocks.signUp.response, requestId, mocks.signUp.requestBody),
-      ]
-
-      expect(store.getActions()).toEqual(expectedActions)
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
     })
 
-    test(`should create '${signUp.rejected.type}' when fetch & failed to create a user after sign up request`, async () => {
-      server.use(signUpErrorHandler)
+    describe(`${signUp.typePrefix} action`, () => {
+      test(`should create '${signUp.fulfilled.type}' when fetch & create a user after sign up`, async () => {
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
 
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
+        const {
+          meta: { requestId },
+        } = await dispatch(signUp(mocks.signUp.requestBody))
 
-      const {
-        meta: { requestId },
-        payload,
-      } = await dispatch(signUp(mocks.signUp.requestBody))
+        const expectedActions = [
+          signUp.pending(requestId, mocks.signUp.requestBody),
+          signUp.fulfilled(mocks.signUp.response, requestId, mocks.signUp.requestBody),
+        ]
 
-      const expectedActions = [
-        signUp.pending(requestId, mocks.signUp.requestBody),
-        signUp.rejected(
-          null,
-          requestId,
-          mocks.signUp.requestBody,
-          payload as IAxiosSerializedError,
-        ),
-      ]
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
 
-      expect(store.getActions()).toEqual(expectedActions)
+      test(`should create '${signUp.rejected.type}' when fetch & failed to create a user after sign up`, async () => {
+        server.use(signUpErrorHandler)
+
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
+
+        const {
+          meta: { requestId },
+          payload,
+        } = await dispatch(signUp(mocks.signUp.requestBody))
+
+        const expectedActions = [
+          signUp.pending(requestId, mocks.signUp.requestBody),
+          signUp.rejected(
+            null,
+            requestId,
+            mocks.signUp.requestBody,
+            payload as IAxiosSerializedError,
+          ),
+        ]
+
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
     })
 
-    test(`should create '${signOut.fulfilled}' when fetch & receive a message after sign out request`, async () => {
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
+    describe(`${signOut.typePrefix} action`, () => {
+      test(`should create '${signOut.fulfilled}' when fetch & receive a message after sign out`, async () => {
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
 
-      const {
-        meta: { requestId },
-      } = await dispatch(signOut())
+        const {
+          meta: { requestId },
+        } = await dispatch(signOut())
 
-      const expectedActions = [
-        signOut.pending(requestId),
-        signOut.fulfilled(mocks.signOut.response, requestId),
-      ]
+        const expectedActions = [
+          signOut.pending(requestId),
+          signOut.fulfilled(mocks.signOut.response, requestId),
+        ]
 
-      expect(store.getActions()).toEqual(expectedActions)
-    }, 30000)
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
 
-    test(`should create '${signOut.rejected}' when fetch & failed to receive a message after sign out request`, async () => {
-      server.use(signOutErrorHandler)
+      test(`should create '${signOut.rejected}' when fetch & failed to receive a message after sign out`, async () => {
+        server.use(signOutErrorHandler)
 
-      const store = mockStore({})
-      const { dispatch }: { dispatch: AppDispatch } = store
+        const store = mockStore({})
+        const { dispatch }: { dispatch: AppDispatch } = store
 
-      const {
-        meta: { requestId },
-        payload,
-      } = await dispatch(signOut())
+        const {
+          meta: { requestId },
+          payload,
+        } = await dispatch(signOut())
 
-      const expectedActions = [
-        signOut.pending(requestId),
-        signOut.rejected(null, requestId, undefined, payload as IAxiosSerializedError),
-      ]
+        const expectedActions = [
+          signOut.pending(requestId),
+          signOut.rejected(null, requestId, undefined, payload as IAxiosSerializedError),
+        ]
 
-      expect(store.getActions()).toEqual(expectedActions)
-    }, 30000)
+        expect(store.getActions()).toEqual(expectedActions)
+      }, 30000)
+    })
   })
 
   describe('Reducer', () => {

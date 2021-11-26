@@ -56,7 +56,7 @@ export const getAllOrders = createAsyncThunk<
     // eslint-disable-next-line consistent-return
     condition: (_, thunkApi) => {
       const { feedPage } = thunkApi.getState()
-      const fetchStatus = feedPage.status
+      const fetchStatus = feedPage?.status
 
       if (fetchStatus === 'loaded' || fetchStatus === 'loading') {
         // Already fetched or in progress, don't need to re-fetch
@@ -113,7 +113,7 @@ export const getUsersOrders = createAsyncThunk<
     // eslint-disable-next-line consistent-return
     condition: (_, thunkApi) => {
       const { feedPage } = thunkApi.getState()
-      const fetchStatus = feedPage.status
+      const fetchStatus = feedPage?.status
 
       if (fetchStatus === 'loaded' || fetchStatus === 'loading') {
         // Already fetched or in progress, don't need to re-fetch
