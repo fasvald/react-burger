@@ -117,7 +117,7 @@ export const signOut = createAsyncThunk('signOut/post', async (_, thunkApi) => {
     const refreshToken = Cookies.get('sb-refreshToken') as string
 
     const response = await apiInstance.post<{ token: string }, AxiosResponse<ISignOutResponse>>(
-      API_ENDPOINTS.singOut,
+      API_ENDPOINTS.signOut,
       { token: refreshToken },
       {
         cancelToken: source.token,
