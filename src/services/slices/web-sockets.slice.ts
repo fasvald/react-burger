@@ -2,7 +2,7 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface IWSState {
+export interface IWSState {
   connected: boolean
   url: string | null
   error?: string

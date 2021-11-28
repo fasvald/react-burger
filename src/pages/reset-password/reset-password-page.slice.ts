@@ -11,7 +11,7 @@ import { getSerializedAxiosError } from '@common/utils/errors.utils'
 import apiInstance from '@services/interceptors/client.interceptor'
 import { RootState } from '@store'
 
-interface IResetPasswordPageState {
+export interface IResetPasswordPageState {
   status: TFetchProcess
   res: TPasswordResetResponse | null
 }

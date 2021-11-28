@@ -1,10 +1,17 @@
 import { ResponseComposition, rest, RestContext, RestRequest } from 'msw'
 
 import { BASE_URL, API_ENDPOINTS } from '@common/constants/api.constant'
+import { ingredientsData } from '@common/constants/ingredients-mock.constant'
 import {
+  IAuthUser,
+  IPasswordForgotRequestBody,
+  IPasswordResetRequestBody,
+  IProfileResponse,
   ISignInRequestBody,
   ISignOutResponse,
   ISignUpRequestBody,
+  TPasswordForgotResponse,
+  TPasswordResetResponse,
   TSignInResponse,
   TSignUpResponse,
 } from '@common/models/auth.model'
@@ -13,8 +20,11 @@ import {
   IOrderByNumberBody,
   IOrdersResponse,
 } from '@common/models/orders.model'
+import { IBurgerIngredient } from '@components/burger-ingredients/burger-ingredients.model'
 
 import { mocks } from './mocks'
+
+// NOTE: We can use https://mswjs.io/docs/recipes/custom-response-composition#using-a-composition instead of delay
 
 const errorTriggerCb = (req: RestRequest, res: ResponseComposition, ctx: RestContext) =>
   res(ctx.status(401), ctx.json({ error: '' }), ctx.delay(300))
@@ -55,6 +65,36 @@ export const orderByNumberErrorHandler = rest.get<IOrderByNumberBody, IOrderByID
   errorTriggerCb,
 )
 
+// Handles a GET /auth/user request and triggering error
+export const profileErrorHandler = rest.get<undefined, IOrdersResponse>(
+  `${BASE_URL}${API_ENDPOINTS.profile}`,
+  errorTriggerCb,
+)
+
+// Handles a PATCH /auth/user request and triggering error
+export const profilePatchErrorHandler = rest.patch<undefined, IOrdersResponse>(
+  `${BASE_URL}${API_ENDPOINTS.profile}`,
+  errorTriggerCb,
+)
+
+// Handles a POST /password-reset request and triggering error
+export const forgotPasswordErrorHandler = rest.post<
+  IPasswordForgotRequestBody,
+  TPasswordForgotResponse
+>(`${BASE_URL}${API_ENDPOINTS.passwordForgot}`, errorTriggerCb)
+
+// Handles a POST /password-reset/reset request and triggering error
+export const resetPasswordErrorHandler = rest.post<
+  IPasswordForgotRequestBody,
+  TPasswordForgotResponse
+>(`${BASE_URL}${API_ENDPOINTS.passwordReset}`, errorTriggerCb)
+
+// Handles a GET /ingredients request and triggering error
+export const ingredientsErrorHandler = rest.get<undefined, { data: IBurgerIngredient[] }>(
+  `${BASE_URL}${API_ENDPOINTS.ingredients}`,
+  errorTriggerCb,
+)
+
 export const handlers = [
   // Handles a POST /auth/login request
   rest.post<ISignInRequestBody, TSignInResponse>(
@@ -82,5 +122,28 @@ export const handlers = [
   rest.get<IOrderByNumberBody, IOrderByIDResponse>(
     `${BASE_URL}${API_ENDPOINTS.orders}/:orderNumber`,
     (req, res, ctx) => res(ctx.json(mocks.orderByNumber.response), ctx.delay(300)),
+  ),
+  // Handles a GET /auth/user request
+  rest.get<undefined, IProfileResponse>(`${BASE_URL}${API_ENDPOINTS.profile}`, (req, res, ctx) =>
+    res(ctx.json(mocks.profile.response), ctx.delay(300)),
+  ),
+  // Handles a PATCH /auth/user request
+  rest.patch<IAuthUser, IProfileResponse>(`${BASE_URL}${API_ENDPOINTS.profile}`, (req, res, ctx) =>
+    res(ctx.json(mocks.profile.response), ctx.delay(300)),
+  ),
+  // Handles a POST /password-reset request
+  rest.post<IPasswordForgotRequestBody, TPasswordForgotResponse>(
+    `${BASE_URL}${API_ENDPOINTS.passwordForgot}`,
+    (req, res, ctx) => res(ctx.json(mocks.forgotPassword.response), ctx.delay(300)),
+  ),
+  // Handles a POST /password-reset/reset request
+  rest.post<IPasswordResetRequestBody, TPasswordResetResponse>(
+    `${BASE_URL}${API_ENDPOINTS.passwordReset}`,
+    (req, res, ctx) => res(ctx.json(mocks.resetPassword.response), ctx.delay(300)),
+  ),
+  // Handles a GET /ingredients request
+  rest.get<undefined, { data: IBurgerIngredient[] }>(
+    `${BASE_URL}${API_ENDPOINTS.ingredients}`,
+    (req, res, ctx) => res(ctx.json({ data: ingredientsData }), ctx.delay(300)),
   ),
 ]

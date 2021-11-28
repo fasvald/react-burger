@@ -3,9 +3,13 @@
 import { nanoid } from 'nanoid'
 
 import {
+  IPasswordForgotRequestBody,
+  IPasswordResetRequestBody,
+  IProfileResponse,
   ISignInRequestBody,
   ISignOutResponse,
   ISignUpRequestBody,
+  TPasswordForgotResponse,
   TSignInResponse,
 } from '@common/models/auth.model'
 import {
@@ -15,35 +19,35 @@ import {
 } from '@common/models/orders.model'
 import { IAuthState } from '@services/slices/auth.slice'
 
-const userMock: IAuthState['user'] = {
+export const userMock: IAuthState['user'] = {
   name: 'Hanz',
   email: 'mock@mock.com',
 }
 
-const signInRequestBodyMock: ISignInRequestBody = {
+export const signInRequestBodyMock: ISignInRequestBody = {
   email: 'mock@mock.com',
   password: 'mockPassword',
 }
 
-const authDefaultResponseMock: TSignInResponse = {
+export const authDefaultResponseMock: TSignInResponse = {
   success: true,
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
   user: userMock,
 }
 
-const signUpRequestBodyMock: ISignUpRequestBody = {
+export const signUpRequestBodyMock: ISignUpRequestBody = {
   email: userMock.email,
   name: userMock.name,
   password: 'mockPassword',
 }
 
-const signOutResponseMock: ISignOutResponse = {
+export const signOutResponseMock: ISignOutResponse = {
   success: true,
   message: 'Sign Out',
 }
 
-const orderResponseMock: IOrdersResponse = {
+export const orderResponseMock: IOrdersResponse = {
   success: true,
   total: 2,
   totalToday: 2,
@@ -64,18 +68,54 @@ const orderResponseMock: IOrdersResponse = {
       ingredients: [nanoid(), nanoid()],
       name: 'Бургер #2',
       number: 5006,
-      status: 'done',
+      status: 'pending',
     },
   ],
 }
 
-const orderByNumberRequestBodyMock: IOrderByNumberBody = {
+export const orderByNumberRequestBodyMock: IOrderByNumberBody = {
   isPrivate: true,
   orderNumber: 5000,
 }
 
-const orderByNumberResponseMock: IOrderByIDResponse = {
+export const orderByNumberResponseMock: IOrderByIDResponse = {
   orders: orderResponseMock.orders,
+}
+
+export const profileResponseMock: IProfileResponse = {
+  success: true,
+  user: userMock,
+}
+
+export const wsConnectPayloadMock: {
+  url: string
+  onMessageActionType: string
+} = {
+  url: 'WS Connection Url',
+  onMessageActionType: 'Any Action',
+}
+
+export const wsOnErrorPayloadMock: { error: string } = {
+  error: new Error(`Web socket error using url:"URL"`).message,
+}
+
+export const forgotPasswordRequestBodyMock: IPasswordForgotRequestBody = {
+  email: userMock.email,
+}
+
+export const forgotPasswordResponseMock: TPasswordForgotResponse = {
+  message: 'The code has been sent',
+  success: true,
+}
+
+export const resetPasswordRequestBodyMock: IPasswordResetRequestBody = {
+  token: 'token',
+  password: 'password',
+}
+
+export const resetPasswordResponseMock: TPasswordForgotResponse = {
+  message: 'The password has been reset',
+  success: true,
 }
 
 export const mocks = {
@@ -97,8 +137,25 @@ export const mocks = {
   orders: {
     response: orderResponseMock,
   },
+  ordersUser: {
+    response: orderResponseMock,
+  },
   orderByNumber: {
     requestBody: orderByNumberRequestBodyMock,
     response: orderByNumberResponseMock,
+  },
+  profile: {
+    response: profileResponseMock,
+  },
+  profileUpdate: {
+    response: profileResponseMock,
+  },
+  forgotPassword: {
+    requestBody: forgotPasswordRequestBodyMock,
+    response: forgotPasswordResponseMock,
+  },
+  resetPassword: {
+    requestBody: resetPasswordRequestBodyMock,
+    response: resetPasswordResponseMock,
   },
 }

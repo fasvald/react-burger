@@ -12,7 +12,7 @@ import { RootState } from '@store'
 
 import apiInstance from '../interceptors/client.interceptor'
 
-interface IUserState {
+export interface IUserState {
   user: IAuthUser | null
 }
 

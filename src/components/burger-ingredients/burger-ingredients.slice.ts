@@ -13,7 +13,7 @@ import { RootState } from '@store'
 
 import { IBurgerIngredient, IBurgerIngredientFetch } from './burger-ingredients.model'
 
-interface IBurgerIngredientsState {
+export interface IBurgerIngredientsState {
   status: TFetchProcess
   items: IBurgerIngredient[]
 }
@@ -111,7 +111,7 @@ export const getIngredients = createAsyncThunk<
     // eslint-disable-next-line consistent-return
     condition: (_, thunkApi) => {
       const { burgerIngredients } = thunkApi.getState()
-      const fetchStatus = burgerIngredients.status
+      const fetchStatus = burgerIngredients?.status
 
       if (fetchStatus === 'loaded' || fetchStatus === 'loading') {
         // Already fetched or in progress, don't need to re-fetch
