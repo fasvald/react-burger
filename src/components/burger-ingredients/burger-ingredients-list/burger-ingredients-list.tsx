@@ -78,7 +78,7 @@ const BurgerIngredientsList = (): JSX.Element => {
   ))
 
   return (
-    <div className={styles.wrapper} ref={rootDynamicTabsRef}>
+    <div data-test='burger-ingredient-list' className={styles.wrapper} ref={rootDynamicTabsRef}>
       <div className={styles.tabs} data-header>
         <TabBun />
         <TabSauce />

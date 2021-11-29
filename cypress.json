@@ -1,0 +1,11 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "projectId": "react-burger-7s5okt",
+  "integrationFolder": "cypress/tests",
+  "viewportHeight": 1000,
+  "viewportWidth": 1280,
+  "experimentalStudio": true,
+  "supportFile": "cypress/support/commands.ts",
+  "commands": false,
+  "downloads": false
+}

@@ -1,0 +1,14 @@
+{
+  "plugins": ["cypress", "import"],
+  "extends": ["plugin:cypress/recommended"],
+  "rules": {
+    "class-methods-use-this": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}
+

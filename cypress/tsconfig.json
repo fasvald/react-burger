@@ -1,0 +1,20 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "es5",
+    "isolatedModules": false,
+    "allowJs": true,
+    "noEmit": true,
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "cypress-wait-until"],
+    "baseUrl": "./",
+    "paths": {
+      "@pages/*": ["./pages/*"],
+    }
+  },
+  "include": [
+    "../node_modules/cypress",
+    "./**/*.ts"
+  ],
+  "exclude": []
+}
