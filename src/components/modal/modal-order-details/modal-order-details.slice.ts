@@ -10,7 +10,7 @@ import { ordersSelector as ordersUserSelector } from '@pages/profile/profile-ord
 import { getOrderByNumber } from '@services/slices/orders.slice'
 import { RootState } from '@store'
 
-interface IModalOrderDetailsState {
+export interface IModalOrderDetailsState {
   order: IOrder | null
   status: TFetchProcess
 }

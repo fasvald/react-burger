@@ -21,6 +21,10 @@ import {
   IOrdersResponse,
 } from '@common/models/orders.model'
 import { IBurgerIngredient } from '@components/burger-ingredients/burger-ingredients.model'
+import {
+  IOrderDetailsBody,
+  IOrderDetailsResponse,
+} from '@components/modal/modal-order-creation-details/modal-order-creation-details.model'
 
 import { mocks } from './mocks'
 
@@ -95,6 +99,12 @@ export const ingredientsErrorHandler = rest.get<undefined, { data: IBurgerIngred
   errorTriggerCb,
 )
 
+// Handles a POST /orders request and triggering error
+export const orderCreationErrorHandler = rest.post<IOrderDetailsBody, IOrderDetailsResponse>(
+  `${BASE_URL}${API_ENDPOINTS.orders}`,
+  errorTriggerCb,
+)
+
 export const handlers = [
   // Handles a POST /auth/login request
   rest.post<ISignInRequestBody, TSignInResponse>(
@@ -145,5 +155,10 @@ export const handlers = [
   rest.get<undefined, { data: IBurgerIngredient[] }>(
     `${BASE_URL}${API_ENDPOINTS.ingredients}`,
     (req, res, ctx) => res(ctx.json({ data: ingredientsData }), ctx.delay(300)),
+  ),
+  // Handles a POST /orders request
+  rest.post<IOrderDetailsBody, IOrderDetailsResponse>(
+    `${BASE_URL}${API_ENDPOINTS.orders}`,
+    (req, res, ctx) => res(ctx.json(mocks.orderCreate.response), ctx.delay(300)),
   ),
 ]

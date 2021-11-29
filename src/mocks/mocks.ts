@@ -2,6 +2,7 @@
 
 import { nanoid } from 'nanoid'
 
+import { ingredientsData } from '@common/constants/ingredients-mock.constant'
 import {
   IPasswordForgotRequestBody,
   IPasswordResetRequestBody,
@@ -17,6 +18,10 @@ import {
   IOrderByNumberBody,
   IOrdersResponse,
 } from '@common/models/orders.model'
+import {
+  IOrderDetailsBody,
+  IOrderDetailsResponse,
+} from '@components/modal/modal-order-creation-details/modal-order-creation-details.model'
 import { IAuthState } from '@services/slices/auth.slice'
 
 export const userMock: IAuthState['user'] = {
@@ -73,6 +78,41 @@ export const orderResponseMock: IOrdersResponse = {
   ],
 }
 
+export const orderUserResponseMock: IOrdersResponse = {
+  success: true,
+  total: 3,
+  totalToday: 3,
+  orders: [
+    {
+      _id: nanoid(),
+      createdAt: new Date().toISOString().split('T')[0],
+      updatedAt: new Date().toISOString().split('T')[0],
+      ingredients: [nanoid(), nanoid()],
+      name: 'Бургер #999',
+      number: 5055,
+      status: 'done',
+    },
+    {
+      _id: nanoid(),
+      createdAt: new Date().toISOString().split('T')[0],
+      updatedAt: new Date().toISOString().split('T')[0],
+      ingredients: [nanoid(), nanoid()],
+      name: 'Бургер #777',
+      number: 5056,
+      status: 'pending',
+    },
+    {
+      _id: nanoid(),
+      createdAt: new Date().toISOString().split('T')[0],
+      updatedAt: new Date().toISOString().split('T')[0],
+      ingredients: [nanoid(), nanoid()],
+      name: 'Бургер #888',
+      number: 5057,
+      status: 'pending',
+    },
+  ],
+}
+
 export const orderByNumberRequestBodyMock: IOrderByNumberBody = {
   isPrivate: true,
   orderNumber: 5000,
@@ -118,6 +158,16 @@ export const resetPasswordResponseMock: TPasswordForgotResponse = {
   success: true,
 }
 
+export const orderCheckoutRequestBodyMock: IOrderDetailsBody = {
+  ingredients: ingredientsData.slice(0, 5).map((ingredient) => ingredient._id),
+}
+
+export const orderCheckoutResponseMock: IOrderDetailsResponse = {
+  name: 'Super Duper Burger',
+  order: { number: 5656 },
+  success: true,
+}
+
 export const mocks = {
   user: userMock,
   signIn: {
@@ -138,7 +188,7 @@ export const mocks = {
     response: orderResponseMock,
   },
   ordersUser: {
-    response: orderResponseMock,
+    response: orderUserResponseMock,
   },
   orderByNumber: {
     requestBody: orderByNumberRequestBodyMock,
@@ -157,5 +207,9 @@ export const mocks = {
   resetPassword: {
     requestBody: resetPasswordRequestBodyMock,
     response: resetPasswordResponseMock,
+  },
+  orderCreate: {
+    requestBody: orderCheckoutRequestBodyMock,
+    response: orderCheckoutResponseMock,
   },
 }
