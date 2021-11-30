@@ -35,7 +35,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Deployed application
 
-Link to the application => [vibrant-almeida-186cc9.netlify.app](**https**://vibrant-almeida-186cc9.netlify.app/)
+Link to the application => [vibrant-almeida-186cc9.netlify.app](https://vibrant-almeida-186cc9.netlify.app/)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/169f60cb-3984-429e-9e71-8b0778a3c871/deploy-status)](https://app.netlify.com/sites/vibrant-almeida-186cc9/deploys)
 
