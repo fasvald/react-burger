@@ -6,11 +6,8 @@
     "allowJs": true,
     "noEmit": true,
     "lib": ["es5", "dom"],
-    "types": ["cypress", "cypress-wait-until"],
-    "baseUrl": "./",
-    "paths": {
-      "@pages/*": ["./pages/*"],
-    }
+    "types": ["cypress", "cypress-wait-until", "@4tw/cypress-drag-drop", "cypress-pipe"],
+    "sourceMap": true
   },
   "include": [
     "../node_modules/cypress",

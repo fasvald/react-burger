@@ -18,7 +18,7 @@ const ModalIngredientDetailsFoodEnergy = ({
   const foodEnergyWrapperClass = useMemo(() => classNames(styles.list, className), [className])
 
   return (
-    <div className={foodEnergyWrapperClass}>
+    <div data-test='modal-ingredient-details-food-energy' className={foodEnergyWrapperClass}>
       {foodEnergy?.calories && (
         <div className={styles.listItem}>
           <p className='text text_type_main-default text_color_inactive'>Калории,ккал</p>

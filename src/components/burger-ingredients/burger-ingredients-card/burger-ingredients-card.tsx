@@ -53,7 +53,7 @@ const BurgerIngredientsCard = ({
 
   const CounterMemo = useMemo(
     () => (
-      <div className={styles.cardCounter}>
+      <div data-test='burger-ingredient-card-counter' className={styles.cardCounter}>
         <Counter count={count} size='default' />
       </div>
     ),
@@ -76,7 +76,13 @@ const BurgerIngredientsCard = ({
   )
 
   return (
-    <div className={cardClass} onClick={handleClick} ref={dragRef} aria-hidden='true'>
+    <div
+      data-test='burger-ingredient-card'
+      className={cardClass}
+      onClick={handleClick}
+      ref={dragRef}
+      aria-hidden='true'
+    >
       {!!count && CounterMemo}
       <img src={ingredient.image} alt='test' className={styles.img} />
       <div className={styles.price}>

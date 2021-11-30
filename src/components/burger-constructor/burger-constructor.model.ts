@@ -1,4 +1,4 @@
-import {IBurgerIngredientUnique} from "../burger-ingredients/burger-ingredients.model";
+import { IBurgerIngredientUnique } from '../burger-ingredients/burger-ingredients.model'
 
 export interface IBurgerConstructorIngredientProps {
   className: string

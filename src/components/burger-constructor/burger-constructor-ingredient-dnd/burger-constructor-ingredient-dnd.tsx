@@ -82,7 +82,11 @@ const BurgerConstructorIngredientDnd = ({
   dragRef(dropRef(ref))
 
   return (
-    <div className={wrapperClass} ref={dragPreviewRef}>
+    <div
+      data-test='burger-constructor-ingredient-dnd'
+      className={wrapperClass}
+      ref={dragPreviewRef}
+    >
       <div className={styles.wrapperDndIcon} ref={ref}>
         {DragIconMemo}
       </div>

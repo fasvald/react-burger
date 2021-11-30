@@ -54,7 +54,11 @@ const BurgerIngredientsList = (): JSX.Element => {
    * (https://gomakethings.com/detecting-when-a-visitor-has-stopped-scrolling-with-vanilla-javascript/).
    */
   const TabBun = React.memo(() => (
-    <a href='#ingredients-buns' className={styles.tabsLink}>
+    <a
+      data-test='burger-ingredient-list__tabs-item'
+      href='#ingredients-buns'
+      className={styles.tabsLink}
+    >
       <Tab value='bun' active={currentListSection === 'bun'} onClick={setCurrentListSection}>
         Булки
       </Tab>
@@ -62,7 +66,11 @@ const BurgerIngredientsList = (): JSX.Element => {
   ))
 
   const TabSauce = React.memo(() => (
-    <a href='#ingredients-sauces' className={styles.tabsLink}>
+    <a
+      data-test='burger-ingredient-list__tabs-item'
+      href='#ingredients-sauces'
+      className={styles.tabsLink}
+    >
       <Tab value='sauce' active={currentListSection === 'sauce'} onClick={setCurrentListSection}>
         Соусы
       </Tab>
@@ -70,7 +78,11 @@ const BurgerIngredientsList = (): JSX.Element => {
   ))
 
   const TabMain = React.memo(() => (
-    <a href='#ingredients-mains' className={styles.tabsLink}>
+    <a
+      data-test='burger-ingredient-list__tabs-item'
+      href='#ingredients-mains'
+      className={styles.tabsLink}
+    >
       <Tab value='main' active={currentListSection === 'main'} onClick={setCurrentListSection}>
         Начинки
       </Tab>
@@ -79,7 +91,7 @@ const BurgerIngredientsList = (): JSX.Element => {
 
   return (
     <div data-test='burger-ingredient-list' className={styles.wrapper} ref={rootDynamicTabsRef}>
-      <div className={styles.tabs} data-header>
+      <div data-test='burger-ingredient-list__tabs' className={styles.tabs} data-header>
         <TabBun />
         <TabSauce />
         <TabMain />
