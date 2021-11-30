@@ -19,7 +19,7 @@ const BurgerConstructorIngredientBun = ({
   const wrapperClass = useMemo(() => classNames(styles.wrapper, className), [className])
 
   return (
-    <div className={wrapperClass}>
+    <div data-test='burger-constructor-ingredient-bun' className={wrapperClass}>
       <ConstructorElement
         type={direction}
         isLocked

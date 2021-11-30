@@ -11,7 +11,7 @@ export const API_ENDPOINTS = {
   profile: `/auth/user`,
   signIn: `/auth/login`,
   signUp: `/auth/register`,
-  singOut: `/auth/logout`,
+  signOut: `/auth/logout`,
   token: `/auth/token`,
 }
 

@@ -162,7 +162,7 @@ const BurgerConstructor = (): JSX.Element => {
 
   if (!ingredients) {
     return (
-      <section className={styles.section}>
+      <section data-test='burger-constructor' className={styles.section}>
         <div className={styles.error}>
           <p className='text text_type_main-medium'>
             Конструктор для бургеров не может работать без ингредиентов.
@@ -173,8 +173,12 @@ const BurgerConstructor = (): JSX.Element => {
   }
 
   return (
-    <section className={styles.section}>
-      <div className={listClass} ref={ingredientsDropRef}>
+    <section data-test='burger-constructor' className={styles.section}>
+      <div
+        data-test='burger-constructor-drop-container'
+        className={listClass}
+        ref={ingredientsDropRef}
+      >
         {buns?.length > 0 && (
           <BurgerConstructorIngredientBun
             className={styles.listItem}
@@ -183,7 +187,11 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
         {toppings?.length > 0 && (
-          <div className={styles.listDnD} ref={toppingsDropRef}>
+          <div
+            data-test='burger-constructor-drop-container__toppings'
+            className={styles.listDnD}
+            ref={toppingsDropRef}
+          >
             {toppings.map((ingredient) => (
               <BurgerConstructorIngredientDraggable
                 key={ingredient.nanoid}
@@ -204,12 +212,17 @@ const BurgerConstructor = (): JSX.Element => {
           />
         )}
       </div>
-      <div className={priceSectionClass}>
-        <span className={priceValueClass}>
+      <div data-test='order-creation-section' className={priceSectionClass}>
+        <span data-test='order-creation-section__total-price' className={priceValueClass}>
           {totalPrice}
           {CurrencyIconMemo}
         </span>
-        <Button type='primary' size='large' onClick={bookOrder}>
+        <Button
+          data-test='order-creation-section__button'
+          type='primary'
+          size='large'
+          onClick={bookOrder}
+        >
           {orderCreationStatus !== 'loading' && <span>Оформить заказ</span>}
           {orderCreationStatus === 'loading' && (
             <LoaderCircular circularProgressProps={{ size: 26, color: 'secondary' }} />

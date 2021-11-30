@@ -17,7 +17,7 @@ const BurgerIngredients = (): JSX.Element => {
   const sectionTitleClass = useMemo(() => classNames('text text_type_main-large', styles.title), [])
 
   return (
-    <section className={styles.section}>
+    <section data-test='burger-ingredient' className={styles.section}>
       {status === 'loading' && <LoaderCircular />}
       {status === 'error' && (
         <div className={styles.error}>

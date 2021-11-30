@@ -23,7 +23,9 @@
   left: 0;
   z-index: 1000;
   background: rgb(0 0 0 / 60%);
-  opacity: 100%;
+
+  /* stylelint-disable-next-line alpha-value-notation */
+  opacity: 1;
 
   pointer-events: auto;
 }

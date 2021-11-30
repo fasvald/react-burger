@@ -60,7 +60,7 @@ const ModalIngredientDetails = ({
   }, [dispatch])
 
   return (
-    <div className={dialogWrapperClass}>
+    <div data-test='modal-ingredient-details' className={dialogWrapperClass}>
       <div className={styles.dialogHeader}>
         <h1 className='text text_type_main-large'>
           {ingredientFetchStatus !== 'loading' && !ingredient
@@ -68,7 +68,7 @@ const ModalIngredientDetails = ({
             : 'Детали ингредиента'}
         </h1>
       </div>
-      <div className={dialogBodyClass}>
+      <div data-test='modal-ingredient-details__body' className={dialogBodyClass}>
         {ingredientFetchStatus === 'loading' || !ingredient ? (
           <Skeleton variant='circular' width={180} height={180} sx={{ bgcolor: '#8585ad' }} />
         ) : (
@@ -82,7 +82,9 @@ const ModalIngredientDetails = ({
             sx={{ bgcolor: '#8585ad', marginTop: '16px' }}
           />
         ) : (
-          <p className={ingredientNameClass}>{ingredient.name}</p>
+          <p data-test='modal-ingredient-details__body-name' className={ingredientNameClass}>
+            {ingredient.name}
+          </p>
         )}
         {ingredientFetchStatus === 'loading' || !ingredient ? (
           <Skeleton

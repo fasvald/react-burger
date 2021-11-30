@@ -144,11 +144,16 @@ const LoginPage = (): JSX.Element => {
     <>
       <div className={formWrapperClass}>
         <p className='sb-form__title text text_type_main-medium'>Вход</p>
-        <form className={formClass} onSubmit={handleFormSubmit} ref={loginFormRef}>
-          <div className='sb-form__body-input-el'>
+        <form
+          data-test='login-form'
+          className={formClass}
+          onSubmit={handleFormSubmit}
+          ref={loginFormRef}
+        >
+          <div data-test='login-form__email' className='sb-form__body-input-el'>
             <EmailInput onChange={handleFormChange} value={form.email} name='email' />
           </div>
-          <div className='sb-form__body-input-el'>
+          <div data-test='login-form__password' className='sb-form__body-input-el'>
             <PasswordInput onChange={handleFormChange} value={form.password} name='password' />
           </div>
           <Button type='primary' size='large'>

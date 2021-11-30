@@ -32,9 +32,11 @@ const ModalOrderCreationDetails = ({ orderDetails }: IOrderDetailsProps): JSX.El
   )
 
   return (
-    <div className={styles.dialog}>
+    <div data-test='modal-order-creation' className={styles.dialog}>
       <div className={styles.dialogBody}>
-        <p className={orderNumberClass}>{order.number}</p>
+        <p data-test='modal-order-creation__number' className={orderNumberClass}>
+          {order.number}
+        </p>
         <p className={orderTitleClass}>идентификатор заказа</p>
         <img src={orderAcceptedGif} alt='Order Accepted' className={styles.orderAcceptedImg} />
         <p className={orderDescriptionTitleClass}>Ваш заказ готов</p>

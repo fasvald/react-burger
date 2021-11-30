@@ -8,7 +8,7 @@ import { IOrder, IOrdersResponse, TOrderStatuses } from '@common/models/orders.m
 import { getUsersOrders } from '@services/slices/orders.slice'
 import { RootState } from '@store'
 
-interface IProfileOrdersListPageState {
+export interface IProfileOrdersListPageState {
   status: TFetchProcess
   orders: IOrder[]
   total: number | null

@@ -25,7 +25,9 @@ const ModalIngredientDetailsImage = ({
 
   const imgContainerClass = useMemo(() => classNames(styles.img, className), [className])
 
-  return <div className={imgContainerClass} style={imgStyle} />
+  return (
+    <div data-test='modal-ingredient-details-img' className={imgContainerClass} style={imgStyle} />
+  )
 }
 
 export default React.memo(ModalIngredientDetailsImage)

@@ -7,7 +7,7 @@ import { TFetchProcess } from '@common/models/fetch-process.model'
 import { signIn } from '@services/slices/auth.slice'
 import { RootState } from '@store'
 
-interface ILoginPageState {
+export interface ILoginPageState {
   status: TFetchProcess
   res: TSignInResponse | null
 }

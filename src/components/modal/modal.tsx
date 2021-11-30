@@ -110,11 +110,21 @@ const Modal = ({ children, open, isModalRoute, onClose }: IModalProps): JSX.Elem
 
   return ReactDOM.createPortal(
     open ? (
-      <div className={styles.wrapper} role='dialog'>
-        <div className={styles.backdrop} onClick={handleOverlayClick} aria-hidden='true'>
-          <div className={styles.container}>
-            <div className={styles.dialog}>
-              <button type='button' onClick={handleClose} className={styles.closeBtn}>
+      <div data-test='modal-dialog' className={styles.wrapper} role='dialog'>
+        <div
+          data-test='modal-dialog__backdrop'
+          className={styles.backdrop}
+          onClick={handleOverlayClick}
+          aria-hidden='true'
+        >
+          <div data-test='modal-dialog__container' className={styles.container}>
+            <div data-test='modal-dialog__container-body' className={styles.dialog}>
+              <button
+                data-test='modal-dialog__container-body-close-btn'
+                type='button'
+                onClick={handleClose}
+                className={styles.closeBtn}
+              >
                 {CloseIconMemo}
               </button>
               {children}

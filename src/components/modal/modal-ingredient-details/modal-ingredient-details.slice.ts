@@ -8,7 +8,7 @@ import { RootState } from '@store'
 import { IBurgerIngredient } from '../../burger-ingredients/burger-ingredients.model'
 import { ingredientsSelector } from '../../burger-ingredients/burger-ingredients.slice'
 
-interface IIngredientDetailsState {
+export interface IIngredientDetailsState {
   ingredient: IBurgerIngredient | null
 }
 

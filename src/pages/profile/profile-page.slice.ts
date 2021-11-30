@@ -7,7 +7,7 @@ import { TFetchProcess } from '@common/models/fetch-process.model'
 import { signOut } from '@services/slices/auth.slice'
 import { RootState } from '@store'
 
-interface IProfilePageState {
+export interface IProfilePageState {
   signOutStatus: TFetchProcess
   res: ISignOutResponse | null
 }

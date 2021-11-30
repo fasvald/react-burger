@@ -7,7 +7,7 @@ import { TFetchProcess } from '@common/models/fetch-process.model'
 import { getUser, updateUser } from '@services/slices/user.slice'
 import { RootState } from '@store'
 
-interface IUserDetailsPageState {
+export interface IUserDetailsPageState {
   fetch: {
     status: TFetchProcess
     res: IProfileResponse | null
