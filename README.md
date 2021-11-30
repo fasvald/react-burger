@@ -7,6 +7,12 @@ Main "theory" project from Yandex practicum course "React developer" - "Stellar 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
+## Deployed application
+
+Link to the application => [vibrant-almeida-186cc9.netlify.app](vibrant-almeida-186cc9.netlify.app)
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/169f60cb-3984-429e-9e71-8b0778a3c871/deploy-status)](https://app.netlify.com/sites/vibrant-almeida-186cc9/deploys)
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -23,6 +29,16 @@ You will also see any lint errors in the console.
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run cypress:open`
+
+Launces the Cypress test runner.
+See the section about [running cypress in interactive mode](https://docs.cypress.io/guides/guides/command-line#cypress-open)
+
+### `npm run cypress:run`
+
+Launces the Cypress test runner in headlessly.
+See the section about [running cypress in headless mode](https://docs.cypress.io/guides/guides/command-line#cypress-run)
 
 ### `npm run build`
 
